@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/router";
+import SkeletonUser from "./skeletonUser";
 import { UserType } from "./type";
 import { getUserInfo } from "@/api/user";
 import RandomProfile from "../table/member/RandomProfile";
@@ -54,7 +55,7 @@ const HeaderDashboard = () => {
           <div className="flex gap-[6px] md:gap-[16px]">
             <button
               onClick={goToDashboardEdit}
-              className="flex items-center justify-center w-[49px] h-[30px] md:w-[88px] md:h-[40px] rounded-[8px] border-[1px] border-[#D9D9D9] gap-[10px] cursor-pointer"
+              className="flex items-center justify-center w-[49px] h-[30px] md:w-[88px] md:h-[40px] rounded-[8px] border border-[#D9D9D9] gap-[10px] cursor-pointer"
             >
               <img
                 src="/svgs/settings.svg"
@@ -66,7 +67,7 @@ const HeaderDashboard = () => {
 
             <button
               onClick={openInviteModal}
-              className="flex items-center justify-center w-[73px] h-[30px] md:w-[116px] md:h-[40px] rounded-[8px] border-[1px] border-[#D9D9D9] gap-[10px] cursor-pointer"
+              className="flex items-center justify-center w-[73px] h-[30px] md:w-[116px] md:h-[40px] rounded-[8px] border border-[#D9D9D9] gap-[10px] cursor-pointer"
             >
               <img
                 src="/svgs/add-box.svg"
@@ -84,23 +85,27 @@ const HeaderDashboard = () => {
           </div>
 
           {/*유저 프로필 아이콘 & 유저 닉네임*/}
-          {user && (
-            <div className="flex items-center pr-[10px] md:pr-[30px] lg:pr-[80px] gap-[12px]">
-              <div className="w-[34px] h-[34px] md:w-[38px] md:h-[38px]">
-                {user.profileImageUrl ? (
-                  <img
-                    src={user.profileImageUrl}
-                    alt="유저 프로필 아이콘"
-                    className="w-full h-full rounded-full object-cover"
-                  />
-                ) : (
-                  <RandomProfile name={user.nickname} />
-                )}
+          {isLoading ? (
+            <SkeletonUser />
+          ) : (
+            user && (
+              <div className="flex items-center pr-[10px] md:pr-[30px] lg:pr-[80px] gap-[12px]">
+                <div className="w-[34px] h-[34px] md:w-[38px] md:h-[38px]">
+                  {user.profileImageUrl ? (
+                    <img
+                      src={user.profileImageUrl}
+                      alt="유저 프로필 아이콘"
+                      className="w-full h-full rounded-full object-cover"
+                    />
+                  ) : (
+                    <RandomProfile name={user.nickname} />
+                  )}
+                </div>
+                <span className="hidden md:block text-black3 md:text-base md:font-medium">
+                  {user.nickname}
+                </span>
               </div>
-              <span className="hidden md:block text-black3 md:text-base md:font-medium">
-                {user.nickname}
-              </span>
-            </div>
+            )
           )}
         </div>
       </div>
