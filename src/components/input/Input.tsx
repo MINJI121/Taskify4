@@ -14,13 +14,12 @@ interface GeneralInputProps {
 interface SignInputProps extends Omit<GeneralInputProps, "type"> {
   type: Extract<HTMLInputTypeAttribute, "text" | "email" | "password">;
   name: "email" | "nickname" | "password" | "passwordCheck";
-  pattern: string;
-  invalidMessage: string;
+  pattern?: string;
+  invalidMessage?: string;
   labelClassName?: string;
   wrapperClassName?: string;
 }
 
-//주석석
 type InputProps = GeneralInputProps | SignInputProps;
 
 export default function Input(props: InputProps) {
@@ -40,15 +39,24 @@ export default function Input(props: InputProps) {
 
   const id = useId();
   const inputRef = useRef<HTMLInputElement>(null);
-  const [htmlType, setHtmlType] = useState(type);
+  const [htmlType, setHtmlType] = useState<HTMLInputTypeAttribute>(type);
   const [isInvalid, setIsInvalid] = useState(false);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const value = event.target.value;
+
     if (onChange) {
-      onChange(event.target.value);
+      onChange(value);
     }
+
     event.target.setCustomValidity("");
-    setIsInvalid(false);
+
+    if (pattern) {
+      const regex = new RegExp(pattern);
+      setIsInvalid(!regex.test(value));
+    } else {
+      setIsInvalid(false);
+    }
   };
 
   const handleBlur = (event: React.FocusEvent<HTMLInputElement>) => {
@@ -65,9 +73,7 @@ export default function Input(props: InputProps) {
   };
 
   const togglePasswordTypeOnClick = () => {
-    setHtmlType((prev: HTMLInputTypeAttribute) =>
-      prev === "password" ? "text" : "password"
-    );
+    setHtmlType((prev) => (prev === "password" ? "text" : "password"));
   };
 
   return (
@@ -132,8 +138,9 @@ export default function Input(props: InputProps) {
           </button>
         )}
       </div>
+
       {isInvalid && invalidMessage && (
-        <span className="mt-2 font-14r block text-[var(--color-red)]">
+        <span className="font-14r block text-[var(--color-red)] mt-1">
           {invalidMessage}
         </span>
       )}
