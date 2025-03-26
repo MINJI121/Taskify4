@@ -3,3 +3,8 @@ export interface MemberType {
   profileImageUrl: string;
   nickname: string;
 }
+
+export interface UserType {
+  profileImageUrl: string;
+  nickname: string;
+}

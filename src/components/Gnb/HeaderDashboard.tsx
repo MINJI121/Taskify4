@@ -1,15 +1,14 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useRouter } from "next/router";
+import { UserType } from "./type";
+import { getUserInfo } from "@/api/user";
 import RandomProfile from "../table/member/RandomProfile";
-import ModalInviting from "./ModalInviting";
-
-/*dummy data*/
-const user = {
-  nickname: "배유철",
-  profileImageUrl: "/svgs/dummy-icon.png",
-};
+import NewDashboard from "../modal/NewDashboard";
 
 const HeaderDashboard = () => {
+  const [user, setUser] = useState<UserType | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+
   /*관리 버튼 클릭 이벤트 함수*/
   const router = useRouter();
   const { dashboardId } = router.query;
@@ -26,9 +25,25 @@ const HeaderDashboard = () => {
     setIsModalOpen(false);
   };
 
+  /*유저 정보 api 호출*/
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const data = await getUserInfo();
+        setUser(data);
+      } catch (error) {
+        console.log("유저 정보 불러오기 실패", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchUser();
+  }, []);
+
   return (
     <header className="w-full h-[50px] sm:h-[60px] md:h-[70px] flex items-center justify-center bg-white border-b-[1px] border-b-[#D9D9D9]">
-      <div className="w-full flex items-center justify-between pl-[18vw]">
+      <div className="w-full flex items-center justify-between pl-[4vw]">
         <div className="flex items-center">
           <p className="text-base text-black3 font-bold md:text-xl">
             내 대시보드
@@ -60,8 +75,7 @@ const HeaderDashboard = () => {
               />
               <span className="text-sm md:text-base text-gray1">초대하기</span>
             </button>
-            {/*임시 컴포넌트명, 추후 정식 초대 모달 컴포넌트로 교체*/}
-            {isModalOpen && <ModalInviting onClose={closeInviteModal} />}
+            {isModalOpen && <NewDashboard onClose={closeInviteModal} />}
           </div>
 
           {/*구분선*/}
@@ -70,22 +84,24 @@ const HeaderDashboard = () => {
           </div>
 
           {/*유저 프로필 아이콘 & 유저 닉네임*/}
-          <div className="flex items-center pr-[10px] md:pr-[30px] lg:pr-[80px] gap-[12px]">
-            <div className="w-[34px] h-[34px] md:w-[38px] md:h-[38px]">
-              {user.profileImageUrl ? (
-                <img
-                  src={user.profileImageUrl}
-                  alt="유저 프로필 아이콘"
-                  className="w-full h-full rounded-full object-cover"
-                />
-              ) : (
-                <RandomProfile name={user.nickname} index={2} />
-              )}
+          {user && (
+            <div className="flex items-center pr-[10px] md:pr-[30px] lg:pr-[80px] gap-[12px]">
+              <div className="w-[34px] h-[34px] md:w-[38px] md:h-[38px]">
+                {user.profileImageUrl ? (
+                  <img
+                    src={user.profileImageUrl}
+                    alt="유저 프로필 아이콘"
+                    className="w-full h-full rounded-full object-cover"
+                  />
+                ) : (
+                  <RandomProfile name={user.nickname} />
+                )}
+              </div>
+              <span className="hidden md:block text-black3 md:text-base md:font-medium">
+                {user.nickname}
+              </span>
             </div>
-            <span className="hidden md:block text-black3 md:text-base md:font-medium">
-              {user.nickname}
-            </span>
-          </div>
+          )}
         </div>
       </div>
     </header>

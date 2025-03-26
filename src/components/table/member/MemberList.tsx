@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import Pagination from "../TablePagination";
 import RandomProfile from "./RandomProfile";
-import { MemberType } from "@/components/Gnb/members";
+import { MemberType } from "@/components/Gnb/type";
 import { getMembers } from "@/api/members";
 
 interface HeaderBebridgeProps {
