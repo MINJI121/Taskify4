@@ -24,8 +24,6 @@ export const getMembers = async (dashboardId?: string | string[]) => {
       },
     }
   );
-  console.log(response.data);
-  console.log(response.data.members);
 
   return response.data.members || [];
 };
