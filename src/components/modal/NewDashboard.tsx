@@ -31,6 +31,7 @@ export default function NewDashboard({ onClose }: { onClose?: () => void }) {
         }
       );
       console.log("대시보드 생성 성공:", response.data);
+      alert("대시보드가 성공적으로 생성되었습니다.");
       console.log(loading);
 
       onClose?.(); // 모달 닫기
@@ -42,54 +43,56 @@ export default function NewDashboard({ onClose }: { onClose?: () => void }) {
   };
 
   return (
-    <div className="sm:w-[584px] sm:h-[344px] w-[327px] h-[312px] bg-white sm:rounded-[16px] rounded-[8px] shadow-md p-[24px] flex flex-col">
-      <h2 className="text-sm sm:text-[24px] font-bold">새로운 대시보드</h2>
-      <Input
-        type="text"
-        onChange={setTitle}
-        label="대시보드 이름"
-        labelClassName="text-lg sm:text-base text-black3 mt-6"
-        placeholder="뉴프로젝트"
-        className="max-w-[620px] mb-1"
-      />
+    <div className="fixed inset-0 flex items-center justify-center bg-black/35 z-50">
+      <div className="bg-white p-6 rounded-lg shadow-lg w-[327px] sm:w-[584px] sm:h-[344px]">
+        <h2 className="text-sm sm:text-[24px] font-bold">새로운 대시보드</h2>
+        <Input
+          type="text"
+          onChange={setTitle}
+          label="대시보드 이름"
+          labelClassName="text-lg sm:text-base text-black3 mt-6"
+          placeholder="뉴프로젝트"
+          className="max-w-[620px] mb-1"
+        />
 
-      <div className="mt-3 flex relative">
-        {colors.map((color, index) => (
-          <div key={index} className="relative">
-            <button
-              className="cursor-pointer w-[30px] h-[30px] rounded-full mr-2"
-              style={{ backgroundColor: color }}
-              onClick={() => setSelected(index)}
-            />
-            {selected === index && (
-              <Image
-                src="/svgs/check.svg"
-                alt="선택표시 이미지"
-                width={23}
-                height={23}
-                className="absolute top-4 left-4 transform -translate-x-1/2 -translate-y-1/2"
+        <div className="mt-3 flex relative">
+          {colors.map((color, index) => (
+            <div key={index} className="relative">
+              <button
+                className="cursor-pointer w-[30px] h-[30px] rounded-full mr-2"
+                style={{ backgroundColor: color }}
+                onClick={() => setSelected(index)}
               />
-            )}
-          </div>
-        ))}
-      </div>
+              {selected === index && (
+                <Image
+                  src="/svgs/check.svg"
+                  alt="선택표시 이미지"
+                  width={23}
+                  height={23}
+                  className="absolute top-4 left-4 transform -translate-x-1/2 -translate-y-1/2"
+                />
+              )}
+            </div>
+          ))}
+        </div>
 
-      <div className="mt-8 flex justify-between">
-        <button
-          onClick={onClose}
-          className="cursor-pointer sm:w-[256px] sm:h-[54px] w-[295px] h-[54px] rounded-[8px] border border-[var(--color-gray3)] text-[var(--color-gray1)]"
-        >
-          취소
-        </button>
-        <button
-          onClick={handleSubmit}
-          disabled={!title || selected === null}
-          className={`cursor-pointer sm:w-[256px] sm:h-[54px] w-[295px] h-[54px] rounded-[8px] 
+        <div className="mt-8 flex justify-between">
+          <button
+            onClick={onClose}
+            className="cursor-pointer sm:w-[256px] sm:h-[54px] w-[295px] h-[54px] rounded-[8px] border border-[var(--color-gray3)] text-[var(--color-gray1)]"
+          >
+            취소
+          </button>
+          <button
+            onClick={handleSubmit}
+            disabled={!title || selected === null}
+            className={`cursor-pointer sm:w-[256px] sm:h-[54px] w-[295px] h-[54px] rounded-[8px] 
                       border border-[var(--color-gray3)] text-[var(--color-white)] 
           ${!title || selected === null ? "bg-gray-300 cursor-not-allowed" : "bg-[var(--primary)]"}`}
-        >
-          생성
-        </button>
+          >
+            생성
+          </button>
+        </div>
       </div>
     </div>
   );

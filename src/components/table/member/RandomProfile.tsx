@@ -1,14 +1,17 @@
 interface RandomProfileProps {
   name: string;
-  index: number; // 몇 번째 요소인지 받음
+  index?: number;
 }
 
 // 4개의 고정된 색상 배열
 const colors = ["bg-[#C4B1A2]", "bg-[#9DD7ED]", "bg-[#FDD446]", "bg-[#FFC85A]"];
 
 export default function RandomProfile({ name, index }: RandomProfileProps) {
-  // 4개의 요소에 대해 순서대로 색상을 할당
-  const bgColor = colors[index % colors.length];
+  // index가 있을 경우 순서대로 색상 할당, 없으면 랜덤으로 색상 할당
+  const bgColor =
+    index !== undefined
+      ? colors[index % colors.length]
+      : colors[Math.floor(Math.random() * colors.length)];
 
   return (
     <div

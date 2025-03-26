@@ -1,17 +1,15 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Pagination from "../TablePagination";
 import RandomProfile from "./RandomProfile";
+import { MemberType } from "@/components/Gnb/members";
+import { getMembers } from "@/api/members";
 
-const MemberList = () => {
-  const [members, setMembers] = useState([
-    // 나중에 api 데이터로 변경
-    { name: "정만철" },
-    { name: "김태순" },
-    { name: "최주협" },
-    { name: "윤지현" },
-    { name: "박영수" },
-    { name: "이민정" },
-  ]);
+interface HeaderBebridgeProps {
+  dashboardId?: string | string[];
+}
+
+const MemberList: React.FC<HeaderBebridgeProps> = ({ dashboardId }) => {
+  const [members, setMembers] = useState<MemberType[]>([]);
 
   /* 페이지네이션 */
   const [currentPage, setCurrentPage] = useState(1);
@@ -24,8 +22,8 @@ const MemberList = () => {
   );
 
   /*버튼(삭제, 이전, 다음)*/
-  const handleDelete = (name: string) => {
-    setMembers(members.filter((member) => member.name !== name));
+  const handleDelete = (nickname: string) => {
+    setMembers(members.filter((member) => member.nickname !== nickname));
   };
 
   const handlePrevPage = () => {
@@ -35,6 +33,23 @@ const MemberList = () => {
   const handleNextPage = () => {
     if (currentPage < totalPages) setCurrentPage(currentPage + 1);
   };
+
+  /*멤버 목록 api 호출*/
+  useEffect(() => {
+    const fetchMembers = async () => {
+      try {
+        if (dashboardId) {
+          const members = await getMembers(dashboardId);
+          setMembers(members);
+          console.log("member_list", members);
+        }
+      } catch (error) {
+        console.error("멤버 불러오기 실패:", error);
+      }
+    };
+
+    fetchMembers();
+  }, [dashboardId]);
 
   return (
     <div className="relative bg-white p-6 rounded-lg shadow-md max-w-md w-full sm:max-w-lg md:max-w-xl lg:max-w-2xl mx-auto">
@@ -62,11 +77,11 @@ const MemberList = () => {
             }`}
           >
             <div className="flex items-center gap-4">
-              <RandomProfile name={member.name} index={index} />
-              <p className="text-sm sm:text-base">{member.name}</p>
+              <RandomProfile name={member.nickname} index={index} />
+              <p className="text-sm sm:text-base">{member.nickname}</p>
             </div>
             <button
-              onClick={() => handleDelete(member.name)}
+              onClick={() => handleDelete(member.nickname)}
               className="text-md-Medium cursor-pointer font-medium text-sm sm:text-base h-[32px] sm:h-[32px] w-[52px] sm:w-[84px] md:w-[84px] border border-gray-300 text-indigo-600 px-2 py-1 rounded-md hover:bg-gray-100"
             >
               삭제

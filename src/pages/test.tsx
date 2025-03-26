@@ -24,6 +24,9 @@ export default function TestPage() {
       <h1 className="text-2xl font-bold">초대받은 테이블 테스트</h1>
       <InvitedDashBoard />
       <br />
+      <br />
+      <br />
+
       <h1 className="text-2xl font-bold">프로필 카드 테스트</h1>
       <Profile />
       <br />
@@ -42,11 +45,7 @@ export default function TestPage() {
           추가
         </button>
 
-        {isModalOpen && (
-          <div className="fixed inset-0 backdrop-blur-sm backdrop-brightness-75 flex items-center justify-center">
-            <NewDashboard onClose={() => setIsModalOpen(false)} />
-          </div>
-        )}
+        {isModalOpen && <NewDashboard onClose={() => setIsModalOpen(false)} />}
       </div>
       <br />
       <br />

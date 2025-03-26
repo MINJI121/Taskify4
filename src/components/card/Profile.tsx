@@ -61,7 +61,6 @@ export default function ProfileCard() {
             onChange={setEmail}
             pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
             invalidMessage="유효한 이메일 주소를 입력하세요."
-            className="mb-2"
           />
 
           <Input

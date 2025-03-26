@@ -24,23 +24,34 @@ const invitedData: Invite[] = [
 const ITEMS_PER_PAGE = 6; // 한 번에 보여줄 개수
 
 function InvitedList({ searchTitle }: { searchTitle: string }) {
-  const [displayedData, setDisplayedData] = useState<Invite[]>([]);
-  const [page, setPage] = useState(1);
-  const observerRef = useRef<HTMLDivElement | null>(null);
-  const hasMore = displayedData.length < invitedData.length; // 남은 데이터가 있는지 확인
+  const [displayedData, setDisplayedData] = useState<Invite[]>([]); // 보여줄 데이터 상태
+  const [page, setPage] = useState(1); // 페이지 번호
+  const observerRef = useRef<HTMLDivElement | null>(null); // IntersectionObserver를 위한 ref
 
+  const hasMore = displayedData.length < invitedData.length;
+
+  // 데이터 로드
   useEffect(() => {
-    loadMoreData(); // 초기 데이터 로드
-  }, []);
+    loadMoreData();
+  }, [page]);
 
+  // IntersectionObserver 설정
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
-        if (entries[0].isIntersecting && hasMore) {
-          loadMoreData();
-        }
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            console.log("스크롤이 바닥에 도달했습니다.");
+            if (hasMore) {
+              console.log("Scroll reached the end. Loading more data...");
+              setPage((prevPage) => prevPage + 1);
+            }
+          } else {
+            console.log("스크롤이 바닥에서 벗어났습니다.");
+          }
+        });
       },
-      { threshold: 1.0 }
+      { threshold: 0.5 }
     );
 
     if (observerRef.current) {
@@ -49,21 +60,16 @@ function InvitedList({ searchTitle }: { searchTitle: string }) {
 
     return () => {
       if (observerRef.current) {
-        observer.unobserve(observerRef.current);
+        observer.unobserve(observerRef.current); // cleanup
       }
     };
-  }, [displayedData, hasMore]);
+  }, [hasMore]);
 
-  // 새로운 데이터 로드 (기존 데이터에서 6개씩 추가)
+  // 데이터를 로드하는 함수
   const loadMoreData = () => {
-    setDisplayedData((prevData) => {
-      const nextData = invitedData.slice(0, prevData.length + ITEMS_PER_PAGE);
-      return nextData;
-    });
-    setPage((prevPage) => prevPage + 1);
+    const nextData = invitedData.slice(0, page * ITEMS_PER_PAGE); // 페이지에 맞는 데이터만 가져옴
+    setDisplayedData(nextData); // 데이터를 갱신
   };
-
-  console.log(page);
 
   // 검색 기능
   const filteredData = displayedData.filter(
@@ -73,26 +79,30 @@ function InvitedList({ searchTitle }: { searchTitle: string }) {
   );
 
   return (
-    <div className="relative bg-white w-[1022px] h-[458px] mx-auto mt-[40px]">
+    <div className="relative bg-white w-[260px] sm:w-[504px] lg:w-[1022px] h-[770px] sm:h-[592px] lg:h-[620px] mx-auto mt-[40px]">
       {filteredData.length > 0 && (
-        <div className="p-6 flex w-[900px] h-[26px] justify-start items-center pl-[43px] pr-[76px] gap-x-[50px]">
-          <p className="font-normal text-[var(--color-gray2)] ml-5.5">이름</p>
-          <p className="font-normal text-[var(--color-gray2)] ml-54">초대자</p>
-          <p className="font-normal text-[var(--color-gray2)] ml-72">
+        <div className="p-6 flex w-full h-[26px] justify-start items-center pl-[43px] pr-[76px] md:gap-x-[130px] lg:gap-x-[280px]">
+          <p className="lg:ml-10 font-normal text-[var(--color-gray2)]">이름</p>
+          <p className="font-normal text-[var(--color-gray2)]">초대자</p>
+          <p className="lg:ml-6 font-normal text-[var(--color-gray2)]">
             수락여부
           </p>
         </div>
       )}
-      <div className="scroll-area h-[400px] overflow-y-auto overflow-x-hidden ">
+      <div className="scroll-area h-[400px] overflow-y-auto overflow-x-hidden">
         {filteredData.length > 0
           ? filteredData.map((invite, index) => (
               <div
                 key={index}
-                className="pb-5 mb-[20px] w-[1022px] h-[52px] grid grid-cols-[1fr_1fr_1fr] border-b border-[var(--color-gray4)] items-center"
+                className="pb-5 mb-[20px] w-[260px] sm:w-[504px] lg:w-[1022px] h-[50px] sm:grid sm:grid-cols-[1fr_1fr_1fr] sm:items-center flex flex-col gap-2 border-b border-[var(--color-gray4)]"
               >
-                <p className="flex ml-16 mt-1">{invite.title}</p>
-                <p className="justify-center ml-4.5 mt-1">{invite.nickname}</p>
-                <div className="flex gap-2 mt-1">
+                <p className="lg:ml-21 ml-9 flex justify-left mt-1 w-full">
+                  {invite.title}
+                </p>
+                <p className="lg:ml-12 ml-9 justify-center mt-1">
+                  {invite.nickname}
+                </p>
+                <div className="lg:mr-2 flex gap-2 mt-1 justify-between sm:justify-start">
                   <button className="cursor-pointer bg-[var(--primary)] text-white px-3 py-1 rounded-md w-[84px] h-[32px]">
                     수락
                   </button>
@@ -102,18 +112,17 @@ function InvitedList({ searchTitle }: { searchTitle: string }) {
                 </div>
               </div>
             ))
-          : // "대시보드가 없습니다." 메시지는 데이터가 아예 없을 때만 표시
-            !hasMore && <NoDashboardMessage searchTitle={searchTitle} />}
+          : !hasMore && <NoDashboardMessage searchTitle={searchTitle} />}
 
-        {/* "더 이상 초대 목록이 없습니다." 메시지는 데이터가 있을 때만 표시 */}
         {filteredData.length > 0 && !hasMore && (
           <p className="text-center text-gray-400 py-4">
             더 이상 초대 목록이 없습니다.
           </p>
         )}
 
-        {/*  Intersection Observer 감지 요소 */}
-        {hasMore && <div ref={observerRef} className="h-10"></div>}
+        {hasMore && (
+          <div ref={observerRef} className="h-[50px] bg-transparent"></div> // 마지막 요소로 스크롤을 감지
+        )}
       </div>
     </div>
   );
@@ -133,12 +142,12 @@ export default function InvitedDashBoard() {
 
   return (
     <div>
-      <div className="relative bg-white rounded-lg shadow-md w-[1022px] h-[650px] max-w-none mx-auto">
+      <div className="relative bg-white rounded-lg shadow-md w-[260px] sm:w-[504px] lg:w-[1022px] h-[770px] sm:h-[592px] lg:h-[620px] max-w-none mx-auto">
         <div className="p-6 relative w-[966px] h-[104px]">
           <div className="flex justify-between items-center mb-[32px]">
             <p className="text-xl sm:text-2xl font-bold">초대받은 대시보드</p>
           </div>
-          <div className="relative w-[966px]">
+          <div className="relative w-[260px] sm:w-[448px] lg:w-[966px]">
             <input
               id="title"
               placeholder="검색"

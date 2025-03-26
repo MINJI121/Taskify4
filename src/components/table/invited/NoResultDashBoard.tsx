@@ -2,7 +2,7 @@ import Image from "next/image";
 
 function NoResultDashBoard({ searchTitle }: { searchTitle: string }) {
   return (
-    <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 flex flex-col justify-center items-center">
+    <div className="w-full absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 flex flex-col justify-center items-center">
       <Image
         src="/svgs/unsubscribe.svg"
         alt="검색 결과 없을때 아이콘"

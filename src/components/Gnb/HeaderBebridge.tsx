@@ -4,20 +4,26 @@ import { MemberType } from "@/components/Gnb/members";
 import { getMembers } from "@/api/members";
 import RandomProfile from "../table/member/RandomProfile";
 import ModalInviting from "./ModalInviting";
+import NewDashboard from "../modal/NewDashboard";
+
+interface HeaderBebridgeProps {
+  dashboardId?: string | string[];
+}
 
 /*dummy data*/
 const user = {
   nickname: "배유철",
-  profileImageUrl: "../svgs/dummy-icon.png",
+  profileImageUrl: "",
 };
 
-const HeaderBebridge = () => {
+const HeaderBebridge: React.FC<HeaderBebridgeProps> = ({ dashboardId }) => {
+  // dashboardId 받을 수 있게 변경
+
   /*멤버 목록 profileImageUrl loading*/
   const [isLoading, setIsLoading] = useState(true);
   const [members, setMembers] = useState<MemberType[]>([]);
   /*관리 버튼 클릭 이벤트 함수*/
   const router = useRouter();
-  const { dashboardId } = router.query;
   const goToDashboardEdit = () => {
     router.push(`/dashboard/${dashboardId}/edit`);
   };
@@ -34,8 +40,10 @@ const HeaderBebridge = () => {
   useEffect(() => {
     const fetchMembers = async () => {
       try {
-        const members = await getMembers();
-        setMembers(members);
+        if (dashboardId) {
+          const members = await getMembers(dashboardId);
+          setMembers(members);
+        }
       } catch (error) {
         console.error("멤버 불러오기 실패:", error);
       } finally {
@@ -44,7 +52,7 @@ const HeaderBebridge = () => {
     };
 
     fetchMembers();
-  }, []);
+  }, [dashboardId]);
 
   return (
     <header className="w-full h-[50px] sm:h-[60px] md:h-[70px] flex items-center justify-center bg-white border-b-[1px] border-b-[#D9D9D9]">
@@ -86,7 +94,8 @@ const HeaderBebridge = () => {
               <span className="text-sm md:text-base text-gray1">초대하기</span>
             </button>
             {/*임시 컴포넌트명, 추후 정식 초대 모달 컴포넌트로 교체*/}
-            {isModalOpen && <ModalInviting onClose={closeInviteModal} />}
+
+            {isModalOpen && <NewDashboard onClose={closeInviteModal} />}
           </div>
 
           {/*4개의 프로필 아이콘 표시, 나머지 멤버 숫자 +n 아이콘으로 표시*/}
@@ -96,12 +105,17 @@ const HeaderBebridge = () => {
             ) : (
               <>
                 {members.slice(0, 4).map((member) => (
-                  <img
-                    key={member.id}
-                    src={member.profileImageUrl || "/svgs/dummy-icon.png"}
-                    alt={member.nickname}
-                    className="w-[34px] h-[34px] md:w-[38px] md:h-[38px] rounded-full border-[2px] border-white"
-                  />
+                  <div key={member.id}>
+                    {member.profileImageUrl ? (
+                      <img
+                        src={member.profileImageUrl}
+                        alt={member.nickname}
+                        className="w-[34px] h-[34px] md:w-[38px] md:h-[38px] rounded-full border-[2px] border-white"
+                      />
+                    ) : (
+                      <RandomProfile name={member.nickname} />
+                    )}
+                  </div>
                 ))}
                 {members.length > 4 && (
                   <div className="w-[34px] h-[34px] md:w-[38px] md:h-[38px] flex items-center justify-center rounded-full border-[2px] border-white bg-[#F4D7DA] font-16m text-[#D25B68]">
@@ -127,9 +141,10 @@ const HeaderBebridge = () => {
                   className="w-full h-full rounded-full object-cover"
                 />
               ) : (
-                <RandomProfile name={user.nickname} index={2} />
+                <RandomProfile name={user.nickname} />
               )}
             </div>
+
             <span className="hidden md:block text-black3 md:text-base md:font-medium">
               {user.nickname}
             </span>
