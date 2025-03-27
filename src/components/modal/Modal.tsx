@@ -1,7 +1,7 @@
 "use client";
 
 import { createPortal } from "react-dom";
-import { CustomBtn } from "../../button/CustomBtn";
+import { CustomBtn } from "../button/CustomBtn";
 
 interface ButtonProps {
   label: string;
