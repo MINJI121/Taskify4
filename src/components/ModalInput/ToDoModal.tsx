@@ -1,9 +1,9 @@
 import { useState } from "react";
-import ModalInput from "@/components/ModalInput/ModalInput";
-import ModalTextarea from "@/components/ModalInput/ModalTextarea";
-import ModalImage from "@/components/ModalInput/ModalImage";
-import TextButton from "@/components/ModalInput/TextButton";
-import AssigneeSelect from "@/components/ModalInput/AssigneeSelect";
+import ModalInput from "@/components/modalInput/ModalInput";
+import ModalTextarea from "@/components/modalInput/ModalTextarea";
+import ModalImage from "@/components/modalInput/ModalImage";
+import TextButton from "@/components/modalInput/TextButton";
+import AssigneeSelect from "@/components/modalInput/AssigneeSelect";
 
 interface TaskModalProps {
   onClose: () => void;

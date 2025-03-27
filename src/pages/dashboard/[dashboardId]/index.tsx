@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useRouter } from "next/router";
-import HeaderBebridge from "@/components/Gnb/HeaderBebridge";
+import HeaderBebridge from "@/components/gnb/HeaderBebridge";
 import NewDashboard from "@/components/modal/NewDashboard";
 
 export default function Dashboard() {

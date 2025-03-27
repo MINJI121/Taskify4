@@ -93,7 +93,6 @@ const HeaderMyPage = () => {
               />
               <span className="text-sm md:text-base text-gray1">초대하기</span>
             </button>
-            {/*임시 컴포넌트명, 추후 정식 초대 모달 컴포넌트로 교체*/}
             {isModalOpen && <NewDashboard onClose={closeInviteModal} />}
           </div>
 
