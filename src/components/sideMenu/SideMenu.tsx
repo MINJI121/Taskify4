@@ -2,8 +2,6 @@ import clsx from "clsx";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
-import { getDashboards } from "@/api/sidemenu";
 
 interface Dashboard {
   id: number;
@@ -17,20 +15,13 @@ interface Dashboard {
 
 interface SideMenuProps {
   teamId: string;
+  dashboardList: Dashboard[];
 }
 
-export default function SideMenu({ teamId }: SideMenuProps) {
+export default function SideMenu({ teamId, dashboardList }: SideMenuProps) {
   const router = useRouter();
   const { boardid } = router.query;
   const boardId = parseInt(boardid as string);
-
-  const [dashboardList, setDashboardList] = useState<Dashboard[]>([]);
-
-  useEffect(() => {
-    getDashboards({ teamId })
-      .then((res) => setDashboardList(res.dashboards))
-      .catch((err) => console.error("대시보드 로딩 실패:", err));
-  }, [teamId]);
 
   return (
     <aside className="h-screen overflow-y-auto border-r border-[var(--color-gray3)] px-3 py-5 lg:w-[300px] md:w-[160px] sm:w-[67px] transition-all duration-200 flex flex-col">
