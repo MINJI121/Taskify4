@@ -2,30 +2,45 @@ import clsx from "clsx";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
 
-import { Dashboard } from "@/components/SideMenu/dashboard";
+import { getDashboards } from "@/api/sidemenu";
 
-interface Props {
-  dashboardList: Dashboard[];
+interface Dashboard {
+  id: number;
+  title: string;
+  color: string;
+  userId: number;
+  createdAt: string;
+  updatedAt: string;
+  createdByMe: boolean;
 }
 
-export default function SideMenu({ dashboardList }: Props) {
+interface SideMenuProps {
+  teamId: string;
+}
+
+export default function SideMenu({ teamId }: SideMenuProps) {
   const router = useRouter();
   const { boardid } = router.query;
   const boardId = parseInt(boardid as string);
 
+  const [dashboardList, setDashboardList] = useState<Dashboard[]>([]);
+
+  useEffect(() => {
+    getDashboards({ teamId })
+      .then((res) => setDashboardList(res.dashboards))
+      .catch((err) => console.error("대시보드 로딩 실패:", err));
+  }, [teamId]);
+
   return (
-    <aside
-      className="h-screen overflow-y-auto border-r border-[var(--color-gray3)] px-3 py-5
-                      lg:w-[300px] md:w-[160px] sm:w-[67px] transition-all duration-200 flex flex-col"
-    >
-      {/* 🔥 로고 섹션 - 반응형 정렬 */}
+    <aside className="h-screen overflow-y-auto border-r border-[var(--color-gray3)] px-3 py-5 lg:w-[300px] md:w-[160px] sm:w-[67px] transition-all duration-200 flex flex-col">
+      {/* 로고 */}
       <div className="mb-14 px-3 sm:mb-9 sm:px-0">
         <Link
           href={"/"}
           className="flex lg:justify-start md:justify-start sm:justify-center"
         >
-          {/* ✅ 태블릿 & 데스크톱: 큰 로고 (768px 이상) */}
           <Image
             src="/svgs/logo_taskify.svg"
             alt="Taskify Large Logo"
@@ -35,7 +50,6 @@ export default function SideMenu({ dashboardList }: Props) {
             priority
             unoptimized
           />
-          {/* ✅ 모바일 & 초소형 화면: 작은 로고 (767px 이하) */}
           <Image
             src="/svgs/logo.svg"
             alt="Taskify Small Logo"
@@ -48,10 +62,9 @@ export default function SideMenu({ dashboardList }: Props) {
         </Link>
       </div>
 
-      {/* 🔥 대시보드 리스트 타이틀 + 추가 버튼 */}
+      {/* 대시보드 타이틀 */}
       <nav>
         <div className="mb-4 flex items-center justify-between px-3 md:px-2">
-          {/* ✅ Dash Boards 텍스트 (768px 이상에서만 표시) */}
           <span className="hidden md:block font-12sb text-[var(--color-black)]">
             Dash Boards
           </span>
@@ -66,7 +79,7 @@ export default function SideMenu({ dashboardList }: Props) {
           </button>
         </div>
 
-        {/* 🔥 대시보드 목록 - 모바일에서 중앙 정렬 */}
+        {/* 대시보드 목록 */}
         <ul className="flex flex-col lg:items-start md:items-start sm:items-center sm:w-full">
           {dashboardList.map((dashboard) => (
             <li
@@ -81,7 +94,6 @@ export default function SideMenu({ dashboardList }: Props) {
                 href={`/dashboard/${dashboard.id}`}
                 className="flex items-center gap-3 sm:gap-2"
               >
-                {/* 컬러 아이콘 */}
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="8"
@@ -92,8 +104,6 @@ export default function SideMenu({ dashboardList }: Props) {
                 >
                   <circle cx="4" cy="4" r="4" />
                 </svg>
-
-                {/* 대시보드 제목 & 크라운 아이콘 */}
                 <div className="hidden md:flex items-center gap-2">
                   <span className="truncate font-18m md:text-base">
                     {dashboard.title}
