@@ -1,5 +1,5 @@
 import axios from "axios";
-import { MemberType } from "@/components/gnb/type";
+import { MemberType } from "@/types/users";
 
 interface ApiResponse {
   members: MemberType[]; // 실제 데이터

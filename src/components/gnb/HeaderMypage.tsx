@@ -1,19 +1,20 @@
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/router";
-import SkeletonUser from "./skeletonUser";
-import { UserType } from "./type";
+import SkeletonUser from "../../shared/skeletonUser";
+import { MemberType, UserType } from "../../types/users";
+import { getMembers } from "@/api/members";
 import { getUserInfo } from "@/api/user";
 import RandomProfile from "../table/member/RandomProfile";
 import NewDashboard from "../modal/NewDashboard";
 
-const HeaderDashboard = () => {
+const HeaderMyPage = () => {
   const [user, setUser] = useState<UserType | null>(null);
+  const [members, setMembers] = useState<MemberType[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
   /*관리 버튼 클릭 이벤트 함수*/
   const router = useRouter();
   const { dashboardId } = router.query;
-
   const goToDashboardEdit = () => {
     router.push(`/dashboard/${dashboardId}/edit`);
   };
@@ -42,20 +43,36 @@ const HeaderDashboard = () => {
     fetchUser();
   }, []);
 
+  /*멤버 목록 api 호출*/
+  useEffect(() => {
+    const fetchMembers = async () => {
+      try {
+        const members = await getMembers();
+        setMembers(members);
+      } catch (error) {
+        console.error("멤버 불러오기 실패:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchMembers();
+  }, []);
+
   return (
     <header className="w-full h-[50px] sm:h-[60px] md:h-[70px] flex items-center justify-center bg-white border-b-[1px] border-b-[#D9D9D9]">
-      <div className="w-full flex items-center justify-between pl-[4vw]">
+      <div className="w-full flex items-center justify-between pl-[18vw]">
         <div className="flex items-center">
-          <p className="text-base text-black3 font-bold md:text-xl">
-            내 대시보드
+          <p className="hidden lg:block text-base text-black3 font-bold md:text-xl">
+            계정관리
           </p>
         </div>
 
         <div className="flex items-center">
-          <div className="flex gap-[6px] md:gap-[16px]">
+          <div className="flex gap-[6px] md:gap-[16px] pr-[40px]">
             <button
               onClick={goToDashboardEdit}
-              className="flex items-center justify-center w-[49px] h-[30px] md:w-[88px] md:h-[40px] rounded-[8px] border border-[#D9D9D9] gap-[10px] cursor-pointer"
+              className="flex items-center justify-center w-[49px] h-[30px] md:w-[85px] md:h-[36px] lg:w-[88px] lg:h-[40px] rounded-[8px] border border-[#D9D9D9] gap-[10px] cursor-pointer"
             >
               <img
                 src="/svgs/settings.svg"
@@ -67,7 +84,7 @@ const HeaderDashboard = () => {
 
             <button
               onClick={openInviteModal}
-              className="flex items-center justify-center w-[73px] h-[30px] md:w-[116px] md:h-[40px] rounded-[8px] border border-[#D9D9D9] gap-[10px] cursor-pointer"
+              className="flex items-center justify-center w-[73px] h-[30px] md:w-[109px] md:h-[36px] lg:w-[116px] lg:h-[40px] rounded-[8px] border border-[#D9D9D9] gap-[10px] cursor-pointer"
             >
               <img
                 src="/svgs/add-box.svg"
@@ -77,6 +94,29 @@ const HeaderDashboard = () => {
               <span className="text-sm md:text-base text-gray1">초대하기</span>
             </button>
             {isModalOpen && <NewDashboard onClose={closeInviteModal} />}
+          </div>
+
+          {/*4개의 프로필 아이콘 표시, 나머지 멤버 숫자 +n 아이콘으로 표시*/}
+          <div className="flex -space-x-3">
+            {isLoading ? (
+              <SkeletonUser />
+            ) : (
+              <>
+                {members.slice(0, 4).map((member) => (
+                  <img
+                    key={member.id}
+                    src={member.profileImageUrl}
+                    alt={member.nickname}
+                    className="w-[34px] h-[34px] md:w-[38px] md:h-[38px] rounded-full border-[2px] border-white"
+                  />
+                ))}
+                {members.length > 4 && (
+                  <div className="w-[34px] h-[34px] md:w-[38px] md:h-[38px] flex items-center justify-center rounded-full border-[2px] border-white bg-[#F4D7DA] font-16m text-[#D25B68]">
+                    +{members.length - 4}
+                  </div>
+                )}
+              </>
+            )}
           </div>
 
           {/*구분선*/}
@@ -113,4 +153,4 @@ const HeaderDashboard = () => {
   );
 };
 
-export default HeaderDashboard;
+export default HeaderMyPage;
