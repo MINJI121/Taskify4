@@ -3,7 +3,7 @@ import { useRouter } from "next/router";
 import { getColumns, getCardsByColumn, getDashboards } from "@/api/dashboard";
 import { CardType, ColumnType, TasksByColumn } from "@/types/task";
 import HeaderBebridge from "@/components/gnb/HeaderBebridge";
-import Column from "@/components/columnCard/Column";
+import Column from "@/components/columncard/Column";
 import SideMenu from "@/components/sideMenu/SideMenu";
 import ColumnsButton from "@/components/button/ColumnsButton";
 import { Modal } from "@/components/modal/Modal";

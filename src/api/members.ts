@@ -17,8 +17,11 @@ export const getMembers = async (dashboardId?: string | string[]) => {
     typeof dashboardId === "string" ? Number(dashboardId) : undefined;
 
   const response = await axios.get<ApiResponse>(
-    `https://sp-taskify-api.vercel.app/13-4/members?page=1&size=20&dashboardId=${numericDashboardId}`,
+    `${process.env.NEXT_PUBLIC_BASE_URL}13-4/members`,
     {
+      params: {
+        dashboardId: numericDashboardId,
+      },
       headers: {
         Authorization: `Bearer ${token}`,
       },

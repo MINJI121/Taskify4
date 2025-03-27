@@ -22,9 +22,9 @@ export const apiRoutes = {
     `/${TEAM_ID}/dashboards/${dashboardId}`, //get,put,delete
   //대시보드 초대하기
   DashboardInvite: (dashboardId: number) =>
-    `/${TEAM_ID}/dashboards/${dashboardId}/dashboard-invite`, //post,get
+    `/${TEAM_ID}/dashboards/${dashboardId}/invitations`, //post,get
   DashboardInviteDelete: (dashboardId: number, invitationId: number) =>
-    `/${TEAM_ID}/dashboards/${dashboardId}/dashboard-invite/${invitationId}`, //delete
+    `/${TEAM_ID}/dashboards/${dashboardId}/invitations/${invitationId}`, //delete
   //초대 받은 대시보드
   Invitations: () => `/${TEAM_ID}/members`, //get
   invitationDetail: (invitationId: number) =>

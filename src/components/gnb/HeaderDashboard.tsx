@@ -4,7 +4,7 @@ import SkeletonUser from "../../shared/skeletonUser";
 import { UserType } from "../../types/users";
 import { getUserInfo } from "@/api/user";
 import RandomProfile from "../table/member/RandomProfile";
-import NewDashboard from "../modal/NewDashboard";
+import InviteDashboard from "../modal/InviteDashboard";
 
 const HeaderDashboard = () => {
   const [user, setUser] = useState<UserType | null>(null);
@@ -15,7 +15,7 @@ const HeaderDashboard = () => {
   const { dashboardId } = router.query;
 
   const goToDashboardEdit = () => {
-    router.push(`/dashboard/${dashboardId}/edit`);
+    router.push(`/mypage`);
   };
   /*초대하기 버튼 클릭 시 모달 팝업 오픈*/
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -76,7 +76,7 @@ const HeaderDashboard = () => {
               />
               <span className="text-sm md:text-base text-gray1">초대하기</span>
             </button>
-            {isModalOpen && <NewDashboard onClose={closeInviteModal} />}
+            {isModalOpen && <InviteDashboard onClose={closeInviteModal} />}
           </div>
 
           {/*구분선*/}

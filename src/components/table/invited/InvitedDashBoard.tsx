@@ -163,7 +163,7 @@ export default function InvitedDashBoard() {
 
   return (
     <div>
-      <div className="relative bg-white rounded-lg shadow-md w-[260px] sm:w-[504px] lg:w-[1022px] h-[770px] sm:h-[592px] lg:h-[620px] max-w-none mx-auto">
+      <div className="relative bg-white rounded-lg shadow-md w-[260px] sm:w-[504px] lg:w-[1022px] h-[770px] sm:h-[592px] lg:h-[620px] max-w-none">
         <div className="p-6 relative w-full h-[104px]">
           <div className="flex justify-between items-center mb-[32px]">
             <p className="text-xl sm:text-2xl font-bold">초대받은 대시보드</p>

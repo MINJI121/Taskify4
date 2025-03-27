@@ -18,8 +18,7 @@ export default function TestPage() {
       <h1 className="text-2xl font-bold">구성원 테이블 테스트</h1>
       <MemberList />
       <br />
-      <h1 className="text-2xl font-bold">초대 테이블 테스트</h1>
-      <InviteRecords />
+
       <br />
       <h1 className="text-2xl font-bold">초대받은 테이블 테스트</h1>
       <InvitedDashBoard />

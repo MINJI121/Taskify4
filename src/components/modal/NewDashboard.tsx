@@ -21,7 +21,7 @@ export default function NewDashboard({ onClose }: { onClose?: () => void }) {
     try {
       setLoading(true);
       const response = await axios.post(
-        `https://sp-taskify-api.vercel.app/13-4/dashboards`,
+        `${process.env.NEXT_PUBLIC_BASE_URL}13-4/dashboards`,
         payload,
         {
           headers: {
