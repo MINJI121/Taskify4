@@ -31,7 +31,6 @@ export default function ModalInput({
 }: ModalInputProps) {
   const [tagInput, setTagInput] = useState<string>("");
   const [tags, setTags] = useState<Tag[]>([]);
-
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
   const [selectedDate, setSelectedDate] = useState(defaultValue);
 
@@ -78,10 +77,12 @@ export default function ModalInput({
     onValueChange(updatedTags.map((tag) => tag.text));
   };
 
+  // ✅ 마감일 포맷 수정 (YYYY-MM-DD HH:mm)
   const handleDateChange = (date: moment.Moment | string) => {
     if (moment.isMoment(date)) {
-      setSelectedDate(date.format("YYYY.MM.DD"));
-      onValueChange([date.format("YYYY.MM.DD")]);
+      const formatted = date.format("YYYY-MM-DD HH:mm"); // ← 이 줄이 핵심!
+      setSelectedDate(formatted);
+      onValueChange([formatted]);
     } else {
       setSelectedDate(date);
       onValueChange([date]);

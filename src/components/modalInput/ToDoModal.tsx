@@ -1,56 +1,103 @@
-import { useState } from "react";
+import React, { useState } from "react";
+import { createCard } from "@/api/card";
+import AssigneeSelect from "@/components/modalInput/AssigneeSelect";
 import ModalInput from "@/components/modalInput/ModalInput";
 import ModalTextarea from "@/components/modalInput/ModalTextarea";
 import ModalImage from "@/components/modalInput/ModalImage";
 import TextButton from "@/components/modalInput/TextButton";
-import AssigneeSelect from "@/components/modalInput/AssigneeSelect";
 
 interface TaskModalProps {
   onClose: () => void;
-  onSubmit: (data: TaskData) => void;
+  teamId: string;
+  dashboardId: number;
+  columnId: number;
+  members: {
+    id: number;
+    userId: number;
+    nickname: string;
+  }[];
 }
 
 interface TaskData {
-  assignee: string;
+  assignee: string; // nickname
   title: string;
   description: string;
   deadline: string;
   tags: string[];
-  image?: File;
+  image?: string;
 }
 
-export default function TaskModal({ onClose, onSubmit }: TaskModalProps) {
+export default function TaskModal({
+  onClose,
+  teamId,
+  dashboardId,
+  columnId,
+  members,
+}: TaskModalProps) {
   const [formData, setFormData] = useState<TaskData>({
     assignee: "",
     title: "",
     description: "",
     deadline: "",
     tags: [],
+    image: "",
   });
 
-  const handleChange = (
-    field: keyof TaskData,
-    value: string | string[] | File
-  ) => {
+  const handleChange = (field: keyof TaskData, value: string | string[]) => {
     setFormData((prev) => ({
       ...prev,
       [field]: value,
     }));
-    console.log("Updated formData:", formData);
+  };
+
+  const isFormValid =
+    formData.assignee &&
+    formData.title &&
+    formData.description &&
+    formData.deadline;
+
+  const handleSubmit = async () => {
+    try {
+      const selectedAssignee = members.find(
+        (m) => m.nickname === formData.assignee
+      );
+      const assigneeUserId = selectedAssignee?.userId;
+
+      if (!assigneeUserId) {
+        alert("담당자를 선택해 주세요.");
+        return;
+      }
+
+      await createCard({
+        teamId,
+        assigneeUserId,
+        dashboardId,
+        columnId,
+        title: formData.title,
+        description: formData.description,
+        dueDate: formData.deadline,
+        tags: formData.tags,
+        imageUrl: formData.image || undefined,
+      });
+
+      onClose();
+    } catch (err) {
+      console.error("카드 생성 실패:", err);
+      alert("카드 생성에 실패했습니다.");
+    }
   };
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-30 p-4">
-      {/* ✅ 반응형 모달: 모바일에서는 풀 너비, 데스크탑에서는 584px */}
       <div className="w-full max-w-[584px] h-auto max-h-[90vh] rounded-lg bg-white p-4 sm:p-8 shadow-lg flex flex-col gap-4 sm:gap-8 overflow-y-auto">
         <h2 className="text-xl font-bold">할 일 생성</h2>
 
-        {/* ✅ 반응형 입력 필드 그룹 */}
         <div className="flex flex-col gap-4 sm:gap-8">
           <AssigneeSelect
             label="담당자"
             value={formData.assignee}
             required
+            users={members.map((m) => m.nickname)}
             onChange={(value) => handleChange("assignee", value)}
           />
 
@@ -78,14 +125,14 @@ export default function TaskModal({ onClose, onSubmit }: TaskModalProps) {
             onValueChange={(value) => handleChange("tags", value)}
           />
 
-          {/* ✅ 반응형 이미지 업로드 */}
           <ModalImage
             label="이미지"
-            onImageSelect={(file) => handleChange("image", file)}
+            teamId={teamId}
+            columnId={columnId}
+            onImageSelect={(url) => handleChange("image", url)}
           />
         </div>
 
-        {/* ✅ 버튼 그룹: 모바일에서는 세로 정렬, 데스크탑에서는 가로 정렬 */}
         <div className="mt-auto flex flex-col sm:flex-row justify-end gap-2 sm:gap-3 w-full">
           <TextButton
             color="third"
@@ -99,8 +146,9 @@ export default function TaskModal({ onClose, onSubmit }: TaskModalProps) {
           <TextButton
             color="primary"
             buttonSize="md"
-            onClick={() => onSubmit(formData)}
+            onClick={handleSubmit}
             className="w-full sm:w-[256px] h-[54px] bg-[var(--primary)] text-white rounded-lg"
+            disabled={!isFormValid}
           >
             생성
           </TextButton>

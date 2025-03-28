@@ -27,7 +27,7 @@ export default function MyDashboardPage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const itemsPerPage = 6;
 
-  const totalPages = Math.ceil((dashboardList.length + 1) / itemsPerPage); // +1 for the add button
+  const totalPages = Math.ceil((dashboardList.length + 1) / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
 
   const currentItems = [

@@ -1,14 +1,21 @@
 import Image from "next/image";
 import { ChangeEvent, useRef, useState } from "react";
-
 import AddButton from "./AddButton";
+import { uploadCardImage } from "@/api/card";
 
 interface ModalImageProps {
   label: string;
-  onImageSelect: (imageUrl: File) => void;
+  teamId: string;
+  columnId: number;
+  onImageSelect: (imageUrl: string) => void;
 }
 
-export default function ModalImage({ label, onImageSelect }: ModalImageProps) {
+export default function ModalImage({
+  label,
+  teamId,
+  columnId,
+  onImageSelect,
+}: ModalImageProps) {
   const [backgroundImage, setBackgroundImage] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
@@ -16,17 +23,28 @@ export default function ModalImage({ label, onImageSelect }: ModalImageProps) {
     fileInputRef.current?.click();
   };
 
-  const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const selectedFile = e.target.files?.[0];
+  const handleFileChange = async (e: ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
 
-    if (selectedFile) {
-      const reader = new FileReader();
-      reader.onload = (event) => {
-        const imageSrc = event.target?.result as string;
-        setBackgroundImage(imageSrc);
-        onImageSelect(selectedFile);
-      };
-      reader.readAsDataURL(selectedFile);
+    // 이미지 미리보기
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      const imageSrc = event.target?.result as string;
+      setBackgroundImage(imageSrc);
+    };
+    reader.readAsDataURL(file);
+
+    try {
+      const imageUrl = await uploadCardImage({
+        teamId,
+        columnId,
+        imageFile: file, // ✅ File만 넘김
+      });
+      onImageSelect(imageUrl); // 부모로 전달
+    } catch (error) {
+      console.error("이미지 업로드 실패:", error);
+      alert("이미지 업로드에 실패했어요.");
     }
   };
 
@@ -67,6 +85,7 @@ export default function ModalImage({ label, onImageSelect }: ModalImageProps) {
           type="file"
           ref={fileInputRef}
           className="hidden"
+          accept="image/*"
           onChange={handleFileChange}
         />
       </button>

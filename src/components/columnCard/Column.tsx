@@ -1,5 +1,4 @@
-// components/column/Column.tsx
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import { CardType } from "@/types/task";
 import Card from "./Card";
@@ -8,6 +7,7 @@ import TodoButton from "@/components/button/TodoButton";
 import ColumnManageModal from "@/components/columnCard/ColumnManageModal";
 import ColumnDeleteModal from "@/components/columnCard/ColumnDeleteModal";
 import { updateColumn, deleteColumn } from "@/api/dashboards";
+import { getDashboardMembers } from "@/api/card";
 
 type ColumnProps = {
   columnId: number;
@@ -28,6 +28,34 @@ export default function Column({
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [isTodoModalOpen, setIsTodoModalOpen] = useState(false);
   const [columnTitle, setColmnTitle] = useState(title);
+
+  const [members, setMembers] = useState<
+    { id: number; userId: number; nickname: string }[]
+  >([]);
+
+  // ✅ 멤버 불러오기
+  useEffect(() => {
+    const fetchMembers = async () => {
+      try {
+        const result = await getDashboardMembers({
+          teamId,
+          dashboardId,
+        });
+
+        const parsed = result.map((m: any) => ({
+          id: m.id,
+          userId: m.userId,
+          nickname: m.nickname || m.email,
+        }));
+
+        setMembers(parsed);
+      } catch (error) {
+        console.error("멤버 불러오기 실패:", error);
+      }
+    };
+
+    fetchMembers();
+  }, [teamId, dashboardId]);
 
   const handleEditColumn = async (newTitle: string) => {
     if (!newTitle.trim()) {
@@ -51,7 +79,7 @@ export default function Column({
       await deleteColumn({ teamId, columnId });
       setIsDeleteModalOpen(false);
       alert("칼럼이 삭제되었습니다.");
-      // 👉 부모에서 상태를 관리 중이라면 삭제 후 다시 데이터를 불러오거나, 상태 업데이트 필요!
+      // :point_right: 부모에서 상태를 관리 중이라면 삭제 후 다시 데이터를 불러오거나, 상태 업데이트 필요!
     } catch (error) {
       console.error("칼럼 삭제 실패:", error);
       alert("칼럼 삭제에 실패했습니다.");
@@ -99,10 +127,12 @@ export default function Column({
       {/* Todo 모달 */}
       {isTodoModalOpen && (
         <TodoModal
-          isOpen={isTodoModalOpen} // todo todomodal에서 타입정의 추가하기 (isOpen, teamId, dashboardId)
+          isOpen={isTodoModalOpen}
           onClose={() => setIsTodoModalOpen(false)}
           teamId={teamId}
           dashboardId={dashboardId}
+          columnId={columnId}
+          members={members} // ✅ 멤버 넘겨줌
         />
       )}
 
