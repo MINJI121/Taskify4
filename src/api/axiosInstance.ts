@@ -12,4 +12,13 @@ const axiosInstance = axios.create({
 axiosInstance.defaults.headers.common["Authorization"] =
   `Bearer ${process.env.NEXT_PUBLIC_API_TOKEN}`;
 
+// 👉 요청 보낼 때마다 토큰 자동 추가
+axiosInstance.interceptors.request.use((config) => {
+  const token = localStorage.getItem("accessToken");
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+  return config;
+});
+
 export default axiosInstance;
