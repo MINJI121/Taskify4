@@ -4,7 +4,7 @@ export const apiRoutes = {
   //로그인
   Login: () => `/${TEAM_ID}/login`, //post
   //비밀번호변경
-  Password: () => `/${TEAM_ID}/password`, //put
+  Password: () => `/${TEAM_ID}/auth/password`, //put
   //카드
   Cards: () => `/${TEAM_ID}/cards`, //post,get
   CardDetail: (cardId: number) => `/${TEAM_ID}/cards/${cardId}`, //get,put,delete

@@ -9,6 +9,8 @@ interface GeneralInputProps {
   placeholder?: string;
   className?: string;
   onChange?: (value: string) => void;
+  value?: string;
+  readOnly?: boolean; //입력방지 추가
 }
 
 interface SignInputProps extends Omit<GeneralInputProps, "type"> {
