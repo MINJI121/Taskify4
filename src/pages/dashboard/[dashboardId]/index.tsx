@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/router";
-import { getColumns, getCardsByColumn, getDashboards } from "@/api/dashboard";
+import { getColumns, getCardsByColumn, getDashboards } from "@/api/dashboards";
 import { CardType, ColumnType, TasksByColumn } from "@/types/task";
-import HeaderBebridge from "@/components/gnb/HeaderBebridge";
-import Column from "@/components/columncard/Column";
+import HeaderDashboard from "@/components/gnb/HeaderDashboard";
+import Column from "@/components/columnCard/Column";
 import SideMenu from "@/components/sideMenu/SideMenu";
 import ColumnsButton from "@/components/button/ColumnsButton";
 import { Modal } from "@/components/modal/Modal";
@@ -80,7 +80,7 @@ export default function Dashboard() {
       <SideMenu teamId={teamId} dashboardList={dashboardList} />
 
       <div className="flex-1">
-        <HeaderBebridge dashboardId={dashboardId} />
+        <HeaderDashboard variant="dashboard" dashboardId={dashboardId} />
 
         <div className="flex gap-4 p-6">
           {columns.map((col) => (

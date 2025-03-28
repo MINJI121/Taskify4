@@ -1,4 +1,3 @@
-// 예: src/lib/api/cards.ts
 import axiosInstance from "./axiosInstance";
 
 export const getCardsByColumn = async ({
@@ -48,5 +47,16 @@ export const getDashboards = async ({
     params: { navigationMethod, page, size },
   });
 
+  return res.data;
+};
+
+export const getDashboardById = async ({
+  teamId,
+  dashboardId,
+}: {
+  teamId: string;
+  dashboardId: number;
+}) => {
+  const res = await axiosInstance.get(`/${teamId}/dashboards/${dashboardId}`);
   return res.data;
 };

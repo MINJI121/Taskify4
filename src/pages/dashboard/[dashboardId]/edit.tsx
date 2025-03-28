@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import ChangeBebridge from "@/components/modal/ChangeBebridge";
-import HeaderBebridge from "@/components/gnb/HeaderBebridge";
+import HeaderDashboardEdit from "@/components/gnb/HeaderDashboard";
 import MemberList from "@/components/table/member/MemberList";
 import SideMenu from "@/components/sideMenu/SideMenu";
 import InviteRecords from "@/components/table/InviteRecords";
 import Image from "next/image";
 import axiosInstance from "@/api/axiosInstance";
 import { apiRoutes } from "@/api/apiRoutes";
-import { getDashboards } from "@/api/dashboard";
+import { getDashboards } from "@/api/dashboards";
 
 interface Dashboard {
   id: number;
@@ -72,7 +72,7 @@ export default function EditDashboard() {
       <div className="flex flex-col flex-1">
         {/* HeaderBebridge와 ChangeBebridge는 상단에 배치 */}
         <div className="flex flex-col">
-          <HeaderBebridge dashboardId={dashboardId} />
+          <HeaderDashboardEdit variant="dashboard" dashboardId={dashboardId} />
         </div>
         <div className="overflow-auto flex-1 px-[50px] pt-[10px] pb-10">
           <div className="mt-6">

@@ -1,45 +1,56 @@
 import React from "react";
 import { useRouter } from "next/router";
+import Image from "next/image";
 
-const HeaderDefault = () => {
+interface HeaderDefaultProps {
+  variant?: "white" | "black";
+}
+
+const HeaderDefault: React.FC<HeaderDefaultProps> = ({ variant = "white" }) => {
   const router = useRouter();
-  const goToMain = () => {
-    router.push(`/`);
-  };
-  const goToLogin = () => {
-    router.push(`/login`);
-  };
-  const goToSignUp = () => {
-    router.push(`/signup`);
-  };
+
+  const isWhite = variant === "white";
 
   return (
-    <header className="w-full h-[50px] sm:h-[60px] md:h-[70px] flex items-center justify-center bg-white border-b-[1px] border-b-[#D9D9D9]">
-      <div className="w-full flex items-center justify-between px-[16px] sm:px-[24px] md:px-[40px] lg:px-[70px]">
+    <header
+      className={`w-full h-[60px] md:h-[70px] flex items-center justify-center
+        ${isWhite ? "bg-white border-b-[1px] border-b-[#D9D9D9]" : "bg-black"} `}
+    >
+      <div className="w-full flex items-center justify-between px-[24px] md:px-[40px] lg:px-[70px]">
         <div className="flex items-center cursor-pointer">
-          <img
-            src="/svgs/logo-large.svg"
+          <Image
+            src={
+              isWhite ? "/svgs/logo-large.svg" : "/svgs/logo-large-white.svg"
+            }
             alt="Taskify Logo"
-            onClick={goToMain}
-            className="h-[39px] hidden md:block"
+            onClick={() => router.push(`/`)}
+            width={121}
+            height={39}
+            className="hidden md:block"
           />
-          <img
-            src="/svgs/small-logo.svg"
+          <Image
+            src={
+              isWhite ? "/svgs/small-logo.svg" : "/svgs/logo-small-white.svg"
+            }
             alt="Taskify Mobile Logo"
-            onClick={goToMain}
-            className="h-[27px] block md:hidden"
+            onClick={() => router.push(`/`)}
+            width={24}
+            height={27}
+            className="block md:hidden"
           />
         </div>
         <div className="flex space-x-[24px] md:space-x-[36px]">
           <button
-            onClick={goToLogin}
-            className="text-sm md:text-base text-black3 cursor-pointer"
+            onClick={() => router.push(`/login`)}
+            className={`text-sm md:text-base cursor-pointer
+              ${isWhite ? "text-black3" : "text-white"}`}
           >
             로그인
           </button>
           <button
-            onClick={goToSignUp}
-            className="text-sm md:text-base text-black3 cursor-pointer"
+            onClick={() => router.push(`/signup`)}
+            className={`text-sm md:text-base cursor-pointer
+              ${isWhite ? "text-black3" : "text-white"}`}
           >
             회원가입
           </button>

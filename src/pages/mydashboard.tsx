@@ -6,7 +6,7 @@ import CardButton from "@/components/button/CardButton";
 import { PaginationBtn } from "@/components/button/PaginationBtn";
 import NewDashboard from "@/components/modal/NewDashboard";
 import DashboardAddButton from "@/components/button/DashboardAddButton";
-import { getDashboards } from "@/api/dashboard";
+import { getDashboards } from "@/api/dashboards";
 import { useRouter } from "next/router";
 
 interface Dashboard {
@@ -69,7 +69,7 @@ export default function MyDashboardPage() {
       <SideMenu teamId={teamId} dashboardList={dashboardList} />
 
       <div className="flex flex-col flex-1 overflow-hidden">
-        <HeaderDashboard />
+        <HeaderDashboard variant="mydashboard" />
 
         <main className="flex-1 overflow-auto px-[25px] pt-[40px] pb-10 bg-[#f9f9f9] space-y-10">
           {/* 대시보드 카드 + 페이지네이션 */}
