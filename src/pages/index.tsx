@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 
 import Footer from "@/components/landing/Footer";
-import LandingHeader from "@/components/gnb/HeaderDefault";
 import LandingMain from "@/components/landing/LandingMain";
 
 export default function Home() {
@@ -21,7 +20,6 @@ export default function Home() {
 
   return (
     <>
-      <LandingHeader variant="black" />
       <LandingMain />
       <Footer />
     </>

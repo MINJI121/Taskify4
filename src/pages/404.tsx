@@ -30,3 +30,5 @@ export default function Custom404() {
     </div>
   );
 }
+
+Custom404.hideHeader = true;

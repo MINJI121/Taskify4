@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/router";
+import SkeletonUser from "@/shared/skeletonUser";
 import Image from "next/image";
-import SkeletonUser from "../../shared/skeletonUser";
-import { MemberType, UserType } from "../../types/users";
+import { MemberType, UserType } from "@/types/users";
 import { getMembers } from "@/api/members";
 import { getUserInfo } from "@/api/user";
 import { getDashboardById } from "@/api/dashboards";
 import { TEAM_ID } from "@/constants/team";
-import RandomProfile from "../table/member/RandomProfile";
-import InviteDashboard from "../modal/InviteDashboard";
+import RandomProfile from "@/components/table/member/RandomProfile";
+import InviteDashboard from "@/components/modal/InviteDashboard";
 
 interface HeaderDashboardProps {
   variant?: "mydashboard" | "dashboard" | "mypage";
@@ -27,7 +27,11 @@ const HeaderDashboard: React.FC<HeaderDashboardProps> = ({
   const router = useRouter();
   const [user, setUser] = useState<UserType | null>(null);
   const [members, setMembers] = useState<MemberType[]>([]);
-  const [dashboardTitle, setDashboardTitle] = useState();
+  const [dashboard, setDashboard] = useState<{
+    title: string;
+    createdByMe: boolean;
+  } | null>(null);
+  const [errorMessage, setErrorMessage] = useState("");
   const [isLoading, setIsLoading] = useState(true);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -45,7 +49,8 @@ const HeaderDashboard: React.FC<HeaderDashboardProps> = ({
         const user = await getUserInfo({ teamId: TEAM_ID });
         setUser(user);
       } catch (error) {
-        console.log("유저 정보 불러오기 실패", error);
+        console.error("유저 정보 불러오기 실패", error);
+        setErrorMessage("유저 정보를 불러오지 못했습니다.");
       } finally {
         setIsLoading(false);
       }
@@ -62,6 +67,7 @@ const HeaderDashboard: React.FC<HeaderDashboardProps> = ({
         setMembers(members);
       } catch (error) {
         console.error("멤버 불러오기 실패:", error);
+        setErrorMessage("멤버 정보를 불러오지 못했습니다.");
       } finally {
         setIsLoading(false);
       }
@@ -73,46 +79,66 @@ const HeaderDashboard: React.FC<HeaderDashboardProps> = ({
 
   /*대시보드 이름 api 호출*/
   useEffect(() => {
-    const fetchDashboardTitle = async () => {
+    const fetchDashboard = async () => {
       if (variant === "dashboard" && dashboardId) {
         try {
-          const dashboard = await getDashboardById({
+          const dashboardData = await getDashboardById({
             teamId: TEAM_ID,
             dashboardId: Number(dashboardId),
           });
-          setDashboardTitle(dashboard.title);
+          setDashboard(dashboardData);
         } catch (error) {
-          console.error("대시보드 타이틀 불러오기 실패", error);
+          console.error("대시보드 정보 불러오기 실패", error);
+          setErrorMessage("대시보드를 불러오지 못했습니다.");
+        } finally {
+          setIsLoading(false);
         }
       }
     };
-    fetchDashboardTitle();
+    fetchDashboard();
   }, [variant, dashboardId]);
 
-  const title =
-    variant === "mypage"
-      ? "계정 관리"
-      : variant === "dashboard" && dashboardTitle
-        ? dashboardTitle
-        : "내 대시보드";
+  /*헤더 종류에 따라 다른 제목 표시*/
+  const title = (() => {
+    if (variant === "mypage") return "계정 관리";
+    if (variant === "dashboard" && dashboard?.title) return dashboard.title;
+    return "내 대시보드";
+  })();
 
   return (
     <header className="w-full h-[60px] md:h-[70px] flex items-center justify-center bg-white border-b-[1px] border-b-[#D9D9D9]">
       <div className="w-full flex items-center justify-between pl-[4vw]">
-        <div className="flex items-center gap-[8px]">
-          <p
-            className={`text-base text-black3 font-bold md:text-xl
-            ${variant === "mydashboard" ? "block" : "hidden lg:block"}`}
-          >
-            {title}
+        {errorMessage && (
+          <p className="text-sm text-[var(--color-red)] px-4 py-2">
+            {errorMessage}
           </p>
+        )}
+        <div className="flex items-center gap-[8px]">
+          <p className="text-base text-black3 font-bold md:text-xl">{title}</p>
+          {dashboard?.createdByMe && (
+            <Image
+              src="/svgs/crown.svg"
+              alt="왕관 아이콘"
+              width={22}
+              height={22}
+              className="inline-block"
+              unoptimized
+              priority
+            />
+          )}
         </div>
 
         <div className="flex items-center">
           {/*관리 / 초대하기 버튼*/}
           <div className="flex gap-[6px] md:gap-[16px] pr-[40px]">
             <button
-              onClick={() => router.push(`/dashboard/${dashboardId}/edit`)}
+              onClick={() => {
+                if (dashboardId) {
+                  router.push(`/dashboard/${dashboardId}/edit`);
+                } else {
+                  router.push("mydashboard");
+                }
+              }}
               className="flex items-center justify-center w-[49px] h-[30px] md:w-[85px] md:h-[36px] lg:w-[88px] lg:h-[40px] rounded-[8px] border border-[#D9D9D9] gap-[10px] cursor-pointer"
             >
               <Image
