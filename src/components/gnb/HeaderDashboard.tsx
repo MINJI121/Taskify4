@@ -136,7 +136,7 @@ const HeaderDashboard: React.FC<HeaderDashboardProps> = ({
                 if (dashboardId) {
                   router.push(`/dashboard/${dashboardId}/edit`);
                 } else {
-                  router.push("mydashboard");
+                  router.push("/mydashboard");
                 }
               }}
               className="flex items-center justify-center w-[49px] h-[30px] md:w-[85px] md:h-[36px] lg:w-[88px] lg:h-[40px] rounded-[8px] border border-[#D9D9D9] gap-[10px] cursor-pointer"
@@ -211,7 +211,10 @@ const HeaderDashboard: React.FC<HeaderDashboardProps> = ({
             <SkeletonUser />
           ) : (
             user && (
-              <div className="flex items-center pr-[10px] md:pr-[30px] lg:pr-[80px] gap-[12px]">
+              <div
+                onClick={() => router.push("/mypage")}
+                className="flex items-center pr-[10px] md:pr-[30px] lg:pr-[80px] gap-[12px] cursor-default"
+              >
                 <div className="relative w-[34px] h-[34px] md:w-[38px] md:h-[38px] rounded-full">
                   {user.profileImageUrl ? (
                     <Image

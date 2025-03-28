@@ -1,5 +1,5 @@
 import { Modal } from "./Modal";
-import { CustomBtn } from "../button/CustomBtn";
+import { CustomBtn } from "../button/CustomButton";
 import { ReactNode } from "react";
 
 interface MypageModalProps {
