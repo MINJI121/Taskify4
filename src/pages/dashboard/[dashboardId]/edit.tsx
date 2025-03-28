@@ -70,7 +70,6 @@ export default function EditDashboard() {
       <SideMenu teamId={teamId} dashboardList={dashboardList} />
 
       <div className="flex flex-col flex-1">
-        {/* HeaderBebridge와 ChangeBebridge는 상단에 배치 */}
         <div className="flex flex-col">
           <HeaderDashboardEdit variant="dashboard" dashboardId={dashboardId} />
         </div>
@@ -82,7 +81,7 @@ export default function EditDashboard() {
             >
               <Image
                 src="/svgs/arrow-backward-black.svg"
-                alt="돌이가기"
+                alt="돌아가기"
                 width={20}
                 height={20}
               />

@@ -26,7 +26,7 @@ export const apiRoutes = {
   DashboardInviteDelete: (dashboardId: number, invitationId: number) =>
     `/${TEAM_ID}/dashboards/${dashboardId}/invitations/${invitationId}`, //delete
   //초대 받은 대시보드
-  Invitations: () => `/${TEAM_ID}/members`, //get
+  Invitations: () => `/${TEAM_ID}/invitations`, //get
   invitationDetail: (invitationId: number) =>
     `/${TEAM_ID}/invitations/${invitationId}`, //put
   // [Members]

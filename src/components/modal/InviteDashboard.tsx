@@ -39,14 +39,18 @@ export default function InviteDashboard({ onClose }: { onClose?: () => void }) {
           alert("초대 권한이 없습니다.");
         } else if (error.response?.status === 404) {
           alert("대시보드 또는 유저가 존재하지 않습니다.");
+        } else if (error.response?.status === 409) {
+          alert("이미 대시보드에 초대된 멤버입니다.");
         } else {
           alert("오류가 발생했습니다.");
         }
+        // Next.js가 감지하기 전에 강제 새로고침 실행 > 추후 더 좋은 방법 있으면 변경
+        setTimeout(() => {
+          window.location.reload();
+        }, 50);
       } else {
         alert("네트워크 오류가 발생했습니다.");
       }
-
-      window.location.reload();
     }
   };
 

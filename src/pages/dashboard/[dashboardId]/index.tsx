@@ -107,7 +107,7 @@ export default function Dashboard() {
       <div className="flex-1">
         <HeaderDashboard dashboardId={dashboardId} />
 
-        <div className="flex gap-4 p-6 overflow-x-auto">
+        <div className="flex gap-4 p-6 overflow-x-auto ">
           {/* 각 칼럼 렌더링 */}
           {columns.map((col) => (
             <Column

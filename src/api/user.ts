@@ -7,6 +7,8 @@ interface UserResponse {
   profileImageUrl: string;
   createdAt: string;
   updatedAt: string;
+  isOwner?: boolean;
+  userId?: number;
 }
 
 export const getUserInfo = async ({ teamId }: { teamId: string }) => {

@@ -1,6 +1,6 @@
 function EmptyInvitations() {
   return (
-    <div className="relative sm:w-[960px] w-[260px] sm:h-[390px] h:[327px]  rounded-[16px] sm:p-[24px_40px_120px_40px] p-[24px_20px_80px_20px]  bg-white shadow-md  mx-auto">
+    <div className="relative sm:w-[960px] w-[260px] sm:h-[390px] h:[327px]  rounded-[16px] sm:p-[24px_40px_120px_40px] p-[24px_20px_80px_20px]  bg-white shadow-md">
       <div className="flex justify-between ">
         <p className="sm:text-2xl text-sm font-bold mb-4 ">초대받은 대시보드</p>
       </div>

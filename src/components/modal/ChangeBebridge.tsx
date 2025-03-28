@@ -68,11 +68,13 @@ const ChangeBebridge = () => {
 
   return (
     <div className="sm:w-[620px] sm:h-[344px] w-[327px] h-[312px] bg-white sm:rounded-[16px] rounded-[8px] p-[24px] flex flex-col">
-      <h2 className="text-sm sm:text-[24px] font-bold">비브리지</h2>
+      <h2 className="text-sm sm:text-[24px] font-bold">
+        {dashboardDetail.title}
+      </h2>
       <Input
         type="text"
         onChange={setTitle}
-        label={`대시보드 이름 : ${dashboardDetail?.title || ""}`}
+        label="대시보드 이름"
         labelClassName="text-lg sm:text-base text-black3 mt-6"
         placeholder="뉴프로젝트"
         className="max-w-[620px] mb-1"

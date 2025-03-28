@@ -13,6 +13,34 @@ import ChangeBebridge from "@/components/modal/ChangeBebridge";
 export default function TestPage() {
   const [isModalOpen, setIsModalOpen] = useState(false); // 새로운 대시보드 모달
 
+  fetch(
+    "https://sp-taskify-api.vercel.app/13-4/invitations?size=10&cursorId=15241",
+    {
+      method: "GET",
+      headers: {
+        Authorization:
+          "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NTI4MywidGVhbUlkIjoiMTMtNCIsImlhdCI6MTc0MjgyNTA1NywiaXNzIjoic3AtdGFza2lmeSJ9.orNmncw29WyG8f7KJI8n0IrhYgYkp5BBjvrB0wRnCMg", // 실제 토큰을 입력하세요
+      },
+    }
+  )
+    .then((response) => response.json())
+    .then((data) => console.log(data))
+    .catch((error) => console.error("Error:", error));
+
+  fetch(
+    "https://sp-taskify-api.vercel.app/13-4/invitations?size=10&cursorId=15235",
+    {
+      method: "GET",
+      headers: {
+        Authorization:
+          "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NTI4MywidGVhbUlkIjoiMTMtNCIsImlhdCI6MTc0MjgyNTA1NywiaXNzIjoic3AtdGFza2lmeSJ9.orNmncw29WyG8f7KJI8n0IrhYgYkp5BBjvrB0wRnCMg", // 실제 토큰을 입력하세요
+      },
+    }
+  )
+    .then((response) => response.json())
+    .then((data) => console.log(data))
+    .catch((error) => console.error("Error:", error));
+
   return (
     <div className="flex flex-col items-center gap-4 p-10">
       <h1 className="text-2xl font-bold">구성원 테이블 테스트</h1>

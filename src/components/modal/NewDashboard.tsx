@@ -10,7 +10,7 @@ export default function NewDashboard({ onClose }: { onClose?: () => void }) {
 
   const colors = ["#7ac555", "#760DDE", "#FF9800", "#76A5EA", "#E876EA"];
 
-  const token = process.env.NEXT_PUBLIC_API_TOKEN;
+  const token = localStorage.getItem("accessToken");
 
   const handleSubmit = async () => {
     const payload = {
