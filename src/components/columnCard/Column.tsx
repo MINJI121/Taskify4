@@ -1,25 +1,62 @@
+// components/column/Column.tsx
 import { useState } from "react";
 import Image from "next/image";
 import { CardType } from "@/types/task";
 import Card from "./Card";
-import { Modal } from "../modal/Modal";
 import TodoModal from "@/components/modalInput/ToDoModal";
-import Input from "../input/Input";
 import TodoButton from "@/components/button/TodoButton";
-import { CustomBtn } from "../button/CustomBtn";
+import ColumnManageModal from "@/components/columnCard/ColumnManageModal";
+import ColumnDeleteModal from "@/components/columnCard/ColumnDeleteModal";
+import { updateColumn, deleteColumn } from "@/api/dashboards";
 
 type ColumnProps = {
+  columnId: number;
   title?: string;
   tasks?: CardType[];
+  teamId: string;
+  dashboardId: number;
 };
 
 export default function Column({
+  columnId,
   title = "new Task",
   tasks = [],
+  teamId,
+  dashboardId,
 }: ColumnProps) {
   const [isColumnModalOpen, setIsColumnModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [isTodoModalOpen, setIsTodoModalOpen] = useState(false);
+  const [columnTitle, setColmnTitle] = useState(title);
+
+  const handleEditColumn = async (newTitle: string) => {
+    if (!newTitle.trim()) {
+      alert("칼럼 이름을 입력해주세요.");
+      return;
+    }
+
+    try {
+      const updated = await updateColumn({ teamId, columnId, title: newTitle });
+      setColmnTitle(updated.title);
+      setIsColumnModalOpen(false);
+      alert("칼럼 이름이 변경되었습니다.");
+    } catch (error) {
+      console.error("칼럼 이름 수정 실패:", error);
+      alert("칼럼 이름 수정 중 오류가 발생했습니다.");
+    }
+  };
+
+  const handleDeleteColumn = async () => {
+    try {
+      await deleteColumn({ teamId, columnId });
+      setIsDeleteModalOpen(false);
+      alert("칼럼이 삭제되었습니다.");
+      // 👉 부모에서 상태를 관리 중이라면 삭제 후 다시 데이터를 불러오거나, 상태 업데이트 필요!
+    } catch (error) {
+      console.error("칼럼 삭제 실패:", error);
+      alert("칼럼 삭제에 실패했습니다.");
+    }
+  };
 
   return (
     <div className="w-[354px] h-[1010px] border-[var(--color-gray4)] flex flex-col rounded-md border border-solid bg-gray-50 p-4">
@@ -27,7 +64,7 @@ export default function Column({
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
           <h2 className="text-lg font-bold">
-            <span className="text-[var(--primary)]">•</span> {title}
+            <span className="text-[var(--primary)]">•</span> {columnTitle}
           </h2>
           <span className="bg-gray-200 text-gray-700 px-2 py-1 rounded-full text-sm">
             {tasks.length}
@@ -59,64 +96,34 @@ export default function Column({
         />
       ))}
 
-      {/* Todo 추가 모달 */}
+      {/* Todo 모달 */}
       {isTodoModalOpen && (
         <TodoModal
-          isOpen={isTodoModalOpen}
+          isOpen={isTodoModalOpen} // todo todomodal에서 타입정의 추가하기 (isOpen, teamId, dashboardId)
           onClose={() => setIsTodoModalOpen(false)}
+          teamId={teamId}
+          dashboardId={dashboardId}
         />
       )}
 
       {/* 칼럼 관리 모달 */}
-      {isColumnModalOpen && (
-        <Modal
-          isOpen={isColumnModalOpen}
-          onClose={() => setIsColumnModalOpen(false)}
-        >
-          <div className="flex flex-col gap-5">
-            <h2 className="text-2xl font-bold">칼럼 관리</h2>
-            <label className="font-medium flex flex-col gap-2">
-              이름
-              <Input type="text" />
-            </label>
-            <div className="flex justify-between mt-1.5">
-              <CustomBtn
-                variant="outlineDisabled"
-                onClick={() => {
-                  setIsColumnModalOpen(false);
-                  setIsDeleteModalOpen(true);
-                }}
-              >
-                삭제
-              </CustomBtn>
-              <CustomBtn>변경</CustomBtn>
-            </div>
-          </div>
-        </Modal>
-      )}
+      <ColumnManageModal
+        isOpen={isColumnModalOpen}
+        onClose={() => setIsColumnModalOpen(false)}
+        onDeleteClick={() => {
+          setIsColumnModalOpen(false);
+          setIsDeleteModalOpen(true);
+        }}
+        columnTitle={columnTitle}
+        onEditSubmit={handleEditColumn}
+      />
 
       {/* 칼럼 삭제 확인 모달 */}
-      {isDeleteModalOpen && (
-        <Modal
-          width="w-[568px]"
-          height="h-[174px]"
-          isOpen={isDeleteModalOpen}
-          onClose={() => setIsDeleteModalOpen(false)}
-        >
-          <div className="flex flex-col gap-10 text-center">
-            <p className="text-xl mt-1.5">칼럼의 모든 카드가 삭제됩니다.</p>
-            <div className="flex justify-between gap-3">
-              <CustomBtn
-                variant="outlineDisabled"
-                onClick={() => setIsDeleteModalOpen(false)}
-              >
-                취소
-              </CustomBtn>
-              <CustomBtn variant="primary">삭제</CustomBtn>
-            </div>
-          </div>
-        </Modal>
-      )}
+      <ColumnDeleteModal
+        isOpen={isDeleteModalOpen}
+        onClose={() => setIsDeleteModalOpen(false)}
+        onDelete={handleDeleteColumn}
+      />
     </div>
   );
 }

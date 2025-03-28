@@ -15,6 +15,7 @@ export type CardType = {
   imageUrl: string | null;
   description?: string;
   columnId: number;
+  dashboardId: number;
 };
 
 // 칼럼
@@ -29,4 +30,15 @@ export type ColumnType = {
 // 여러 칼럼별 테스크 묶음
 export type TasksByColumn = {
   [columnIdL: number]: CardType[];
+};
+
+// 대시보드
+export type DashboardType = {
+  id: number;
+  title: string;
+  color: string;
+  createdAt: string;
+  updatedAt: string;
+  createdByMe: boolean;
+  userId: number;
 };

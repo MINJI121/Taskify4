@@ -1,12 +1,12 @@
 import React from "react";
 
-interface PaginationBtnProps
+interface PaginationButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   direction?: "left" | "right";
   disabled?: boolean;
 }
 
-export const PaginationBtn: React.FC<PaginationBtnProps> = ({
+export const PaginationButton: React.FC<PaginationButtonProps> = ({
   direction = "left",
   disabled = false,
   ...props

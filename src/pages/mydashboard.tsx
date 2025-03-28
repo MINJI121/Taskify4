@@ -3,7 +3,7 @@ import SideMenu from "@/components/sideMenu/SideMenu";
 import HeaderDashboard from "@/components/gnb/HeaderDashboard";
 import InvitedDashBoard from "@/components/table/invited/InvitedDashBoard";
 import CardButton from "@/components/button/CardButton";
-import { PaginationBtn } from "@/components/button/PaginationBtn";
+import { PaginationButton } from "@/components/button/PaginationButton";
 import NewDashboard from "@/components/modal/NewDashboard";
 import DashboardAddButton from "@/components/button/DashboardAddButton";
 import { getDashboards } from "@/api/dashboards";
@@ -83,12 +83,12 @@ export default function MyDashboardPage() {
                 <span className="text-sm text-gray-500">
                   {`${currentPage}페이지 중 ${totalPages}`}
                 </span>
-                <PaginationBtn
+                <PaginationButton
                   direction="left"
                   disabled={currentPage === 1}
                   onClick={handlePrevPage}
                 />
-                <PaginationBtn
+                <PaginationButton
                   direction="right"
                   disabled={currentPage === totalPages}
                   onClick={handleNextPage}
