@@ -56,7 +56,7 @@ export default function TaskModal({
     formData.deadline;
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-30 p-4 z-50">
+    <div className="fixed inset-0 flex items-center justify-center bg-black/35 z-50">
       <div className="w-full max-w-[584px] h-auto max-h-[90vh] rounded-lg bg-white p-4 sm:p-8 shadow-lg flex flex-col gap-4 sm:gap-8 overflow-y-auto">
         <h2 className="text-xl font-bold">
           {mode === "edit" ? "할 일 수정" : "할 일 생성"}
@@ -111,7 +111,7 @@ export default function TaskModal({
 
           <ModalImage
             label="이미지"
-            teamId={""} // ✅ 부모에서 넘겨줘야 함
+            teamId={""} // 부모에서 넘겨줘야 함
             columnId={0}
             defaultImageUrl={formData.image}
             onImageSelect={(url) => handleChange("image", url)}
