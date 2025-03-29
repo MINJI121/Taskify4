@@ -11,16 +11,17 @@ interface TaskModalProps {
   onClose: () => void;
   onSubmit: (data: TaskData) => void;
   initialData?: Partial<TaskData>;
+  members: { nickname: string }[]; // ✅ 담당자 목록 받기
 }
 
-interface TaskData {
+export interface TaskData {
   status: string;
   assignee: string;
   title: string;
   description: string;
   deadline: string;
   tags: string[];
-  image?: File;
+  image?: string; // ✅ 이미지 URL
 }
 
 export default function TaskModal({
@@ -28,6 +29,7 @@ export default function TaskModal({
   onClose,
   onSubmit,
   initialData = {},
+  members,
 }: TaskModalProps) {
   const [formData, setFormData] = useState<TaskData>({
     status: initialData.status || "",
@@ -36,18 +38,22 @@ export default function TaskModal({
     description: initialData.description || "",
     deadline: initialData.deadline || "",
     tags: initialData.tags || [],
-    image: initialData.image,
+    image: initialData.image || "",
   });
 
-  const handleChange = (
-    field: keyof TaskData,
-    value: string | string[] | File
-  ) => {
+  const handleChange = (field: keyof TaskData, value: string | string[]) => {
     setFormData((prev) => ({
       ...prev,
       [field]: value,
     }));
   };
+
+  const isFormValid =
+    formData.assignee &&
+    formData.status &&
+    formData.title &&
+    formData.description &&
+    formData.deadline;
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-30 p-4 z-50">
@@ -69,6 +75,7 @@ export default function TaskModal({
             <AssigneeSelect
               label="담당자"
               value={formData.assignee}
+              users={members.map((m) => m.nickname)} // ✅ 드롭다운용
               required
               onChange={(value) => handleChange("assignee", value)}
             />
@@ -104,7 +111,10 @@ export default function TaskModal({
 
           <ModalImage
             label="이미지"
-            onImageSelect={(file) => handleChange("image", file)}
+            teamId={""} // ✅ 부모에서 넘겨줘야 함
+            columnId={0}
+            defaultImageUrl={formData.image}
+            onImageSelect={(url) => handleChange("image", url)}
           />
         </div>
 
@@ -123,6 +133,7 @@ export default function TaskModal({
             buttonSize="md"
             onClick={() => onSubmit(formData)}
             className="w-full sm:w-[256px] h-[54px] bg-[var(--primary)] text-white rounded-lg"
+            disabled={!isFormValid}
           >
             {mode === "edit" ? "수정" : "생성"}
           </TextButton>

@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { ChangeEvent, useRef, useState } from "react";
+import { ChangeEvent, useEffect, useRef, useState } from "react";
 import AddButton from "./AddButton";
 import { uploadCardImage } from "@/api/card";
 
@@ -7,17 +7,26 @@ interface ModalImageProps {
   label: string;
   teamId: string;
   columnId: number;
-  onImageSelect: (imageUrl: string) => void;
+  defaultImageUrl?: string;
+  onImageSelect: (imageUrl: string) => void; // ✅ string만 넘김
 }
 
 export default function ModalImage({
   label,
   teamId,
   columnId,
+  defaultImageUrl,
   onImageSelect,
 }: ModalImageProps) {
   const [backgroundImage, setBackgroundImage] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
+
+  // 기존 이미지 표시
+  useEffect(() => {
+    if (defaultImageUrl) {
+      setBackgroundImage(defaultImageUrl);
+    }
+  }, [defaultImageUrl]);
 
   const handleFileInputClick = () => {
     fileInputRef.current?.click();
@@ -27,7 +36,7 @@ export default function ModalImage({
     const file = e.target.files?.[0];
     if (!file) return;
 
-    // 이미지 미리보기
+    // 미리보기용
     const reader = new FileReader();
     reader.onload = (event) => {
       const imageSrc = event.target?.result as string;
@@ -35,13 +44,14 @@ export default function ModalImage({
     };
     reader.readAsDataURL(file);
 
+    // ✅ 업로드 후 URL 전달
     try {
       const imageUrl = await uploadCardImage({
         teamId,
         columnId,
-        imageFile: file, // ✅ File만 넘김
+        imageFile: file,
       });
-      onImageSelect(imageUrl); // 부모로 전달
+      onImageSelect(imageUrl);
     } catch (error) {
       console.error("이미지 업로드 실패:", error);
       alert("이미지 업로드에 실패했어요.");
@@ -64,7 +74,7 @@ export default function ModalImage({
               src={backgroundImage}
               fill
               alt="Selected Image"
-              className="rounded-md"
+              className="rounded-md object-cover"
               unoptimized
             />
             <div className="z-10 flex w-[76px] h-[76px] items-center justify-center rounded-md bg-[var(--color-black4)] opacity-0 transition-opacity duration-200 ease-in-out group-hover:opacity-60">

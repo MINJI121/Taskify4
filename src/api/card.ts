@@ -84,3 +84,38 @@ export const getDashboardMembers = async ({
 
   return res.data.members;
 };
+
+/** 4. 카드 수정 */
+export const updateCard = async ({
+  teamId,
+  cardId,
+  columnId,
+  assigneeUserId,
+  title,
+  description,
+  dueDate,
+  tags,
+  imageUrl,
+}: {
+  teamId: string;
+  cardId: number;
+  columnId: number;
+  assigneeUserId: number;
+  title: string;
+  description: string;
+  dueDate: string;
+  tags: string[];
+  imageUrl?: string;
+}) => {
+  const response = await axiosInstance.put(`/${teamId}/cards/${cardId}`, {
+    columnId,
+    assigneeUserId,
+    title,
+    description,
+    dueDate,
+    tags,
+    imageUrl,
+  });
+
+  return response.data;
+};
