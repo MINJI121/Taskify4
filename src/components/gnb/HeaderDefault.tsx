@@ -1,6 +1,7 @@
 import React from "react";
 import { useRouter } from "next/router";
 import Image from "next/image";
+import useUserStore from "@/store/useUserStore";
 
 interface HeaderDefaultProps {
   variant?: "white" | "black";
@@ -8,8 +9,21 @@ interface HeaderDefaultProps {
 
 const HeaderDefault: React.FC<HeaderDefaultProps> = ({ variant = "white" }) => {
   const router = useRouter();
+  const { user, clearUser } = useUserStore();
 
+  const isLoggedIn = !user;
   const isWhite = variant === "white";
+
+  const handleAuthClick = () => {
+    if (isLoggedIn) {
+      clearUser();
+      localStorage.removeItem("accessToken");
+      localStorage.removeItem("expiresAt");
+      window.location.reload();
+    } else {
+      router.push("login");
+    }
+  };
 
   return (
     <header
@@ -41,19 +55,21 @@ const HeaderDefault: React.FC<HeaderDefaultProps> = ({ variant = "white" }) => {
         </div>
         <div className="flex space-x-[24px] md:space-x-[36px]">
           <button
-            onClick={() => router.push(`/login`)}
+            onClick={handleAuthClick}
             className={`text-sm md:text-base cursor-pointer
               ${isWhite ? "text-black3" : "text-white"}`}
           >
-            로그인
+            {isLoggedIn ? "로그아웃" : "로그인"}
           </button>
-          <button
-            onClick={() => router.push(`/signup`)}
-            className={`text-sm md:text-base cursor-pointer
+          {!isLoggedIn && (
+            <button
+              onClick={() => router.push(`/signup`)}
+              className={`text-sm md:text-base cursor-pointer
               ${isWhite ? "text-black3" : "text-white"}`}
-          >
-            회원가입
-          </button>
+            >
+              회원가입
+            </button>
+          )}
         </div>
       </div>
     </header>

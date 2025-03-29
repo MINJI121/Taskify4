@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/router";
 import SkeletonUser from "@/shared/skeletonUser";
 import Image from "next/image";
@@ -7,7 +7,8 @@ import { getMembers } from "@/api/members";
 import { getUserInfo } from "@/api/user";
 import { getDashboardById } from "@/api/dashboards";
 import { TEAM_ID } from "@/constants/team";
-import RandomProfile from "@/components/table/member/RandomProfile";
+import { MemberAvatars, UserAvatars } from "@/components/gnb/Avatars";
+import UserMenu from "@/components/gnb/UserMenu";
 import InviteDashboard from "@/components/modal/InviteDashboard";
 
 interface HeaderDashboardProps {
@@ -16,24 +17,22 @@ interface HeaderDashboardProps {
   dashboardId?: string | string[];
 }
 
-const MAX_VISIBLE_MEMBERS = 4;
-const memberIconWrapperClass =
-  "relative flex items-center justify-center w-[34px] h-[34px] md:w-[38px] md:h-[38px] rounded-full border-[2px] border-white";
-
 const HeaderDashboard: React.FC<HeaderDashboardProps> = ({
   variant,
   dashboardId,
 }) => {
   const router = useRouter();
+  const [isLoading, setIsLoading] = useState(true);
   const [user, setUser] = useState<UserType | null>(null);
   const [members, setMembers] = useState<MemberType[]>([]);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
   const [dashboard, setDashboard] = useState<{
     title: string;
     createdByMe: boolean;
   } | null>(null);
-  const [errorMessage, setErrorMessage] = useState("");
-  const [isLoading, setIsLoading] = useState(true);
 
+  /*초대하기 모달 상태 관리*/
   const [isModalOpen, setIsModalOpen] = useState(false);
   const openInviteModal = () => {
     setIsModalOpen(true);
@@ -41,23 +40,6 @@ const HeaderDashboard: React.FC<HeaderDashboardProps> = ({
   const closeInviteModal = () => {
     setIsModalOpen(false);
   };
-
-  /*유저 정보 api 호출*/
-  useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        const user = await getUserInfo({ teamId: TEAM_ID });
-        setUser(user);
-      } catch (error) {
-        console.error("유저 정보 불러오기 실패", error);
-        setErrorMessage("유저 정보를 불러오지 못했습니다.");
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchUser();
-  }, []);
 
   /*멤버 목록 api 호출*/
   useEffect(() => {
@@ -77,7 +59,24 @@ const HeaderDashboard: React.FC<HeaderDashboardProps> = ({
     }
   }, [dashboardId, variant]);
 
-  /*대시보드 이름 api 호출*/
+  /*유저 정보 api 호출*/
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const user = await getUserInfo({ teamId: TEAM_ID });
+        setUser(user);
+      } catch (error) {
+        console.error("유저 정보 불러오기 실패", error);
+        setErrorMessage("유저 정보를 불러오지 못했습니다.");
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchUser();
+  }, []);
+
+  /*대시보드 api 호출*/
   useEffect(() => {
     const fetchDashboard = async () => {
       if (variant === "dashboard" && dashboardId) {
@@ -129,14 +128,14 @@ const HeaderDashboard: React.FC<HeaderDashboardProps> = ({
         </div>
 
         <div className="flex items-center">
-          {/*관리 / 초대하기 버튼*/}
+          {/*관리 버튼*/}
           <div className="flex gap-[6px] md:gap-[16px] pr-[40px]">
             <button
               onClick={() => {
                 if (dashboardId) {
                   router.push(`/dashboard/${dashboardId}/edit`);
                 } else {
-                  router.push("/mydashboard");
+                  router.push("/mypage");
                 }
               }}
               className="flex items-center justify-center w-[49px] h-[30px] md:w-[85px] md:h-[36px] lg:w-[88px] lg:h-[40px] rounded-[8px] border border-[#D9D9D9] gap-[10px] cursor-pointer"
@@ -150,7 +149,7 @@ const HeaderDashboard: React.FC<HeaderDashboardProps> = ({
               />
               <span className="text-sm md:text-base text-gray1">관리</span>
             </button>
-
+            {/*초대하기 버튼*/}
             <button
               onClick={openInviteModal}
               className="flex items-center justify-center w-[73px] h-[30px] md:w-[109px] md:h-[36px] lg:w-[116px] lg:h-[40px] rounded-[8px] border border-[#D9D9D9] gap-[10px] cursor-pointer"
@@ -167,72 +166,39 @@ const HeaderDashboard: React.FC<HeaderDashboardProps> = ({
             {isModalOpen && <InviteDashboard onClose={closeInviteModal} />}
           </div>
 
-          {/*멤버 목록, 나머지 멤버 수 +n 아이콘으로 표시*/}
+          {/*멤버 목록*/}
+          <MemberAvatars
+            members={members}
+            isLoading={isLoading}
+            variant={variant}
+          />
 
-          {variant !== "mydashboard" && (
-            <div className="flex -space-x-3">
-              {isLoading ? (
-                <SkeletonUser />
-              ) : (
-                <>
-                  {members.slice(0, MAX_VISIBLE_MEMBERS).map((member) => (
-                    <div className={memberIconWrapperClass} key={member.id}>
-                      {member.profileImageUrl ? (
-                        <Image
-                          src={member.profileImageUrl}
-                          alt={member.nickname}
-                          fill
-                          className="object-cover"
-                        />
-                      ) : (
-                        <RandomProfile name={member.nickname} />
-                      )}
-                    </div>
-                  ))}
-                  {members.length > MAX_VISIBLE_MEMBERS && (
-                    <div
-                      className={`${memberIconWrapperClass} bg-[#F4D7DA] font-16m text-[#D25B68]`}
-                    >
-                      +{members.length - MAX_VISIBLE_MEMBERS}
-                    </div>
-                  )}
-                </>
-              )}
-            </div>
-          )}
+          {/*드롭다운 메뉴 너비 지정 목적의 섹션 구분용 div*/}
+          <div className="relative flex items-center h-[60px] md:h-[70px] pr-[10px] md:pr-[30px] lg:pr-[80px]">
+            {/*구분선*/}
+            <div className="h-[34px] md:h-[38px] w-[1px] bg-[var(--color-gray3)]" />
 
-          {/*구분선*/}
-          <div className="pl-[15px] pr-[20px] md:pl-[25px] md:pr-[30px] lg:pl-[30px] lg:pr-[35px]">
-            <div className="flex items-center justify-center h-[34px] md:h-[38px] w-[1px] bg-[var(--color-gray3)]"></div>
-          </div>
-
-          {/*유저 정보*/}
-          {isLoading ? (
-            <SkeletonUser />
-          ) : (
-            user && (
-              <div
-                onClick={() => router.push("/mypage")}
-                className="flex items-center pr-[10px] md:pr-[30px] lg:pr-[80px] gap-[12px] cursor-default"
-              >
-                <div className="relative w-[34px] h-[34px] md:w-[38px] md:h-[38px] rounded-full">
-                  {user.profileImageUrl ? (
-                    <Image
-                      src={user.profileImageUrl}
-                      alt="유저 프로필 아이콘"
-                      fill
-                      className="object-cover"
-                    />
-                  ) : (
-                    <RandomProfile name={user.nickname} />
-                  )}
+            {/*유저 정보*/}
+            {isLoading ? (
+              <SkeletonUser />
+            ) : (
+              user && (
+                <div
+                  onClick={() => setIsMenuOpen((prev) => !prev)}
+                  className="flex items-center gap-[12px] pl-[20px] md:pl-[30px] lg:pl-[35px] cursor-pointer"
+                >
+                  <UserAvatars user={user} />
+                  <span className="hidden md:block text-black3 md:text-base md:font-medium">
+                    {user.nickname}
+                  </span>
+                  <UserMenu
+                    isMenuOpen={isMenuOpen}
+                    setIsMenuOpen={setIsMenuOpen}
+                  />
                 </div>
-                <span className="hidden md:block text-black3 md:text-base md:font-medium">
-                  {user.nickname}
-                </span>
-              </div>
-            )
-          )}
+              )
+            )}
+          </div>
         </div>
       </div>
     </header>
