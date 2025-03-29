@@ -12,8 +12,6 @@ interface MemberAvatarsProps {
 }
 
 const MAX_VISIBLE_MEMBERS = 4;
-const memberIconWrapperClass =
-  "w-[34px] h-[34px] md:w-[38px] md:h-[38px] rounded-full border-[2px] border-white overflow-hidden";
 
 export const MemberAvatars: React.FC<MemberAvatarsProps> = ({
   members,
@@ -24,29 +22,29 @@ export const MemberAvatars: React.FC<MemberAvatarsProps> = ({
 
   return (
     <div className="pr-[15px] md:pr-[25px] lg:pr-[30px]">
-      <div className="flex -space-x-3">
+      <div className="flex items-center justify-center -space-x-3">
         {isLoading ? (
           <SkeletonUser />
         ) : (
           <>
             {members.slice(0, MAX_VISIBLE_MEMBERS).map((member) => (
-              <div key={member.id}>
+              <div key={member.id} className="relative rounded-full">
                 {member.profileImageUrl ? (
-                  <Image
-                    src={member.profileImageUrl}
-                    alt={member.nickname}
-                    fill
-                    className={`${memberIconWrapperClass} object-cover`}
-                  />
+                  <div className="relative w-[34px] h-[34px] md:w-[38px] md:h-[38px] rounded-full border-[2px] border-white overflow-hidden">
+                    <Image
+                      src={member.profileImageUrl}
+                      alt={member.nickname}
+                      fill
+                      className="object-cover"
+                    />
+                  </div>
                 ) : (
                   <RandomProfile name={member.nickname} />
                 )}
               </div>
             ))}
             {members.length > MAX_VISIBLE_MEMBERS && (
-              <div
-                className={`${memberIconWrapperClass} bg-[#F4D7DA] font-16m text-[#D25B68]`}
-              >
+              <div className="relative w-[34px] h-[34px] md:w-[38px] md:h-[38px] rounded-full bg-[#F4D7DA] font-16m text-[#D25B68] border-[2px] border-white overflow-hidden">
                 +{members.length - MAX_VISIBLE_MEMBERS}
               </div>
             )}
