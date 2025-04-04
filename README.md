@@ -9,14 +9,15 @@
 
 # Team
 
-### 황혜진 👑
+### 황혜진
 
 - 팀장
-- 컴포넌트 작성 Button, Modal, Columns, card 
-- button, Modal 컴포넌트의 반응형 및 수정이 용이한 작성
-- card, CardList, Column 의 바닥감지 무한스크롤 기능
-- 아이디별 대시보드 페이지에서 카드 동적 랜더링
-- Modal 생성/삭제/상세조회 모달 기반 UI 작성
+- 공통 컴포넌트 Button, Modal을 크기 및 버튼 개수 설정 등 유동적인 UI로 구성
+- 주요 컴포넌트 작성: Card, CardList, Column
+- CardList, Column의 스크롤 바닥 감지를 통한 무한 스크롤 기능 구현
+- [dashboardId]index에서 칼럼 및 카드 데이터 동적 렌더링
+- 카드 생성 / 삭제 / 상세조회 기능을 포함한 모달 기반 UI 작성 (AddColumnModal, ColumnDeleteModal, ColumnManageModal)
+- 프로젝트 초기 컨벤션(파일명, 커밋 메시지, 브랜치 네이밍 등) 설정 및 팀 내 공유
 
 
 ### 임용균
