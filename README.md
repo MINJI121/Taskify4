@@ -61,7 +61,9 @@
 
 # Images
 
-//이미지 나중에 GIF 추가 부탁드립니다.
+https://github.com/user-attachments/assets/64c0e04f-a5da-42c0-a576-1f27519447fb
+
+
 
 # Skill Stacks
 
