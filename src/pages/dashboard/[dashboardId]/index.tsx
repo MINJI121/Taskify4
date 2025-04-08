@@ -111,7 +111,7 @@ export default function Dashboard() {
       <div className="flex flex-col flex-1 overflow-hidden">
         <HeaderDashboard variant="dashboard" dashboardId={dashboardId} />
 
-        <div className="flex-1 overflow-x-auto flex flex-col md:flex-col lg:flex-row bg-gray-50 ">
+        <div className="flex-1 overflow-x-auto flex flex-col md:flex-col lg:flex-row bg-white">
           {/* 각 칼럼 렌더링 */}
           {columns.map((col) => (
             <Column
@@ -123,7 +123,7 @@ export default function Dashboard() {
             />
           ))}
           {/* ColumnsButton: 모바일/태블릿에서는 하단 고정, 데스크탑에서는 원래 위치 */}
-          <div className={`p-11 hidden lg:block bg-gray-50`}>
+          <div className={`p-11 hidden lg:block bg-white`}>
             <ColumnsButton onClick={openModal} />
           </div>
 

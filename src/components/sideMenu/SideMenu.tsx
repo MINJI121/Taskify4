@@ -34,7 +34,7 @@ export default function SideMenu({
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const itemsPerPage = 15;
+  const itemsPerPage = 14;
   const totalPages = Math.ceil(dashboardList.length / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
@@ -51,7 +51,7 @@ export default function SideMenu({
   return (
     <aside
       className={clsx(
-        "h-screen overflow-y-auto border-r border-[var(--color-gray3)] px-3 py-5 transition-all duration-200 flex flex-col",
+        "flex flex-col h-screen overflow-y-auto lg:overflow-y-hidden overflow-x-hidden border-r border-[var(--color-gray3)] px-3 py-5 transition-all duration-200",
         isCollapsed
           ? "w-[67px]"
           : "w-[67px] sm:w-[67px] md:w-[160px] lg:w-[300px]"
@@ -126,7 +126,7 @@ export default function SideMenu({
         </div>
       </div>
 
-      <nav className="flex flex-col flex-1 justify-between">
+      <nav className="flex flex-1 flex-col min-h-0 justify-between h-full">
         <div>
           {/* 대시보드 타이틀 + 추가 버튼 */}
           {!isCollapsed && (
@@ -169,7 +169,7 @@ export default function SideMenu({
           {/* 대시보드 목록 */}
           <ul
             className={clsx(
-              "flex flex-col",
+              "flex-1",
               isCollapsed
                 ? "items-center"
                 : "items-start md:items-start sm:items-center w-full"
@@ -179,14 +179,14 @@ export default function SideMenu({
               <li
                 key={dashboard.id}
                 className={clsx(
-                  "w-full flex justify-center md:justify-start p-3 font-18r text-[var(--color-gray1)] transition-colors duration-200",
+                  "flex w-full justify-center md:justify-start p-3 font-18m text-[var(--color-gray1)] transition-colors duration-200",
                   dashboard.id.toString() === boardId &&
                     "bg-[var(--color-violet8)] text-[var(--color-black)] font-semibold rounded-l-xl"
                 )}
               >
                 <Link
                   href={`/dashboard/${dashboard.id}`}
-                  className="flex items-center gap-2"
+                  className="flex items-center gap-3"
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -199,8 +199,8 @@ export default function SideMenu({
                     <circle cx="4" cy="4" r="4" />
                   </svg>
                   {!isCollapsed && (
-                    <div className="hidden md:flex items-center gap-2">
-                      <span className="truncate md:text-base">
+                    <div className="hidden md:flex min-w-0 items-center gap-1.5">
+                      <span className="truncate md:text-base max-w-[100px] lg:max-w-[200px]">
                         {dashboard.title}
                       </span>
                       {dashboard.createdByMe && (
@@ -223,7 +223,7 @@ export default function SideMenu({
 
         {/* 페이지네이션 */}
         {!isCollapsed && dashboardList.length > itemsPerPage && (
-          <div className="flex justify-start mt-4 px-3">
+          <div className="flex justify-start items-end mb-9 px-2">
             <PaginationButton
               direction="left"
               disabled={currentPage === 1}

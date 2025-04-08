@@ -277,7 +277,7 @@ export default function InvitedDashBoard() {
         <div className="relative bg-white rounded-lg shadow-md w-[260px] sm:w-[504px] lg:w-[1022px] h-[770px] sm:h-[592px] lg:h-[620px] max-w-none">
           <div className="flex flex-col p-6 w-full h-[104px]">
             <div className="flex flex-col w-full sm:w-[448px] lg:w-[966px] gap-[24px]">
-              <p className="text-black3 text-xl sm:text-2xl font-bold">
+              <p className="text-black3 text-[16px] sm:text-[20px] font-bold">
                 초대받은 대시보드
               </p>
 

@@ -64,7 +64,7 @@ const CardButton: React.FC<CardButtonProps> = ({
         "border border-[var(--color-gray3)]",
         "min-w-0 w-full max-w-[260px] md:max-w-[247px] lg:max-w-[332px]",
         "h-[58px] md:h-[68px] lg:h-[70px]",
-        "mt-[10px] md:mt-[16px] lg:mt-[20px]",
+        "mt-[2px]", // 카드 세로 간격
         "text-lg md:text-2lg lg:text-2lg",
         isEditMode
           ? "cursor-default hover:border-gray-300"
@@ -73,27 +73,28 @@ const CardButton: React.FC<CardButtonProps> = ({
       )}
     >
       {/* 왼쪽: 색상 도트 + 제목 + 왕관 */}
-      <div className="flex items-center gap-[10px] overflow-hidden">
+      <div className="flex items-center font-semibold gap-[10px] overflow-hidden">
         {/* 색상 원 */}
         <svg width="8" height="8" viewBox="0 0 8 8" fill={color}>
           <circle cx="4" cy="4" r="4" />
         </svg>
 
         {/* 제목 */}
-        <span className="text-black3 font-16sb truncate max-w-[90px] sm:max-w-[100px] md:max-w-[120px] lg:max-w-[160px]">
+        <span className="text-black3 text-[14px] sm:text-[16px] truncate max-w-[90px] sm:max-w-[100px] md:max-w-[120px] lg:max-w-[160px]">
           {title}
         </span>
 
         {/* 왕관 */}
-        {showCrown && (
-          <Image
-            src="/svgs/icon-crown.svg"
-            alt="crown Icon"
-            width={20}
-            height={20}
-            className="hidden sm:block w-[20px] h-[20px]"
-          />
-        )}
+        <div className="relative w-[15px] h-[12px] md:w-[17px] md:h-[14px]">
+          {showCrown && (
+            <Image
+              src="/svgs/icon-crown.svg"
+              alt="crown Icon"
+              fill
+              className="object-contain"
+            />
+          )}
+        </div>
       </div>
 
       {/* 오른쪽: 화살표 아이콘 or 수정/삭제 버튼 */}

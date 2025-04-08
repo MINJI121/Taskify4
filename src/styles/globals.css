@@ -76,6 +76,7 @@
 @layer base {
   :root {
     --primary: #5534da;
+    --color-violet5: #f5f2fc;
     --color-violet8: #f1effd;
     --color-red: #d6173a;
     --color-green: #7ac555;

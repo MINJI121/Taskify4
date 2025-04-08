@@ -135,10 +135,11 @@ const HeaderDashboard: React.FC<HeaderDashboardProps> = ({
         )}
 
         {/*헤더 제목*/}
-        <div className="flex items-center gap-[8px]">
+        <div className="flex font-bold items-center gap-[8px]">
           <p
             className={clsx(
-              "font-20b text-black3 whitespace-nowrap",
+              "text-[16px] sm:text-[20px] text-black3",
+              "whitespace-nowrap truncate max-w-[100px] md:max-w-[400px]",
               variant !== "mydashboard" && variant !== "mypage"
                 ? "hidden lg:block"
                 : ""
