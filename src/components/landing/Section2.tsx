@@ -2,12 +2,12 @@ import Image from "next/image";
 
 export default function Section2() {
   return (
-    <section className="flex flex-col items-center w-full px-4 gap-[80px]">
+    <section className="flex flex-col items-center w-full px-4 sm:gap-[80px] gap-[60px]">
       {/* 카드 1 */}
-      <div className="w-full max-w-[1200px] h-[600px] bg-[var(--color-black3)] rounded-lg relative flex flex-col md:flex-row gap-[40px] overflow-hidden">
+      <div className="w-full max-w-[1200px] h-[600px] bg-[var(--color-black2)] rounded-lg relative flex flex-col md:flex-row gap-[40px] overflow-hidden">
         {/* 텍스트 왼쪽 */}
         <div className="w-full md:w-1/2 flex flex-col justify-center px-[40px] text-center md:text-left z-10">
-          <p className="text-[16px] md:text-[22px] text-[var(--color-gray3)] mb-[40px] md:mb-[100px]">
+          <p className="text-[16px] md:text-[22px] text-[var(--color-gray2)] mb-[40px] md:mb-[100px] md:mt-0 mt-[50px]">
             Point 1
           </p>
           <div className="text-[32px] md:text-[48px] font-bold leading-[44px] md:leading-[64px] text-[var(--color-white)]">
@@ -29,10 +29,10 @@ export default function Section2() {
       </div>
 
       {/* 카드 2 */}
-      <div className="w-full max-w-[1200px] h-[600px] bg-[var(--color-black3)] rounded-lg relative flex flex-col md:flex-row-reverse gap-[40px] overflow-hidden">
+      <div className="w-full max-w-[1200px] h-[600px] bg-[var(--color-black2)] rounded-lg relative flex flex-col md:flex-row-reverse gap-[40px] overflow-hidden">
         {/* 텍스트 */}
         <div className="w-full md:w-1/2 flex flex-col justify-center px-[40px] text-center md:text-left z-10">
-          <p className="text-[14px] md:text-[16px] text-[var(--color-gray3)] mb-[40px] md:mb-[100px]">
+          <p className="text-[14px] md:text-[16px] text-[var(--color-gray2)] mb-[40px] md:mb-[100px] md:mt-0 mt-[50px]">
             Point 2
           </p>
           <div className="text-[32px] md:text-[48px] font-bold leading-[44px] md:leading-[64px] text-[var(--color-white)]">

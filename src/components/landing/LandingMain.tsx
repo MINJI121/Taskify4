@@ -9,7 +9,7 @@ export default function LandingMain() {
       <Section1 />
 
       {/* Section2와 Section3 영역 */}
-      <div className="mt-[184px] mb-[160px] w-full max-w-[1200px] flex flex-col items-center">
+      <div className="md:mt-[180px] mt-[80px] md:mb-[160px] mb-[80px] w-full max-w-[1200px] flex flex-col items-center">
         {/* Section2: 우선순위 & 해야 할 일 등록 */}
         <Section2 />
 

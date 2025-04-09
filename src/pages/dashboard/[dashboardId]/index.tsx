@@ -113,7 +113,7 @@ export default function Dashboard() {
 
         <main
           className="flex flex-1 flex-col min-h-0 lg:flex-row overflow-y-auto
-        bg-white pl-6 py-6"
+        bg-white px-6 py-6"
         >
           {/* 칼럼 가로 스크롤 영역 */}
           <div

@@ -49,7 +49,7 @@ export default function ChangePassword() {
 
   return (
     <div
-      className="flex flex-col w-[284px] sm:w-[548px] md:w-[672px] min:h-[454px] sm:min-h-[466px]
+      className="flex flex-col w-[284px] sm:w-[544px] lg:w-[620px] min:h-[454px] sm:min-h-[466px]
      bg-white rounded-[16px] p-[24px]"
     >
       <h2 className="text-black3 text-[18px] sm:text-[24px] font-bold mb-4">

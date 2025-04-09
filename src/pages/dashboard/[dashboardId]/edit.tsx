@@ -6,7 +6,7 @@ import HeaderDashboardEdit from "@/components/gnb/HeaderDashboard";
 import MemberList from "@/components/table/member/MemberList";
 import SideMenu from "@/components/sideMenu/SideMenu";
 import InviteRecords from "@/components/table/InviteRecords";
-import Image from "next/image";
+import BackButton from "@/components/button/BackButton";
 import { getDashboards } from "@/api/dashboards";
 import DeleteDashboardModal from "@/components/modal/DeleteDashboardModal";
 import { DashboardType } from "@/types/task";
@@ -22,11 +22,6 @@ export default function EditDashboard() {
   const dashboardIdString = Array.isArray(dashboardId)
     ? dashboardId[0]
     : dashboardId;
-
-  /* 돌아가기 버튼 */
-  const goToDashboard = () => {
-    router.back();
-  };
 
   /* 대시보드 삭제 모달 */
   const openModal = () => {
@@ -69,45 +64,26 @@ export default function EditDashboard() {
         <HeaderDashboardEdit variant="edit" dashboardId={dashboardId} />
 
         <div
-          className="overflow-auto flex-1 px-6 pt-[10px] pb-10"
+          className="overflow-auto flex-1 px-6 pt-6 pb-10"
           style={{ backgroundColor: "#F5F2FC" }}
         >
-          <div className="mt-6">
-            <button
-              onClick={goToDashboard}
-              className="cursor-pointer flex items-center gap-2"
-            >
-              <Image
-                src="/svgs/arrow-backward-black.svg"
-                alt="돌아가기"
-                width={20}
-                height={20}
-              />
-              돌아가기
-            </button>
-          </div>
+          <BackButton />
 
-          <div className="my-5">
+          {/* 백버튼 아래 전체 아이템 컨테이너 */}
+          <div className="flex flex-col items-center lg:items-start mt-6 gap-6">
             <ChangeBebridge />
-          </div>
-
-          {/* MemberList는 아래쪽에 배치 */}
-          <div className="">
+            {/* MemberList는 아래쪽에 배치 */}
             <MemberList dashboardId={dashboardId} />
-          </div>
-
-          <div className="my-5">
             <InviteRecords dashboardId={dashboardIdString || ""} />{" "}
             {/* undefined일 경우 빈 문자열로 전달*/}
-          </div>
-          <div className="flex mt-6 sm:mt-0">
-            <button
-              onClick={openModal}
-              className="text-base sm:text-lg cursor-pointer w-[284px] h-[52px] sm:w-[320px] sm:h-[62px] text-black3 rounded-[8px] border-[1px] border-[var(--color-gray3)] hover:scale-105 transition-transform duration-200"
-            >
-              대시보드 삭제하기
-            </button>
-
+            <div className="flex mt-6 sm:mt-0">
+              <button
+                onClick={openModal}
+                className="text-base sm:text-lg cursor-pointer w-[284px] h-[52px] sm:w-[320px] sm:h-[62px] text-black3 rounded-[8px] border-[1px] border-[var(--color-gray3)] hover:scale-105 transition-transform duration-200"
+              >
+                대시보드 삭제하기
+              </button>
+            </div>
             {isModalOpen && (
               <DeleteDashboardModal
                 isOpen={isModalOpen}

@@ -32,11 +32,11 @@ export default function Section1() {
       </div>
 
       {/* 메인 타이틀 */}
-      <div className="mt-[48px] sm:mt-[26px]">
-        <span className="text-[56px] font-bold leading-[72px] tracking-[-2px] sm:text-[40px] sm:leading-[48px]">
+      <div className="mt-[26px] sm:mt-[60px] text-center">
+        <span className="text-[40px] sm:text-[56px] md:text-[76px] font-bold leading-[48px] sm:leading-[72px] tracking-[-2px]">
           새로운 일정 관리{" "}
         </span>
-        <span className="text-[70px] font-bold leading-[70px] tracking-[-1px] text-[var(--primary)] sm:text-[42px] sm:leading-[51px]">
+        <span className="text-[42px] sm:text-[70px] md:text-[90px] font-bold leading-[51px] sm:leading-[70px] tracking-[-1px] text-[var(--primary)]">
           Taskify
         </span>
       </div>

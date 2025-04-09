@@ -29,7 +29,7 @@ export default function Section3({
       {/* 상단 이미지 영역 */}
       <div
         className={clsx(
-          "bg-[var(--color-black3)] flex justify-center items-center min-h-[180px]",
+          "bg-[var(--color-black4)] flex justify-center items-center min-h-[180px]",
           paddingClasses
         )}
       >
