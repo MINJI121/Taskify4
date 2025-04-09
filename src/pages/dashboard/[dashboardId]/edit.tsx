@@ -64,13 +64,14 @@ export default function EditDashboard() {
         <HeaderDashboardEdit variant="edit" dashboardId={dashboardId} />
 
         <div
-          className="overflow-auto flex-1 px-6 pt-6 pb-10"
+          className="overflow-auto flex-1 pt-6 pb-10"
           style={{ backgroundColor: "#F5F2FC" }}
         >
-          <BackButton />
-
+          <div className="sm:px-8 lg:px-6 px-2.5">
+            <BackButton />
+          </div>
           {/* 백버튼 아래 전체 아이템 컨테이너 */}
-          <div className="flex flex-col items-center lg:items-start mt-6 gap-6">
+          <div className="flex flex-col items-center lg:items-start px-6 mt-6 gap-6">
             <ChangeBebridge />
             {/* MemberList는 아래쪽에 배치 */}
             <MemberList dashboardId={dashboardId} />

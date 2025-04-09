@@ -20,7 +20,7 @@ export const signUp = async ({ payload }: { payload: SignUpRequest }) => {
 };
 
 // 내 정보 조회 (GET)
-export const getUserInfo = async () => {
+export const getUserInfo = async (): Promise<UserType> => {
   const response = await axiosInstance.get<UserType>(apiRoutes.usersMe());
   return response.data;
 };

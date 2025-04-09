@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/router";
+import useUserStore from "@/store/useUserStore";
 import clsx from "clsx";
 import Image from "next/image";
 import SkeletonUser from "@/shared/skeletonUser";
-import { MemberType, UserType } from "@/types/users";
+import { MemberType } from "@/types/users";
 import { getMembers } from "@/api/members";
-import { getUserInfo } from "@/api/users";
 import { getDashboardById } from "@/api/dashboards";
 import { UserProfileIcon } from "@/components/gnb/ProfileIcon";
 import MembersProfileIconList from "@/components/gnb/MembersProfileIconList";
@@ -28,8 +28,10 @@ const HeaderDashboard: React.FC<HeaderDashboardProps> = ({
   onToggleEditMode,
 }) => {
   const router = useRouter();
+  const user = useUserStore((state) => state.user);
+  const isUserLoading = !user;
+  const nickname = useUserStore((state) => state.user?.nickname);
   const [isLoading, setIsLoading] = useState(true);
-  const [user, setUser] = useState<UserType | null>(null);
   const [members, setMembers] = useState<MemberType[]>([]);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isListOpen, setIsListOpen] = useState(false);
@@ -63,32 +65,12 @@ const HeaderDashboard: React.FC<HeaderDashboardProps> = ({
         setIsLoading(false);
       }
     };
-    if (
-      (variant === "dashboard" || variant === "mypage" || variant === "edit") &&
-      dashboardId
-    ) {
+    if (variant === "mypage" || variant === "mydashboard") {
+      setIsLoading(false);
+    } else if ((variant === "dashboard" || variant === "edit") && dashboardId) {
       fetchMembers();
     }
-  }, [dashboardId, variant]);
-
-  /*유저 정보 api 호출*/
-  useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        const user = await getUserInfo();
-        setUser(user);
-      } catch (error) {
-        console.error("유저 정보 불러오기 실패", error);
-        setErrorMessage("유저 정보를 불러오지 못했습니다.");
-      } finally {
-        setIsLoading(false);
-      }
-    };
-    const token = localStorage.getItem("accessToken");
-    if (token) {
-      fetchUser();
-    }
-  }, []);
+  }, [variant, dashboardId]);
 
   /*대시보드 api 호출*/
   useEffect(() => {
@@ -273,14 +255,14 @@ const HeaderDashboard: React.FC<HeaderDashboardProps> = ({
                 setIsMenuOpen={setIsMenuOpen}
               />
               {/*유저 프로필*/}
-              {isLoading ? (
+              {isUserLoading ? (
                 <SkeletonUser />
               ) : (
                 user && (
                   <>
                     <UserProfileIcon user={user} />
                     <span className="hidden md:block text-black3 md:text-base md:font-medium max-w-[90px] truncate whitespace-nowrap">
-                      {user.nickname}
+                      {nickname}
                     </span>
                   </>
                 )

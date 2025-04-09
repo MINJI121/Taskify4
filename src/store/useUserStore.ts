@@ -1,17 +1,13 @@
 import { create } from "zustand";
-
-interface UserInfo {
-  id: number;
-  email: string;
-  nickname: string;
-  profileImageUrl: string;
-}
+import { UserType } from "@/types/users";
 
 interface UserState {
-  user: UserInfo | null;
+  user: UserType | null;
   isInitialized: boolean;
-  setUser: (user: UserInfo) => void;
+  setUser: (user: UserType) => void;
   clearUser: () => void;
+  updateNickname: (nickname: string) => void;
+  updateProfileImage: (url: string) => void;
 }
 
 const useUserStore = create<UserState>((set) => ({
@@ -19,6 +15,12 @@ const useUserStore = create<UserState>((set) => ({
   isInitialized: false,
   setUser: (user) => set({ user, isInitialized: true }),
   clearUser: () => set({ user: null, isInitialized: true }),
+  updateNickname: (nickname: string) =>
+    set((state) => ({ user: state.user ? { ...state.user, nickname } : null })),
+  updateProfileImage: (url: string) =>
+    set((state) => ({
+      user: state.user ? { ...state.user, profileImageUrl: url } : null,
+    })),
 }));
 
 export default useUserStore;

@@ -104,7 +104,7 @@ function InvitedList({
       )}
 
       {/* 리스트 */}
-      <div className="scroll-area h-[150vw] max-h-[570px] sm:max-h-[320px] lg:max-h-[280px] overflow-y-auto overflow-x-hidden">
+      <div className="scroll-area h-[150vw] max-h-[380px] sm:max-h-[240px] lg:max-h-[280px] overflow-y-auto overflow-x-hidden">
         {filteredData.length > 0 ? (
           filteredData.map((invite, index) => (
             <div
@@ -112,6 +112,7 @@ function InvitedList({
               className="pb-5 mb-[20px] w-full max-w-[260px] sm:max-w-[504px] lg:max-w-[966px]
                  h-auto sm:h-[50px] border-b border-[var(--color-gray4)]
                  sm:grid sm:grid-cols-[3fr_2fr_3fr] sm:items-center
+                 text-black3 text-[14px] sm:text-[16px] font-normal
                  flex flex-col gap-10"
             >
               {/* 모바일 레이아웃 */}
@@ -274,7 +275,7 @@ export default function InvitedDashBoard() {
       {invitationArray.length === 0 ? (
         <EmptyInvitations />
       ) : (
-        <div className="relative bg-white rounded-lg shadow-md w-[260px] sm:w-[504px] lg:w-[1022px] h-[770px] sm:h-[592px] lg:h-[500px] max-w-none">
+        <div className="relative bg-white rounded-lg shadow-md w-[260px] sm:w-[504px] lg:w-[1022px] h-[550px] sm:h-[450px] lg:h-[500px] max-w-none">
           <div className="flex flex-col p-6 w-full h-[104px]">
             <div className="flex flex-col w-full sm:w-[448px] lg:w-[966px] gap-[24px]">
               <p className="text-black3 text-[16px] sm:text-[20px] font-bold">
