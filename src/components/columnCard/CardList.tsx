@@ -1,6 +1,18 @@
 import { useEffect, useRef, useState, useCallback } from "react";
+import {
+  DndContext,
+  closestCenter,
+  PointerSensor,
+  useSensor,
+  useSensors,
+} from "@dnd-kit/core";
+import {
+  SortableContext,
+  verticalListSortingStrategy,
+  arrayMove,
+} from "@dnd-kit/sortable";
 import { CardType } from "@/types/task";
-import Card from "./Card";
+import SortableCard from "@/components/columnCard/SortableCard";
 import { getCardsByColumn } from "@/api/card";
 
 type CardListProps = {
@@ -25,7 +37,14 @@ export default function CardList({
   const observerRef = useRef<HTMLDivElement | null>(null);
   const isFetchingRef = useRef(false);
 
-  /* cursorId 업데이트 방식 변경 */
+  const sensors = useSensors(
+    useSensor(PointerSensor, {
+      activationConstraint: {
+        distance: 5,
+      },
+    })
+  );
+
   const fetchMoreCards = useCallback(async () => {
     if (isFetchingRef.current || !hasMore) return;
 
@@ -35,7 +54,7 @@ export default function CardList({
       const res = await getCardsByColumn({
         columnId,
         size: ITEMS_PER_PAGE,
-        cursorId: cursorId ?? undefined, // 최신 cursorId 사용
+        cursorId: cursorId ?? undefined,
       });
 
       const newCards = res.cards as CardType[];
@@ -49,7 +68,6 @@ export default function CardList({
           return [...prev, ...uniqueCards];
         });
 
-        // cursorId 안전하게 업데이트
         setCursorId((prevCursorId) => {
           const newCursor = newCards[newCards.length - 1]?.id ?? prevCursorId;
           return newCursor;
@@ -66,7 +84,6 @@ export default function CardList({
     }
   }, [columnId, cursorId, hasMore]);
 
-  /* 무한 스크롤 */
   useEffect(() => {
     if (!observerRef.current) return;
 
@@ -84,17 +101,35 @@ export default function CardList({
     return () => observer.disconnect();
   }, [fetchMoreCards, hasMore]);
 
+  const handleDragEnd = (event: any) => {
+    const { active, over } = event;
+
+    if (!over || active.id === over.id) return;
+
+    const oldIndex = cards.findIndex((card) => card.id === active.id);
+    const newIndex = cards.findIndex((card) => card.id === over.id);
+
+    const newOrder = arrayMove(cards, oldIndex, newIndex);
+    setCards(newOrder);
+  };
+
   return (
-    <div className="grid gap-3 w-full grid-cols-1">
-      {cards.map((task) => (
-        <Card
-          key={task.id}
-          {...task}
-          assignee={task.assignee}
-          onClick={() => onCardClick(task)}
-        />
-      ))}
-      {hasMore && <div ref={observerRef} className="h-20" />}
-    </div>
+    <DndContext
+      sensors={sensors}
+      collisionDetection={closestCenter}
+      onDragEnd={handleDragEnd}
+    >
+      <SortableContext
+        items={cards.map((card) => card.id)}
+        strategy={verticalListSortingStrategy}
+      >
+        <div className="grid gap-3 w-full grid-cols-1">
+          {cards.map((card) => (
+            <SortableCard key={card.id} card={card} onClick={onCardClick} />
+          ))}
+          {hasMore && <div ref={observerRef} className="h-20" />}
+        </div>
+      </SortableContext>
+    </DndContext>
   );
 }
