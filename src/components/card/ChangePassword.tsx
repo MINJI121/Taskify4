@@ -1,11 +1,9 @@
 import { useState } from "react";
-import { useRouter } from "next/router";
 import { changePassword } from "@/api/changepassword";
 import Input from "@/components/input/Input";
 import { toast } from "react-toastify";
 
 export default function ChangePassword() {
-  const router = useRouter();
   const [password, setPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [checkNewpassword, setCheckNewPassword] = useState("");

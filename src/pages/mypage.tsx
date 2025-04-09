@@ -40,11 +40,10 @@ export default function MyPage() {
   };
 
   useEffect(() => {
-    if (isInitialized && user) {
+    if (isInitialized) {
       fetchDashboards();
-      fetchUserData();
     }
-  }, [isInitialized, user]);
+  }, [isInitialized]);
 
   if (!isInitialized || !user) {
     return <LoadingSpinner />;
