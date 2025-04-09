@@ -28,17 +28,6 @@ export default function MyPage() {
     }
   };
 
-  // 프로필 변경 섹션 유저 정보 api 호출
-  const fetchUserData = async () => {
-    try {
-      const res = await getUserInfo();
-      setUser(res);
-    } catch (error) {
-      console.error("유저 정보 불러오기 실패:", error);
-      toast.error("유저 정보를 불러오는 데 실패했습니다.");
-    }
-  };
-
   useEffect(() => {
     if (isInitialized) {
       fetchDashboards();
