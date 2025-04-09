@@ -34,7 +34,7 @@ export default function SideMenu({
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const itemsPerPage = 14;
+  const itemsPerPage = 15;
   const totalPages = Math.ceil(dashboardList.length / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
@@ -51,7 +51,8 @@ export default function SideMenu({
   return (
     <aside
       className={clsx(
-        "flex flex-col h-screen overflow-y-auto lg:overflow-y-hidden overflow-x-hidden border-r border-[var(--color-gray3)] px-3 py-5 transition-all duration-200",
+        "z-20 flex flex-col h-screen overflow-y-auto lg:overflow-y-hidden overflow-x-hidden transition-all duration-200",
+        "bg-white border-r border-[var(--color-gray3)] px-3 py-5",
         isCollapsed
           ? "w-[67px]"
           : "w-[67px] sm:w-[67px] md:w-[160px] lg:w-[300px]"
@@ -131,7 +132,7 @@ export default function SideMenu({
           {/* 대시보드 타이틀 + 추가 버튼 */}
           {!isCollapsed && (
             <div className="mb-4 flex items-center justify-between px-3 md:px-2">
-              <span className="hidden md:block font-12sb text-[var(--color-black)]">
+              <span className="hidden md:block font-12sb text-[var(--color-gray1)]">
                 Dash Boards
               </span>
               <button
@@ -223,7 +224,7 @@ export default function SideMenu({
 
         {/* 페이지네이션 */}
         {!isCollapsed && dashboardList.length > itemsPerPage && (
-          <div className="flex justify-start items-end mb-9 px-2">
+          <div className="flex justify-start items-end mb-1 px-2">
             <PaginationButton
               direction="left"
               disabled={currentPage === 1}

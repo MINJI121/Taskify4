@@ -100,40 +100,46 @@ export default function Column({
   return (
     <div
       className={`
-      flex flex-col border-r border-[var(--color-gray4)] bg-[#F5F2FC] rounded-md p-4
-      h-auto sm:m-h-screen
-      max-h-[401px] sm:max-h-none w-full lg:w-[360px]
-    `}
+      flex flex-col shrink-0 overflow-hidden p-4 mr-4 lg:my-0 mb-4
+      border border-[var(--color-gray4)] bg-[#F5F2FC] rounded-[12px]
+      max-h-[401px] lg:max-h-none w-full lg:w-[360px]
+      `}
     >
       {/* 칼럼 헤더 */}
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-2">
-          <h2 className="text-lg font-bold">
-            <span className="text-[var(--primary)]">•</span> {columnTitle}
-          </h2>
-          <span className="w-5 h-5 text-sm bg-gray-200 text-gray-700 rounded-[4px] flex items-center justify-center ">
-            {tasks.length}
-          </span>
+      <div className="shrink-0">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <Image src="/svgs/ellipse.svg" alt="circle" width={8} height={8} />
+            <h2 className="text-black3 text-[16px] md:text-[18px] font-bold">
+              {columnTitle}
+            </h2>
+            <span className="w-5 h-5 text-sm bg-gray-200 text-gray-700 rounded-[4px] flex items-center justify-center ">
+              {tasks.length}
+            </span>
+          </div>
+          <Image
+            src="/svgs/settings.svg"
+            alt="setting icon"
+            width={24}
+            height={24}
+            priority
+            className="cursor-pointer"
+            onClick={() => setIsColumnModalOpen(true)}
+          />
         </div>
-        <Image
-          src="/svgs/settings.svg"
-          alt="setting icon"
-          width={24}
-          height={24}
-          priority
-          className="cursor-pointer"
-          onClick={() => setIsColumnModalOpen(true)}
-        />
       </div>
 
       {/* 카드 영역 */}
-      <div className="flex-1 pb-4 flex flex-col items-center gap-3">
+      <div className="flex-1 flex flex-col overflow-hidden items-center pb-4 gap-2">
         <div onClick={() => setIsTodoModalOpen(true)} className="mb-2">
           <TodoButton />
         </div>
 
         {/* 무한스크롤 카드 리스트로 대체 */}
-        <div className="w-full max-h-[800px] overflow-y-auto">
+        <div
+          className="flex-1 w-full overflow-y-auto overflow-x-hidden"
+          style={{ scrollbarGutter: "stable" }}
+        >
           <CardList
             columnId={columnId}
             teamId={TEAM_ID}

@@ -73,14 +73,14 @@ const CardButton: React.FC<CardButtonProps> = ({
       )}
     >
       {/* 왼쪽: 색상 도트 + 제목 + 왕관 */}
-      <div className="flex items-center font-semibold gap-[10px] overflow-hidden">
+      <div className="flex items-center overflow-hidden font-semibold gap-[10px]">
         {/* 색상 원 */}
         <svg width="8" height="8" viewBox="0 0 8 8" fill={color}>
           <circle cx="4" cy="4" r="4" />
         </svg>
 
         {/* 제목 */}
-        <span className="text-black3 text-[14px] sm:text-[16px] truncate max-w-[90px] sm:max-w-[100px] md:max-w-[120px] lg:max-w-[160px]">
+        <span className="text-black3 text-[14px] sm:text-[16px] truncate max-w-[120px]">
           {title}
         </span>
 

@@ -238,6 +238,7 @@ const HeaderDashboard: React.FC<HeaderDashboardProps> = ({
               ) : (
                 members && (
                   <div
+                    onMouseDown={(e) => e.stopPropagation()}
                     onClick={() => setIsListOpen((prev) => !prev)}
                     className="flex items-center pl-[15px] md:pl-[25px] lg:pl-[30px] pr-[15px] md:pr-[25px] lg:pr-[30px] cursor-pointer"
                   >
@@ -262,6 +263,7 @@ const HeaderDashboard: React.FC<HeaderDashboardProps> = ({
             <div className="h-[34px] md:h-[38px] w-[1px] bg-[var(--color-gray3)]" />
             {/*유저 드롭다운 메뉴*/}
             <div
+              onMouseDown={(e) => e.stopPropagation()}
               onClick={() => setIsMenuOpen((prev) => !prev)}
               className="flex items-center gap-[12px] pl-[20px] md:pl-[30px] lg:pl-[35px] cursor-pointer overflow-hidden"
             >

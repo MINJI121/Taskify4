@@ -83,7 +83,7 @@ export default function Input(props: InputProps) {
   };
 
   return (
-    <div className={clsx("flex flex-col items-start gap-2", wrapperClassName)}>
+    <div className={clsx("flex flex-col items-start gap-1", wrapperClassName)}>
       {label && (
         <label
           htmlFor={id}

@@ -50,10 +50,9 @@ export default function Card({
         {/* 제목 */}
         <h3
           className={`
-            text-lg font-semibold mt-2
-            md:text-sm md:mt-0
-            lg:text-lg lg:mt-2
-            truncate
+            text-black3 text-[14px] font-medium mt-2
+            md:text-[16px] md:mt-0 lg:mt-2
+            truncate max-w-[180px] sm:max-w-none
           `}
         >
           {title}

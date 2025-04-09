@@ -17,7 +17,7 @@ const TodoButton: React.FC<ButtonProps> = ({
         "flex justify-center items-center gap-[10px] bg-white transition-all",
         "rounded-lg px-4 py-3 font-semibold",
         "border border-gray-200 hover:border-purple-500",
-        fullWidth ? "w-full" : "w-[284px] md:w-[544px] lg:w-[314px]",
+        fullWidth ? "w-full" : "w-[225px] sm:w-[525px] lg:w-[314px]",
         "h-[32px] md:h-[40px] lg:h-[40px]",
         "mt-[10px] md:mt-[16px] lg:mt-[20px]",
         "text-lg md:text-2lg lg:text-2lg",

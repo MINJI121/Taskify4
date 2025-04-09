@@ -55,19 +55,24 @@ export default function SignUpPage() {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-[var(--color-gray5)] py-10">
-      <div className="text-center mb-[40px]">
+    <div
+      className="flex flex-col min-h-screen
+    items-center justify-center
+    bg-[var(--color-gray5)] py-10"
+    >
+      <div className="text-center mb-[25px]">
         <img
           src="/svgs/main-logo.svg"
           alt="태스키파이 로고 이미지"
-          className="w-[200px] h-[280px] relative"
+          className="w-[180px] relative"
         />
         <p className="font-20m text-black3">첫 방문을 환영합니다!</p>
       </div>
 
       <form
         onSubmit={handleSubmit}
-        className="flex flex-col w-[350px] md:w-[520px] gap-[20px] font-16r text-black3"
+        className="flex flex-col w-[350px] md:w-[520px] gap-[18px]
+        font-16r text-black3"
       >
         <Input
           type="email"
@@ -77,6 +82,7 @@ export default function SignUpPage() {
           onChange={setEmail}
           pattern="^[\w.-]+@[\w.-]+\.\w{2,}$"
           invalidMessage="올바른 이메일 주소를 입력해 주세요"
+          className="bg-white"
         />
 
         <Input
@@ -85,6 +91,7 @@ export default function SignUpPage() {
           label="닉네임"
           placeholder="닉네임을 입력해 주세요"
           onChange={setNickname}
+          className="bg-white"
         />
 
         <Input
@@ -95,6 +102,7 @@ export default function SignUpPage() {
           onChange={setPassword}
           pattern=".{8,}"
           invalidMessage="영문, 숫자를 포함한 8자 이상 입력해 주세요"
+          className="bg-white"
         />
 
         <Input
@@ -105,6 +113,7 @@ export default function SignUpPage() {
           onChange={setPasswordCheck}
           pattern="{passwordCheckPattern}"
           invalidMessage="비밀번호가 일치하지 않습니다."
+          className="bg-white"
         />
 
         <label className="flex items-center gap-[8px] font-16r text-black3">

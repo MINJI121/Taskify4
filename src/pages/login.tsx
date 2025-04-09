@@ -48,7 +48,7 @@ export default function LoginPage() {
         <img
           src="/svgs/main-logo.svg"
           alt="태스키파이 로고 이미지"
-          className="w-[200px] h-[280px]"
+          className="w-[180px]"
         />
         <p className="font-20m text-black3">오늘도 만나서 반가워요!</p>
       </div>
@@ -64,6 +64,7 @@ export default function LoginPage() {
           placeholder="이메일을 입력해 주세요"
           onChange={handleChange("email")}
           invalidMessage="올바른 이메일 주소를 입력해 주세요"
+          className="bg-white"
         />
 
         <Input
@@ -74,6 +75,7 @@ export default function LoginPage() {
           onChange={handleChange("password")}
           pattern=".{8,}"
           invalidMessage="비밀번호는 8자 이상이어야 해요"
+          className="bg-white"
         />
 
         <button

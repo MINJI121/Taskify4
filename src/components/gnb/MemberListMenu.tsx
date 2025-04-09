@@ -31,7 +31,7 @@ const MemberListMenu: React.FC<MemberListMenuProps> = ({
           : "opacity-0 -translate-y-2 pointer-events-none"
       )}
     >
-      <ul className="flex flex-col font-16r max-h-[300px] overflow-y-auto">
+      <ul className="flex flex-col font-16r max-h-[200px] sm:max-h-[270px] overflow-y-auto">
         {members.map((member) => (
           <li
             key={member.id}

@@ -94,7 +94,7 @@ export default function CardList({
           onClick={() => onCardClick(task)}
         />
       ))}
-      {hasMore && <div ref={observerRef} className="h-20 " />}
+      {hasMore && <div ref={observerRef} className="h-20" />}
     </div>
   );
 }
