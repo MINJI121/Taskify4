@@ -5,7 +5,6 @@ import { getDashboards } from "@/api/dashboards";
 import { useAuthGuard } from "@/hooks/useAuthGuard";
 import SideMenu from "@/components/sideMenu/SideMenu";
 import HeaderDashboard from "@/components/gnb/HeaderDashboard";
-import CardButton from "@/components/button/CardButton";
 import DashboardAddButton from "@/components/button/DashboardAddButton";
 import { PaginationButton } from "@/components/button/PaginationButton";
 import InvitedDashBoard from "@/components/table/invited/InvitedDashBoard";
@@ -15,6 +14,20 @@ import LoadingSpinner from "@/components/common/LoadingSpinner";
 import { TEAM_ID } from "@/constants/team";
 import { Search } from "lucide-react";
 import { toast } from "react-toastify";
+
+import {
+  DndContext,
+  closestCenter,
+  PointerSensor,
+  useSensor,
+  useSensors,
+} from "@dnd-kit/core";
+import {
+  SortableContext,
+  rectSortingStrategy,
+  arrayMove,
+} from "@dnd-kit/sortable";
+import SortableCardButton from "@/components/button/SortableCardButton";
 
 interface Dashboard {
   id: number;
@@ -45,6 +58,14 @@ export default function MyDashboardPage() {
     useState(false);
   const itemsPerPage = 6;
 
+  const sensors = useSensors(
+    useSensor(PointerSensor, {
+      activationConstraint: {
+        distance: 5,
+      },
+    })
+  );
+
   const filteredDashboardList = dashboardList.filter((dashboard) =>
     dashboard.title.toLowerCase().includes(searchKeyword.toLowerCase())
   );
@@ -53,33 +74,6 @@ export default function MyDashboardPage() {
     (filteredDashboardList.length + 1) / itemsPerPage
   );
   const startIndex = (currentPage - 1) * itemsPerPage;
-
-  const currentItems = [
-    <DashboardAddButton key="add" onClick={() => setIsModalOpen(true)} />,
-    ...filteredDashboardList.map((dashboard) => (
-      <CardButton
-        key={dashboard.id}
-        dashboardId={dashboard.id}
-        title={dashboard.title}
-        showCrown={dashboard.createdByMe}
-        color={dashboard.color}
-        isEditMode={isEditMode}
-        createdByMe={dashboard.createdByMe}
-        onDeleteClick={(id) => {
-          setSelectedDashboardId(id);
-          setSelectedCreatedByMe(true);
-          setSelectedTitle(dashboard.title);
-          setIsDeleteModalOpen(true);
-        }}
-        onLeaveClick={(id) => {
-          setSelectedDashboardId(id);
-          setSelectedCreatedByMe(false);
-          setSelectedTitle(dashboard.title);
-          setIsDeleteModalOpen(true);
-        }}
-      />
-    )),
-  ].slice(startIndex, startIndex + itemsPerPage);
 
   const fetchDashboards = async () => {
     try {
@@ -125,6 +119,17 @@ export default function MyDashboardPage() {
     setSelectedDashboardId(null);
   };
 
+  const handleDragEnd = (event: any) => {
+    const { active, over } = event;
+    if (!over || active.id === over.id) return;
+
+    const oldIndex = dashboardList.findIndex((d) => d.id === active.id);
+    const newIndex = dashboardList.findIndex((d) => d.id === over.id);
+
+    const newOrder = arrayMove(dashboardList, oldIndex, newIndex);
+    setDashboardList(newOrder);
+  };
+
   if (!isInitialized || !user) {
     return <LoadingSpinner />;
   }
@@ -145,7 +150,6 @@ export default function MyDashboardPage() {
         />
 
         <main className="flex-col overflow-auto px-6 py-5 sm:py-10 bg-[#F5F2FC]">
-          {/* 검색 입력창 */}
           <section className="w-full overflow-hidden transition-all">
             <div className="min-w-0 w-full max-w-[260px] md:max-w-[247px] lg:max-w-[332px] mb-3">
               <div className="relative flex items-center justify-end">
@@ -169,12 +173,45 @@ export default function MyDashboardPage() {
           </section>
 
           <section className="w-full max-w-[260px] sm:max-w-[504px] lg:max-w-[1022px]">
-            {/* 카드 영역 */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-[8px] md:gap-[10px] lg:gap-[13px]">
-              {currentItems.map((item, index) => (
-                <div key={index}>{item}</div>
-              ))}
-            </div>
+            <DndContext
+              sensors={sensors}
+              collisionDetection={closestCenter}
+              onDragEnd={handleDragEnd}
+            >
+              <SortableContext
+                items={dashboardList.map((d) => d.id)}
+                strategy={rectSortingStrategy}
+              >
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-[8px] md:gap-[10px] lg:gap-[13px]">
+                  <div key="add">
+                    <DashboardAddButton onClick={() => setIsModalOpen(true)} />
+                  </div>
+
+                  {filteredDashboardList
+                    .slice(startIndex, startIndex + (itemsPerPage - 1))
+                    .map((dashboard) => (
+                      <SortableCardButton
+                        key={dashboard.id}
+                        dashboard={dashboard}
+                        isEditMode={isEditMode}
+                        onDeleteClick={(id: number) => {
+                          setSelectedDashboardId(id);
+                          setSelectedCreatedByMe(true);
+                          setSelectedTitle(dashboard.title);
+                          setIsDeleteModalOpen(true);
+                        }}
+                        onLeaveClick={(id: number) => {
+                          setSelectedDashboardId(id);
+                          setSelectedCreatedByMe(false);
+                          setSelectedTitle(dashboard.title);
+                          setIsDeleteModalOpen(true);
+                        }}
+                      />
+                    ))}
+                </div>
+              </SortableContext>
+            </DndContext>
+
             {totalPages > 1 && (
               <div className="w-full flex justify-end items-center mt-3">
                 <span className="text-[12px] sm:text-[14px] text-black3 px-[8px] whitespace-nowrap">
@@ -192,7 +229,7 @@ export default function MyDashboardPage() {
                 />
               </div>
             )}
-            {/* 초대받은 대시보드 */}
+
             <div className="mt-[25px]">
               <InvitedDashBoard />
             </div>

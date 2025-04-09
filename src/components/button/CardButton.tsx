@@ -3,7 +3,7 @@ import { useRouter } from "next/router";
 import clsx from "clsx";
 import Image from "next/image";
 
-interface CardButtonProps extends React.ButtonHTMLAttributes<HTMLDivElement> {
+interface CardButtonProps extends React.HTMLAttributes<HTMLDivElement> {
   title?: string;
   showCrown?: boolean;
   color?: string;
@@ -12,29 +12,31 @@ interface CardButtonProps extends React.ButtonHTMLAttributes<HTMLDivElement> {
   createdByMe?: boolean;
   onDeleteClick?: (id: number) => void;
   onLeaveClick?: (id: number) => void;
+  attributes?: React.HTMLAttributes<HTMLDivElement>;
+  listeners?: React.HTMLAttributes<HTMLDivElement>;
 }
 
 const CardButton: React.FC<CardButtonProps> = ({
   className,
   title = "비브리지",
   showCrown = true,
-  color = "#7ac555", // 기본 색상
+  color = "#7ac555",
   isEditMode = false,
   dashboardId,
   createdByMe,
   onDeleteClick,
   onLeaveClick,
+  attributes,
+  listeners,
   ...props
 }) => {
   const router = useRouter();
 
   const handleCardClick = (e: React.MouseEvent<HTMLDivElement>) => {
-    // 관리 상태에서 카드 클릭 이벤트 차단
     if (isEditMode) {
       e.preventDefault();
       return;
     }
-    // 카드 클릭 시 해당 대시보드로 이동
     router.push(`/dashboard/${dashboardId}`);
   };
 
@@ -46,16 +48,16 @@ const CardButton: React.FC<CardButtonProps> = ({
   const handleDelete = (e: React.MouseEvent) => {
     e.stopPropagation();
     if (createdByMe) {
-      // 실제 삭제 API 요청
-      if (onDeleteClick) onDeleteClick(dashboardId);
+      onDeleteClick?.(dashboardId);
     } else {
-      // 나만 탈퇴
-      if (onLeaveClick) onLeaveClick(dashboardId);
+      onLeaveClick?.(dashboardId);
     }
   };
 
   return (
     <div
+      {...attributes}
+      {...listeners}
       {...props}
       onClick={handleCardClick}
       className={clsx(
@@ -64,7 +66,7 @@ const CardButton: React.FC<CardButtonProps> = ({
         "border border-[var(--color-gray3)]",
         "min-w-0 w-full max-w-[260px] md:max-w-[247px] lg:max-w-[332px]",
         "h-[58px] md:h-[68px] lg:h-[70px]",
-        "mt-[2px]", // 카드 세로 간격
+        "mt-[2px]",
         "text-lg md:text-2lg lg:text-2lg",
         isEditMode
           ? "cursor-default hover:border-gray-300"
@@ -74,30 +76,25 @@ const CardButton: React.FC<CardButtonProps> = ({
     >
       {/* 왼쪽: 색상 도트 + 제목 + 왕관 */}
       <div className="flex items-center overflow-hidden font-semibold gap-[10px]">
-        {/* 색상 원 */}
         <svg width="8" height="8" viewBox="0 0 8 8" fill={color}>
           <circle cx="4" cy="4" r="4" />
         </svg>
-
-        {/* 제목 */}
         <span className="text-black3 text-[14px] sm:text-[16px] truncate max-w-[120px]">
           {title}
         </span>
-
-        {/* 왕관 */}
-        <div className="relative w-[15px] h-[12px] md:w-[17px] md:h-[14px]">
-          {showCrown && (
+        {showCrown && (
+          <div className="relative w-[15px] h-[12px] md:w-[17px] md:h-[14px]">
             <Image
               src="/svgs/icon-crown.svg"
               alt="crown Icon"
               fill
               className="object-contain"
             />
-          )}
-        </div>
+          </div>
+        )}
       </div>
 
-      {/* 오른쪽: 화살표 아이콘 or 수정/삭제 버튼 */}
+      {/* 오른쪽: 수정/삭제 버튼 또는 아이콘 */}
       {isEditMode ? (
         <div className="flex flex-col gap-2">
           {createdByMe && (
