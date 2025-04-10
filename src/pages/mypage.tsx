@@ -1,20 +1,17 @@
 import React, { useState, useEffect } from "react";
 import { useAuthGuard } from "@/hooks/useAuthGuard";
-import useUserStore from "@/store/useUserStore";
 import HeaderMyPage from "@/components/gnb/HeaderDashboard";
 import SideMenu from "@/components/sideMenu/SideMenu";
 import { ProfileCard } from "@/components/card/Profile";
 import ChangePassword from "@/components/card/ChangePassword";
 import BackButton from "@/components/button/BackButton";
 import { Dashboard, getDashboards } from "@/api/dashboards";
-import { getUserInfo } from "@/api/users";
 import { TEAM_ID } from "@/constants/team";
 import LoadingSpinner from "@/components/common/LoadingSpinner";
 import { toast } from "react-toastify";
 
 export default function MyPage() {
   const { user, isInitialized } = useAuthGuard();
-  const { setUser } = useUserStore();
   const [dashboards, setDashboards] = useState<Dashboard[]>([]);
 
   // 사이드메뉴 대시보드 목록 api 호출

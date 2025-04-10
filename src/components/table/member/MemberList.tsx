@@ -12,6 +12,7 @@ interface HeaderBebridgeProps {
 
 const MemberList: React.FC<HeaderBebridgeProps> = ({ dashboardId }) => {
   const [members, setMembers] = useState<MemberType[]>([]);
+  const [selectedMemberId, setSelectedMemberId] = useState<number | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   /* 페이지네이션 */
@@ -24,7 +25,7 @@ const MemberList: React.FC<HeaderBebridgeProps> = ({ dashboardId }) => {
     currentPage * itemsPerPage
   );
 
-  /* 구성원 삭제 모달 */
+  /* 멤버 삭제 모달 */
   const openModal = () => {
     setIsModalOpen(true);
   };
@@ -43,21 +44,20 @@ const MemberList: React.FC<HeaderBebridgeProps> = ({ dashboardId }) => {
   };
 
   /*멤버 목록 api 호출*/
-  useEffect(() => {
-    const fetchMembers = async () => {
-      try {
-        if (dashboardId) {
-          const members = await getMembers({
-            dashboardId: Number(dashboardId),
-          });
-          setMembers(members);
-          console.log("member_list", members);
-        }
-      } catch (error) {
-        console.error("멤버 불러오기 실패:", error);
+  const fetchMembers = async () => {
+    try {
+      if (dashboardId) {
+        const members = await getMembers({
+          dashboardId: Number(dashboardId),
+        });
+        setMembers(members);
       }
-    };
+    } catch (error) {
+      console.error("멤버 불러오기 실패:", error);
+    }
+  };
 
+  useEffect(() => {
     fetchMembers();
   }, [dashboardId]);
 
@@ -111,17 +111,21 @@ const MemberList: React.FC<HeaderBebridgeProps> = ({ dashboardId }) => {
             {!member.isOwner && (
               <>
                 <button
-                  onClick={openModal}
+                  onClick={() => {
+                    setSelectedMemberId(member.id);
+                    setIsModalOpen(true);
+                  }}
                   className="text-12m cursor-pointer sm:font-sm h-[32px] sm:h-[32px] w-[52px] sm:w-[84px] md:w-[84px] border border-[var(--color-gray3)] text-[var(--primary)] px-2 py-1 rounded-md hover:bg-gray-100"
                 >
                   삭제
                 </button>
 
-                {isModalOpen && (
+                {isModalOpen && selectedMemberId !== null && (
                   <DelteMemberModal
                     isOpen={isModalOpen}
                     onClose={closeModal}
-                    id={member.id}
+                    id={selectedMemberId}
+                    memberDelete={fetchMembers}
                   />
                 )}
               </>

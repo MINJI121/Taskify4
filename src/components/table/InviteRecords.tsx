@@ -30,9 +30,9 @@ const InviteRecords = ({ dashboardId }: { dashboardId: string }) => {
         if (res.data && Array.isArray(res.data.invitations)) {
           // 이메일 리스트를 객체 배열로 저장
           const inviteData = res.data.invitations.map(
-            (item: { id: number; invitee: { email: string } }) => ({
+            (item: { id: number; invite: { email: string } }) => ({
               id: item.id,
-              email: item.invitee.email,
+              email: item.invite.email,
             })
           );
           setInviteList(inviteData);
@@ -55,12 +55,13 @@ const InviteRecords = ({ dashboardId }: { dashboardId: string }) => {
       await axiosInstance.delete(
         apiRoutes.dashboardInviteDelete(dashboardIdNumber, id)
       );
-      window.location.reload();
+      setInviteList((prev) => prev.filter((invite) => invite.id !== id));
+      toast.success("초대가 취소되었습니다.");
     } catch (error) {
       console.error("초대 취소 실패:", error);
       if (error instanceof AxiosError) {
         if (error.response?.status === 403) {
-          toast.error("초대 취소 권한이 없습니다.");
+          toast.error("초대 취소에 실패했습니다.");
           return;
         } else if (error.response?.status === 404) {
           toast.error("대시보드가 존재하지 않습니다.");

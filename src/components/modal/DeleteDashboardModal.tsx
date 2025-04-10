@@ -28,8 +28,6 @@ export default function DeleteDashboardModal({
     } catch (error) {
       console.error("대시보드 삭제 실패:", error);
       toast.error("대시보드 삭제에 실패하였습니다 .");
-
-      window.location.reload();
     }
   };
   return (

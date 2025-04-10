@@ -9,21 +9,26 @@ type DeleteMemberdProps = {
   isOpen: boolean;
   onClose: () => void;
   id: number;
+  memberDelete?: () => void;
 };
 
 export default function DeleteDashboardModal({
   isOpen,
   onClose,
   id,
+  memberDelete,
 }: DeleteMemberdProps) {
   /* 멤버삭제 */
   const handleDelete = async (id: number) => {
     try {
       await axiosInstance.delete(apiRoutes.memberDetail(id));
-      window.location.reload();
+      if (memberDelete) memberDelete();
+      toast.success("멤버가 삭제되었습니다.");
     } catch (error) {
-      toast.error("구성원 삭제에 실패했습니다.");
-      console.error("구성원 삭제 실패:", error);
+      toast.error("멤버 삭제에 실패했습니다.");
+      console.error("멤버 삭제 실패:", error);
+    } finally {
+      onClose();
     }
   };
 

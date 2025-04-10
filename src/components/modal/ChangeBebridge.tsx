@@ -7,10 +7,14 @@ import { apiRoutes } from "@/api/apiRoutes";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-const ChangeBebridge = () => {
+interface ChangeBebridgeProps {
+  onUpdate?: () => void;
+}
+
+const ChangeBebridge = ({ onUpdate }: ChangeBebridgeProps) => {
   const router = useRouter();
   const { dashboardId } = router.query;
-  const [dashboardDetail, setdashboardDetail] = useState<{ title?: string }>(
+  const [dashboardDetail, setDashboardDetail] = useState<{ title?: string }>(
     {}
   );
   const [title, setTitle] = useState("");
@@ -32,7 +36,7 @@ const ChangeBebridge = () => {
         );
         if (res.data) {
           const dashboardData = res.data;
-          setdashboardDetail(dashboardData);
+          setDashboardDetail(dashboardData);
         }
       } catch (error) {
         console.error("대시보드 상세내용 불러오는데 오류 발생:", error);
@@ -58,11 +62,14 @@ const ChangeBebridge = () => {
         apiRoutes.dashboardDetail(dashboardIdNumber),
         payload
       );
+      setDashboardDetail((prev) => ({
+        ...prev,
+        title: title,
+        color: colors[selected],
+      }));
 
       toast.success("대시보드가 변경되었습니다!");
-      setTimeout(() => {
-        router.reload();
-      }, 1500);
+      if (onUpdate) onUpdate();
     } catch (error) {
       console.error("대시보드 변경 실패:", error);
       toast.error("대시보드 변경에 실패했습니다.");

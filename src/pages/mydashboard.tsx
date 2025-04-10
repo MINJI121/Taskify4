@@ -231,7 +231,7 @@ export default function MyDashboardPage() {
             )}
 
             <div className="mt-[25px]">
-              <InvitedDashBoard />
+              <InvitedDashBoard agreeInvitation={fetchDashboards} />
             </div>
           </section>
         </main>

@@ -72,7 +72,7 @@ export default function EditDashboard() {
           </div>
           {/* 백버튼 아래 전체 아이템 컨테이너 */}
           <div className="flex flex-col items-center lg:items-start px-6 mt-6 gap-6">
-            <ChangeBebridge />
+            <ChangeBebridge onUpdate={fetchDashboards} />
             {/* MemberList는 아래쪽에 배치 */}
             <MemberList dashboardId={dashboardId} />
             <InviteRecords dashboardId={dashboardIdString || ""} />{" "}
