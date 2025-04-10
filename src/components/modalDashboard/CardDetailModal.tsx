@@ -10,7 +10,6 @@ import type { CardDetailType } from "@/types/cards";
 import TaskModal from "@/components/modalInput/TaskModal";
 import { useClosePopup } from "@/hooks/useClosePopup";
 import { getColumn } from "@/api/columns";
-import { useRouter } from "next/router";
 import { toast } from "react-toastify";
 
 interface CardDetailModalProps {
@@ -18,6 +17,7 @@ interface CardDetailModalProps {
   currentUserId: number;
   dashboardId: number;
   onClose: () => void;
+  updateCard: () => void;
 }
 
 interface ColumnType {
@@ -31,6 +31,7 @@ export default function CardDetailPage({
   currentUserId,
   dashboardId,
   onClose,
+  updateCard,
 }: CardDetailModalProps) {
   const [cardData, setCardData] = useState<CardDetailType>(card);
   const [commentText, setCommentText] = useState("");
@@ -38,7 +39,6 @@ export default function CardDetailPage({
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const queryClient = useQueryClient();
   const popupRef = useRef(null);
-  const router = useRouter();
   useClosePopup(popupRef, () => setShowMenu(false));
 
   const { data: columns = [] } = useQuery<ColumnType[]>({
@@ -67,9 +67,7 @@ export default function CardDetailPage({
       queryClient.invalidateQueries({ queryKey: ["cards"] });
       toast.success("카드가 삭제되었습니다.");
       onClose();
-      setTimeout(() => {
-        router.reload();
-      }, 1500);
+      if (updateCard) updateCard();
     },
   });
 
@@ -194,7 +192,7 @@ export default function CardDetailPage({
               imageUrl: data.image || undefined,
             });
             setIsEditModalOpen(false);
-            router.reload();
+            if (updateCard) updateCard();
           }}
           initialData={{
             status: columnName,

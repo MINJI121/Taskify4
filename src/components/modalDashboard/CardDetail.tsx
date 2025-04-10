@@ -70,7 +70,7 @@ export default function CardDetail({ card, columnName }: CardDetailProps) {
       {/* 설명 */}
       <p
         className="
-          text-gray-700 p-2 break-words overflow-auto
+          text-gray-700 p-2 overflow-auto
           w-full max-w-[470px] md:max-w-[349px]
           whitespace-pre-wrap word-break break-words
           h-[70px]

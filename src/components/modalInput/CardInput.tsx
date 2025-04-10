@@ -35,7 +35,7 @@ export default function CardInput({
         onChange={handleChange}
         placeholder={placeholder}
         className={clsx(
-          "p-4 w-full resize-none rounded-md border border-[var(--color-gray3)] focus:border-[var(--primary)] p-1 outline-none bg-white",
+          "p-4 w-full resize-none rounded-md border border-[var(--color-gray3)] focus:border-[var(--primary)] outline-none bg-white",
           small ? "text-sm" : "text-base",
           className
         )}

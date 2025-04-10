@@ -25,11 +25,6 @@ const MemberList: React.FC<HeaderBebridgeProps> = ({ dashboardId }) => {
     currentPage * itemsPerPage
   );
 
-  /* 멤버 삭제 모달 */
-  const openModal = () => {
-    setIsModalOpen(true);
-  };
-
   const closeModal = () => {
     setIsModalOpen(false);
   };

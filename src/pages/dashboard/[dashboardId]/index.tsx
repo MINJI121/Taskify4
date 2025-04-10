@@ -60,40 +60,39 @@ export default function Dashboard() {
     }
   };
 
-  // 대시보드 및 칼럼/카드 데이터 패칭
+  // 칼럼/카드 데이터 패칭
+  const fetchColumnsAndCards = async () => {
+    try {
+      const numericDashboardId = Number(dashboardId);
+
+      // 칼럼 목록 조회
+      const columnRes = await getColumns({
+        dashboardId: numericDashboardId,
+      });
+      setColumns(columnRes.data);
+
+      // 각 칼럼에 대한 카드 목록 조회
+      const columnTasks: { [columnId: number]: CardType[] } = {};
+
+      await Promise.all(
+        columnRes.data.map(async (column: ColumnType) => {
+          const cardRes = await getCardsByColumn({
+            columnId: column.id,
+          });
+          columnTasks[column.id] = cardRes.cards;
+        })
+      );
+
+      setTasksByColumn(columnTasks);
+    } catch (err) {
+      console.error("❌ 칼럼 또는 카드 로딩 에러:", err);
+    }
+  };
+
   useEffect(() => {
     if (!isReady || !dashboardId || !isInitialized || !user) return;
 
     fetchDashboards();
-
-    const fetchColumnsAndCards = async () => {
-      try {
-        const numericDashboardId = Number(dashboardId);
-
-        // 칼럼 목록 조회
-        const columnRes = await getColumns({
-          dashboardId: numericDashboardId,
-        });
-        setColumns(columnRes.data);
-
-        // 각 칼럼에 대한 카드 목록 조회
-        const columnTasks: { [columnId: number]: CardType[] } = {};
-
-        await Promise.all(
-          columnRes.data.map(async (column: ColumnType) => {
-            const cardRes = await getCardsByColumn({
-              columnId: column.id,
-            });
-            columnTasks[column.id] = cardRes.cards;
-          })
-        );
-
-        setTasksByColumn(columnTasks);
-      } catch (err) {
-        console.error("❌ 칼럼 또는 카드 로딩 에러:", err);
-      }
-    };
-
     fetchColumnsAndCards();
   }, [isReady, dashboardId, isInitialized, user]);
 
@@ -130,6 +129,8 @@ export default function Dashboard() {
                 title={col.title}
                 tasks={tasksByColumn[col.id] || []}
                 dashboardId={Number(dashboardId)}
+                columnDelete={fetchColumnsAndCards}
+                fetchColumnsAndCards={fetchColumnsAndCards}
               />
             ))}
             {/* ColumnsButton: 모바일/태블릿에서는 하단 고정, 데스크탑에서는 원래 위치 */}

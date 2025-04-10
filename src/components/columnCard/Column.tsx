@@ -20,6 +20,8 @@ type ColumnProps = {
   title?: string;
   tasks?: CardType[];
   dashboardId: number;
+  columnDelete: (columnId: number) => void;
+  fetchColumnsAndCards: () => void;
 };
 
 export default function Column({
@@ -27,6 +29,8 @@ export default function Column({
   title = "new Task",
   tasks = [],
   dashboardId,
+  columnDelete,
+  fetchColumnsAndCards,
 }: ColumnProps) {
   const [columnTitle, setColumnTitle] = useState(title);
   const [isColumnModalOpen, setIsColumnModalOpen] = useState(false);
@@ -61,7 +65,7 @@ export default function Column({
 
   const handleEditColumn = async (newTitle: string) => {
     if (!newTitle.trim()) {
-      toast.error("칼럼 이름을 입력해주세요.");
+      toast.error("칼럼 제목을 입력해주세요.");
       return;
     }
 
@@ -69,10 +73,10 @@ export default function Column({
       const updated = await updateColumn({ columnId, title: newTitle });
       setColumnTitle(updated.title);
       setIsColumnModalOpen(false);
-      toast.success("칼럼이 변경되었습니다.");
+      toast.success("칼럼 제목이 변경되었습니다.");
     } catch (error) {
-      console.error("칼럼 이름 수정 실패:", error);
-      toast.error("칼럼 변경에 실패했습니다.");
+      console.error("칼럼 제목 수정 실패:", error);
+      toast.error("칼럼 제목 변경에 실패했습니다.");
     }
   };
 
@@ -80,6 +84,7 @@ export default function Column({
     try {
       await deleteColumn({ columnId });
       setIsDeleteModalOpen(false);
+      if (columnDelete) columnDelete(columnId);
       toast.success("칼럼이 삭제되었습니다.");
     } catch (error) {
       console.error("칼럼 삭제 실패:", error);
@@ -158,6 +163,7 @@ export default function Column({
           dashboardId={dashboardId}
           columnId={columnId}
           members={members}
+          updateCard={fetchColumnsAndCards}
         />
       )}
 
@@ -190,6 +196,7 @@ export default function Column({
             setIsCardDetailModalOpen(false);
             setSelectedCard(null);
           }}
+          updateCard={fetchColumnsAndCards}
         />
       )}
     </div>

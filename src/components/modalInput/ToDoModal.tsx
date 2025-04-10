@@ -5,12 +5,12 @@ import ModalInput from "@/components/modalInput/ModalInput";
 import ModalTextarea from "@/components/modalInput/ModalTextarea";
 import ModalImage from "@/components/modalInput/ModalImage";
 import TextButton from "@/components/modalInput/TextButton";
-import { useRouter } from "next/router";
 import { toast } from "react-toastify";
 
 interface TaskModalProps {
   isOpen: boolean;
   onClose: () => void;
+  updateCard: () => void;
   teamId: string;
   dashboardId: number;
   columnId: number;
@@ -31,6 +31,7 @@ interface TaskData {
 
 export default function TaskModal({
   onClose,
+  updateCard,
   dashboardId,
   columnId,
   members,
@@ -43,8 +44,6 @@ export default function TaskModal({
     tags: [],
     image: "",
   });
-
-  const router = useRouter();
 
   const handleChange = (field: keyof TaskData, value: string | string[]) => {
     setFormData((prev) => ({
@@ -81,9 +80,9 @@ export default function TaskModal({
         tags: formData.tags,
         imageUrl: formData.image || undefined,
       });
-
-      router.reload(); // 카드 생성 후 새로고침
       onClose();
+      if (updateCard) updateCard();
+      toast.success("카드가 생성되었습니다.");
     } catch (err) {
       console.error("카드 생성 실패:", err);
       toast.error("카드 생성에 실패했습니다.");
