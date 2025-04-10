@@ -45,7 +45,6 @@ export default function Card({
         </div>
       )}
 
-      {/* 텍스트 콘텐츠 영역 */}
       <div className="flex flex-col justify-between flex-1 w-full">
         {/* 제목 */}
         <h3

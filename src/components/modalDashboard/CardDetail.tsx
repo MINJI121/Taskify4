@@ -1,4 +1,3 @@
-// CardDetail.tsx
 import Image from "next/image";
 import { CardDetailType } from "@/types/cards";
 import { ProfileIcon } from "./profelicon";
@@ -13,13 +12,12 @@ interface CardDetailProps {
 
 export default function CardDetail({ card, columnName }: CardDetailProps) {
   return (
-    <div className="p-4 ">
-      <h2 className="text-3xl font-semibold mb-5">{card.title}</h2>
-      {/* 작성자 정보 추가 */}
+    <div className="p-4">
+      {/* 담당자 정보 박스 */}
       <div className="absolute w-[181px] h-[155px] lg:[200px] top-20 right-10 rounded-lg p-3.5 bg-white border border-[#D9D9D9]">
         <div className="mb-3">
           <p className="text-sm font-semibold text-gray-800 mb-1">담당자</p>
-          <div className="flex items-center  gap-2">
+          <div className="flex items-center gap-2">
             <ProfileIcon
               userId={card.assignee.id}
               nickname={card.assignee.nickname}
@@ -28,7 +26,6 @@ export default function CardDetail({ card, columnName }: CardDetailProps) {
               imgClassName="w-6 h-6"
               fontClassName="text-sm"
             />
-
             <span className="text-sm text-gray-700">
               {card.assignee.nickname}
             </span>
@@ -50,6 +47,8 @@ export default function CardDetail({ card, columnName }: CardDetailProps) {
           </div>
         </div>
       </div>
+
+      {/* 상태 + 태그 */}
       <div className="flex items-center gap-2 mb-2">
         <span
           className="rounded-full bg-violet-200 px-3 py-1 text-sm text-violet-800"
@@ -67,25 +66,28 @@ export default function CardDetail({ card, columnName }: CardDetailProps) {
           );
         })}
       </div>
+
+      {/* 설명 */}
       <p
-        className="text-gray-700 p-2 break-words overflow-auto"
-        style={{
-          width: "470px",
-          height: "70px",
-          whiteSpace: "pre-wrap", // 줄바꿈 유지 + 자동 줄바꿈
-          wordBreak: "break-word", // 긴 단어도 줄바꿈
-        }}
+        className="
+          text-gray-700 p-2 break-words overflow-auto
+          w-full max-w-[470px] md:max-w-[349px]
+          whitespace-pre-wrap word-break break-words
+          h-[70px]
+        "
       >
         {card.description}
       </p>
+
+      {/* 이미지 */}
       {card.imageUrl && (
-        <div className="md:w-420px lg:w-445px">
+        <div className="md:w-[420px] lg:w-[445px]">
           <Image
             src={card.imageUrl}
             alt="카드 이미지"
             width={420}
             height={226}
-            className="rounded-lg object-cover lg:w-[445px] lg:h-[260px] w-[420px] h-[246px] "
+            className="rounded-lg object-cover lg:w-[445px] lg:h-[260px] w-[420px] h-[246px]"
           />
         </div>
       )}
