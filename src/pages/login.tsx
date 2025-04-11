@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useRouter } from "next/router";
+import Image from "next/image";
 import useUserStore from "@/store/useUserStore";
 import { getUserInfo } from "@/api/users";
 import { postAuthData } from "@/api/auth";
@@ -44,18 +45,23 @@ export default function LoginPage() {
 
   return (
     <div className="flex flex-col items-center justify-center h-screen bg-white py-10">
-      <div className="text-center mb-[40px]">
-        <img
+      <div className="flex flex-col items-center justify-center mb-[30px]">
+        <Image
           src="/svgs/main-logo.svg"
           alt="태스키파이 로고 이미지"
-          className="w-[180px]"
+          width={120}
+          height={120}
+          className="object-contain sm:w-[180px]"
         />
-        <p className="font-20m text-black3">오늘도 만나서 반가워요!</p>
+        <p className="text-black3 font-midium text-[18px] sm:text-[20px]">
+          오늘도 만나서 반가워요!
+        </p>
       </div>
 
       <form
         onSubmit={handleSubmit}
-        className="flex flex-col w-[350px] md:w-[520px] gap-[20px] font-16r text-black3"
+        className="flex flex-col w-[350px] md:w-[520px] gap-[12px] sm:gap-[18px]
+        font-16r text-black3"
       >
         <Input
           type="email"
@@ -81,7 +87,7 @@ export default function LoginPage() {
         <button
           type="submit"
           disabled={!isFormValid}
-          className={`w-full h-[50px] rounded-[8px] text-white font-18m transition ${
+          className={`w-full h-[50px] rounded-[8px] text-white font-18m transition mt-1 ${
             isFormValid
               ? "bg-[var(--primary)] cursor-pointer hover:opacity-90}"
               : "bg-[var(--color-gray2)] cursor-not-allowed"

@@ -57,77 +57,92 @@ const MemberList: React.FC<HeaderBebridgeProps> = ({ dashboardId }) => {
   }, [dashboardId]);
 
   return (
-    <div className="lg:w-[620px] lg:h-[404px] w-[284px] min:h-[337px] sm:w-[544px] sm:h-[404px] relative p-6 rounded-[12px] bg-white">
-      <div className="flex justify-between items-center">
-        <p className="text-black3 text-[20px] sm:text-[24px] font-bold">
-          구성원
-        </p>
-        <Pagination
-          currentPage={currentPage}
-          totalPages={totalPages}
-          onPrev={handlePrevPage}
-          onNext={handleNextPage}
-        />
-      </div>
+    <div className="min-h-[312px] lg:w-[620px] sm:w-[544px] w-[284px] bg-white rounded-[12px] p-[24px] flex flex-col">
+      <div className="w-full flex justify-center">
+        {/* 내부 아이템 컨테이너 */}
+        <div className="flex flex-col lg:w-[564px] md:w-[488px] w-[252px]">
+          {/* 헤더 */}
+          <div className="flex justify-between">
+            <p className="text-left text-black3 text-[20px] sm:text-[24px] font-bold">
+              구성원
+            </p>
+            <Pagination
+              currentPage={currentPage}
+              totalPages={totalPages}
+              onPrev={handlePrevPage}
+              onNext={handleNextPage}
+            />
+          </div>
 
-      {/* 구성원 리스트 */}
-      <p className="text-sm sm:text-base text-gray-500 mt-6 mb-4">이름</p>
+          {/* 구성원 리스트 */}
+          <div className="w-full mt-6">
+            <p className="mt-6 mb-4 text-[var(--color-gray2)] font-normal text-[14px] sm:text-[16px]">
+              이름
+            </p>
 
-      <ul>
-        {paginatedMembers.map((member, index) => (
-          <li
-            key={index}
-            className={`flex items-center justify-between mt-3 pb-4 ${
-              index !== paginatedMembers.length - 1
-                ? "border-b border-gray-200"
-                : ""
-            }`}
-          >
-            <div className="flex items-center gap-4">
-              {member.profileImageUrl ? (
-                <div className="relative w-[34px] h-[34px] md:w-[38px] md:h-[38px] rounded-full border-[2px] border-white overflow-hidden">
-                  <Image
-                    src={member.profileImageUrl}
-                    alt={member.nickname}
-                    fill
-                    className="object-cover"
-                  />
-                </div>
-              ) : (
-                <RandomProfile name={member.nickname} index={index} />
-              )}
-
-              <p className="text-sm sm:text-base">
-                {member.nickname}
-                {member.isOwner && "(소유자)"}
-              </p>
-            </div>
-
-            {!member.isOwner && (
-              <>
-                <button
-                  onClick={() => {
-                    setSelectedMemberId(member.id);
-                    setIsModalOpen(true);
-                  }}
-                  className="text-12m cursor-pointer sm:font-sm h-[32px] sm:h-[32px] w-[52px] sm:w-[84px] md:w-[84px] border border-[var(--color-gray3)] text-[var(--primary)] px-2 py-1 rounded-md hover:bg-gray-100"
+            <ul>
+              {paginatedMembers.map((member, index) => (
+                <li
+                  key={index}
+                  className={`sm:mt-4 sm:pb-4 mt-3 pb-3 flex items-center justify-between ${
+                    index !== paginatedMembers.length - 1
+                      ? "border-b border-gray-200"
+                      : ""
+                  }`}
                 >
-                  삭제
-                </button>
+                  <div className="flex items-center gap-3">
+                    {member.profileImageUrl ? (
+                      <div
+                        className="relative w-[34px] h-[34px] md:w-[38px] md:h-[38px]
+                      rounded-full border-[2px] border-white overflow-hidden"
+                      >
+                        <Image
+                          src={member.profileImageUrl}
+                          alt={member.nickname}
+                          fill
+                          className="object-cover"
+                        />
+                      </div>
+                    ) : (
+                      <RandomProfile name={member.nickname} index={index} />
+                    )}
 
-                {isModalOpen && selectedMemberId !== null && (
-                  <DelteMemberModal
-                    isOpen={isModalOpen}
-                    onClose={closeModal}
-                    id={selectedMemberId}
-                    memberDelete={fetchMembers}
-                  />
-                )}
-              </>
-            )}
-          </li>
-        ))}
-      </ul>
+                    <p className="text-black3 font-normal sm:text-[16px] text-[14px]">
+                      {member.nickname}
+                      {member.isOwner && "(소유자)"}
+                    </p>
+                  </div>
+
+                  {!member.isOwner && (
+                    <>
+                      <button
+                        onClick={() => {
+                          setSelectedMemberId(member.id);
+                          setIsModalOpen(true);
+                        }}
+                        className="cursor-pointer px-2 py-1 h-[32px] sm:h-[32px] w-[52px] sm:w-[84px] md:w-[84px]
+                        border border-[var(--color-gray3)] text-[var(--primary)] rounded-md hover:bg-gray-100
+                        font-normal sm:text-[14px] text-[12px]"
+                      >
+                        삭제
+                      </button>
+
+                      {isModalOpen && selectedMemberId !== null && (
+                        <DelteMemberModal
+                          isOpen={isModalOpen}
+                          onClose={closeModal}
+                          id={selectedMemberId}
+                          memberDelete={fetchMembers}
+                        />
+                      )}
+                    </>
+                  )}
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };

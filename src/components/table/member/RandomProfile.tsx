@@ -15,7 +15,7 @@ export default function RandomProfile({ name, index }: RandomProfileProps) {
 
   return (
     <div
-      className={`flex items-center justify-center text-white font-16sb rounded-full ${bgColor} w-[34px] h-[34px] md:w-[38px] md:h-[38px]`}
+      className={`flex items-center justify-center text-white font-16sb leading-none rounded-full ${bgColor} w-[34px] h-[34px] md:w-[38px] md:h-[38px]`}
     >
       {name[0]}
     </div>

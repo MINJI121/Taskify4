@@ -36,7 +36,7 @@ export default function ModalInput({
     defaultValue ? new Date(defaultValue) : null
   );
   const [titleLength, setTitleLength] = useState<number>(0);
-  const maxTitleLength = 70;
+  const maxTitleLength = 50;
 
   useEffect(() => {
     if (label === "태그" && defaultValueArray.length > 0) {

@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, ChangeEvent } from "react";
 import { useRouter } from "next/router";
 import Input from "../input/Input";
 import Image from "next/image";
@@ -18,8 +18,10 @@ const ChangeBebridge = ({ onUpdate }: ChangeBebridgeProps) => {
     {}
   );
   const [title, setTitle] = useState("");
+  const [titleLength, setTitleLength] = useState<number>(0);
   const [selected, setSelected] = useState<number | null>(null);
   const colors = ["#7ac555", "#760DDE", "#FF9800", "#76A5EA", "#E876EA"];
+  const maxTitleLength = 30;
 
   /* 대시보드 이름 데이터 */
   useEffect(() => {
@@ -40,6 +42,7 @@ const ChangeBebridge = ({ onUpdate }: ChangeBebridgeProps) => {
         }
       } catch (error) {
         console.error("대시보드 상세내용 불러오는데 오류 발생:", error);
+        toast.error("대시보드를 불러오는 데 실패했습니다.");
       }
     };
     if (dashboardId) {
@@ -47,11 +50,18 @@ const ChangeBebridge = ({ onUpdate }: ChangeBebridgeProps) => {
     }
   }, [dashboardId]);
 
-  /* 대시보드 이름 변경 버튼 */
-  const handleUpdate = async () => {
-    const dashboardIdNumber = Number(dashboardId);
+  /* 대시보드 이름 글자수 제한 */
+  const handleTitleChange = async (value: string) => {
+    if (value.length <= maxTitleLength) {
+      setTitle(value);
+      setTitleLength(value.length);
+    }
+  };
+
+  const handleSubmit = async () => {
     if (!dashboardId || selected === null) return;
 
+    const dashboardIdNumber = Number(dashboardId);
     const payload = {
       title,
       color: colors[selected],
@@ -68,7 +78,7 @@ const ChangeBebridge = ({ onUpdate }: ChangeBebridgeProps) => {
         color: colors[selected],
       }));
 
-      toast.success("대시보드가 변경되었습니다!");
+      toast.success("대시보드가 변경되었습니다.");
       if (onUpdate) onUpdate();
     } catch (error) {
       console.error("대시보드 변경 실패:", error);
@@ -77,48 +87,68 @@ const ChangeBebridge = ({ onUpdate }: ChangeBebridgeProps) => {
   };
 
   return (
-    <div className="lg:w-[620px] lg:h-[344px] sm:w-[544px] sm:h-[344px] w-[284px] h-[312px] bg-white rounded-[12px] p-[24px] flex flex-col">
-      <h2 className="text-black3 text-[20px] sm:text-[24px] font-bold">
-        {dashboardDetail.title}
-      </h2>
-      <Input
-        type="text"
-        onChange={setTitle}
-        label="대시보드 이름"
-        labelClassName="text-black3 text-[16px] sm:text-[18px] font-medium mt-6"
-        placeholder="뉴프로젝트"
-        className="max-w-[620px] mb-1"
-      />
+    <div className="min-h-[312px] lg:w-[620px] sm:w-[544px] w-[284px] bg-white rounded-[12px] p-[24px] flex flex-col">
+      <div className="w-full flex justify-center">
+        {/* 내부 아이템 컨테이너 */}
+        <div className="flex flex-col lg:w-[564px] md:w-[488px] w-[252px]">
+          {/* 헤더 */}
+          <h2 className="text-left text-black3 font-bold sm:text-[24px] text-[20px]">
+            {dashboardDetail.title}
+          </h2>
 
-      <div className="flex mt-3">
-        {colors.map((color, index) => (
-          <div key={index} className="relative">
-            <button
-              className="cursor-pointer w-[30px] h-[30px] rounded-[15px] mr-2 transition-all duration-200 
-                    hover:opacity-70 hover:scale-110"
-              style={{ backgroundColor: color }}
-              onClick={() => setSelected(index)} // 색상 선택 시 selected 업데이트
+          {/* 변경할 제목 입력창 */}
+          <div className="relative w-full mt-6">
+            <Input
+              type="text"
+              onChange={handleTitleChange}
+              value={title}
+              label="대시보드 이름"
+              labelClassName="text-left text-black3 font-medium sm:text-[18px] text-[16px] mb-1"
+              placeholder="변경할 이름을 입력해 주세요"
+              className="max-w-none mb-1 pr-[52px] placeholder:text-[14px] placeholder:sm:text-[16px]"
             />
-            {selected === index && (
-              <Image
-                src="/svgs/check.svg"
-                alt="선택됨"
-                width={23}
-                height={23}
-                className="cursor-pointer absolute top-4 left-3.5 transform -translate-x-1/2 -translate-y-1/2"
-              />
-            )}
+            <span className="absolute right-3 bottom-1 top-4/6 -translate-y-2/6 font-light text-[12px] sm:text-[14px] text-[var(--color-gray1)] sm:pr-1.5">
+              {titleLength} / {maxTitleLength}
+            </span>
           </div>
-        ))}
-      </div>
-      <div className="mt-8 flex">
-        <button
-          onClick={handleUpdate}
-          disabled={selected === null} // color가 없으면 버튼 비활성화
-          className={`cursor-pointer sm:w-[572px] sm:h-[54px] w-[252px] h-[54px] rounded-[8px] border border-[var(--color-gray3)] bg-[var(--primary)] text-[var(--color-white)] ${selected === null ? "bg-gray-300 cursor-not-allowed" : "bg-[var(--primary)]"}`}
-        >
-          변경
-        </button>
+
+          {/* 컬러칩 선택 */}
+          <div className="flex mt-3">
+            {colors.map((color, index) => (
+              <div key={index} className="relative">
+                <button
+                  className="cursor-pointer w-[30px] h-[30px] rounded-[15px] mr-2 transition-all duration-200 
+                    hover:opacity-70 hover:scale-110"
+                  style={{ backgroundColor: color }}
+                  onClick={() => setSelected(index)} // 색상 선택 시 selected 업데이트
+                />
+                {selected === index && (
+                  <Image
+                    src="/svgs/check.svg"
+                    alt="선택됨"
+                    width={23}
+                    height={23}
+                    className="cursor-pointer absolute top-4 left-3.5 transform -translate-x-1/2 -translate-y-1/2"
+                  />
+                )}
+              </div>
+            ))}
+          </div>
+
+          {/* 변경 버튼 */}
+          <div className="flex mt-6">
+            <button
+              onClick={handleSubmit}
+              disabled={selected === null} // color가 없으면 버튼 비활성화
+              className={`cursor-pointer w-full sm:h-[54px] h-[54px]
+            rounded-[8px] border border-[var(--color-gray3)] bg-[var(--primary)]
+            text-[var(--color-white)] font-semibold text-[14px] sm:text-[16px]
+            ${selected === null ? "bg-gray-300 cursor-not-allowed" : "bg-[var(--primary)]"}`}
+            >
+              변경
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   );

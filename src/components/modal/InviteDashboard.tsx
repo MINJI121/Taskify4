@@ -8,7 +8,13 @@ import { AxiosError } from "axios";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-export default function InviteDashboard({ onClose }: { onClose?: () => void }) {
+export default function InviteDashboard({
+  onClose,
+  onUpdate,
+}: {
+  onClose?: () => void;
+  onUpdate?: () => void;
+}) {
   const [email, setEmail] = useState("");
   const router = useRouter();
   const { dashboardId } = router.query;
@@ -32,6 +38,9 @@ export default function InviteDashboard({ onClose }: { onClose?: () => void }) {
             },
           }
         );
+
+        if (onUpdate) onUpdate();
+
         if (res.data && Array.isArray(res.data.invitations)) {
           // 초대내역 리스트
           const inviteData = res.data.invitations.map(
@@ -67,6 +76,7 @@ export default function InviteDashboard({ onClose }: { onClose?: () => void }) {
       });
 
       toast.success("멤버 초대에 성공했습니다.");
+      onUpdate?.();
       onClose?.();
     } catch (error) {
       if (error instanceof AxiosError) {

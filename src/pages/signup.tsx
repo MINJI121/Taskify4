@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useRouter } from "next/router";
+import Image from "next/image";
 import { signUp } from "@/api/users";
 import Input from "@/components/input/Input";
 import Link from "next/link";
@@ -60,18 +61,22 @@ export default function SignUpPage() {
     items-center justify-center
     bg-white py-10"
     >
-      <div className="text-center mb-[25px]">
-        <img
+      <div className="flex flex-col items-center justify-center mb-[30px]">
+        <Image
           src="/svgs/main-logo.svg"
           alt="태스키파이 로고 이미지"
-          className="w-[180px] relative"
+          width={120}
+          height={120}
+          className="object-contain sm:w-[180px]"
         />
-        <p className="font-20m text-black3">첫 방문을 환영합니다!</p>
+        <p className="text-black3 font-midium text-[18px] sm:text-[20px]">
+          첫 방문을 환영합니다!
+        </p>
       </div>
 
       <form
         onSubmit={handleSubmit}
-        className="flex flex-col w-[350px] md:w-[520px] gap-[18px]
+        className="flex flex-col w-[350px] md:w-[520px] gap-[12px] sm:gap-[18px]
         font-16r text-black3"
       >
         <Input
@@ -135,7 +140,7 @@ export default function SignUpPage() {
         <button
           type="submit"
           disabled={!isFormValid}
-          className={`w-full h-[50px] rounded-[8px] text-white font-18m transition ${
+          className={`w-full h-[50px] rounded-[8px] text-white font-18m transition mt-1 ${
             isFormValid
               ? "bg-[var(--primary)] cursor-pointer hover:opacity-90}"
               : "bg-[var(--color-gray2)] cursor-not-allowed"
