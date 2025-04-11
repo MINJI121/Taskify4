@@ -1,9 +1,9 @@
 // Column.tsx
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import Image from "next/image";
 import { CardType } from "@/types/task";
 import TodoModal from "@/components/modalInput/ToDoModal";
-import TodoButton from "@/components/button/TodoButton";
+import { TodoButton, ShortTodoButton } from "@/components/button/TodoButton";
 import ColumnManageModal from "@/components/columnCard/ColumnManageModal";
 import ColumnDeleteModal from "@/components/columnCard/ColumnDeleteModal";
 import { updateColumn, deleteColumn } from "@/api/columns";
@@ -41,6 +41,9 @@ export default function Column({
   const [members, setMembers] = useState<
     { id: number; userId: number; nickname: string }[]
   >([]);
+
+  // 카드리스트의 스크롤을 칼럼 영역으로 이동
+  const scrollRef = useRef<HTMLDivElement | null>(null);
 
   // ✅ 멤버 불러오기
   useEffect(() => {
@@ -105,51 +108,71 @@ export default function Column({
   return (
     <div
       className={`
-      flex flex-col shrink-0 overflow-hidden p-4 mr-4 lg:my-0 mb-4
+      flex flex-col shrink-0 lg:items-center overflow-hidden p-4 mr-4 lg:my-0 mb-4
       border border-[var(--color-gray4)] bg-[#F5F2FC] rounded-[12px]
-      max-h-[401px] lg:max-h-none w-full lg:w-[360px]
+      w-full lg:w-[370px] max-h-[325px] lg:max-h-[827px]
       `}
     >
       {/* 칼럼 헤더 */}
-      <div className="shrink-0">
+      <div className="shrink-0 mb-2">
         <div className="flex items-center justify-between">
+          {/* 왼쪽: 타이틀 + 카드 개수 */}
           <div className="flex items-center gap-2">
             <Image src="/svgs/ellipse.svg" alt="circle" width={8} height={8} />
             <h2 className="text-black3 text-[16px] md:text-[18px] font-bold">
               {columnTitle}
             </h2>
-            <span className="w-5 h-5 text-sm bg-gray-200 text-gray-700 rounded-[4px] flex items-center justify-center ">
+            <span
+              className="flex items-center justify-center leading-none
+            w-[20px] h-[20px] bg-white text-[var(--primary)] font-14m rounded-[4px]"
+            >
               {tasks.length}
             </span>
           </div>
-          <Image
-            src="/svgs/settings.svg"
-            alt="setting icon"
-            width={24}
-            height={24}
-            priority
-            className="cursor-pointer"
-            onClick={() => setIsColumnModalOpen(true)}
-          />
+          {/* 오른쪽: 생성 버튼 + 설정 버튼 */}
+          <div className="flex items-center gap-2">
+            <div
+              onClick={() => setIsTodoModalOpen(true)}
+              className="block lg:hidden"
+            >
+              <ShortTodoButton />
+            </div>
+            <div className="relative flex justify-end w-[22px] sm:w-[24px] h-[22px] sm:h-[24px]">
+              <Image
+                src="/svgs/settings.svg"
+                alt="setting icon"
+                fill
+                priority
+                className="object-contain cursor-pointer"
+                onClick={() => setIsColumnModalOpen(true)}
+              />
+            </div>
+          </div>
+        </div>
+        <div className="flex items-center justify-center">
+          <div
+            onClick={() => setIsTodoModalOpen(true)}
+            className="mb-2 hidden lg:block"
+          >
+            <TodoButton />
+          </div>
         </div>
       </div>
 
-      {/* 카드 영역 */}
-      <div className="flex-1 flex flex-col overflow-hidden items-center pb-4 gap-2">
-        <div onClick={() => setIsTodoModalOpen(true)} className="mb-2">
-          <TodoButton />
-        </div>
-
+      {/* 스크롤바 컨테이너 */}
+      <div className="flex flex-col lg:pl-[21px] overflow-y-auto w-full lg:w-[357px] rounded-[12px] bg-[#F5F2FC]">
         {/* 카드 리스트 */}
         <div
-          className="flex-1 w-full overflow-y-auto overflow-x-hidden"
+          className="flex-1 overflow-y-auto overflow-x-hidden"
           style={{ scrollbarGutter: "stable" }}
+          ref={scrollRef}
         >
           <CardList
             columnId={columnId}
             teamId={TEAM_ID}
             initialTasks={tasks}
             onCardClick={(card) => handleCardClick(card.id)}
+            scrollRoot={scrollRef}
           />
         </div>
       </div>

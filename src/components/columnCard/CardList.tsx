@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import {
   DndContext,
   closestCenter,
@@ -22,14 +22,17 @@ interface CardListProps {
   teamId: string;
   initialTasks: CardType[];
   onCardClick: (card: CardType) => void;
+  scrollRoot?: React.RefObject<HTMLDivElement | null>;
 }
 
 export const CardList = ({
   initialTasks,
   columnId,
   onCardClick,
+  scrollRoot,
 }: CardListProps) => {
   const [cards, setCards] = useState<CardType[]>([]);
+  const observerRef = useRef<HTMLDivElement | null>(null);
 
   const sensors = useSensors(
     useSensor(PointerSensor, {
@@ -57,6 +60,28 @@ export const CardList = ({
     fetchCards();
   }, [columnId, initialTasks]);
 
+  // 스크롤 감지
+  useEffect(() => {
+    if (!scrollRoot?.current || !observerRef.current) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting) {
+        }
+      },
+      {
+        root: scrollRoot.current,
+        threshold: 1.0,
+      }
+    );
+
+    observer.observe(observerRef.current);
+
+    return () => {
+      observer.disconnect();
+    };
+  }, [scrollRoot]);
+
   // 드래그 & 드롭
   const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event;
@@ -80,10 +105,11 @@ export const CardList = ({
         items={cards.map((card) => card.id)}
         strategy={verticalListSortingStrategy}
       >
-        <div className="grid gap-3 w-full grid-cols-1">
+        <div className="w-full grid grid-cols-1 gap-3">
           {cards.map((card) => (
             <SortableCard key={card.id} card={card} onClick={onCardClick} />
           ))}
+          <div ref={observerRef} className="h-[1px] bg-transparent" />
         </div>
       </SortableContext>
     </DndContext>

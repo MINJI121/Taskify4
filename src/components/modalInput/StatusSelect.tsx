@@ -67,7 +67,7 @@ export default function StatusSelect({
       {label && (
         <p className="text-black3 font-medium text-[14px] sm:text-[18px]">
           {label}
-          {required && <span className="text-[var(--color-purple)]"> *</span>}
+          {required && <span className="text-[var(--primary)]"> *</span>}
         </p>
       )}
 

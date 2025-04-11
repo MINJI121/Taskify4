@@ -58,7 +58,7 @@ export default function SignUpPage() {
     <div
       className="flex flex-col min-h-screen
     items-center justify-center
-    bg-[var(--color-gray5)] py-10"
+    bg-white py-10"
     >
       <div className="text-center mb-[25px]">
         <img

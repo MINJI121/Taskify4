@@ -101,7 +101,7 @@ export default function Dashboard() {
   }
 
   return (
-    <div className="flex h-screen overflow-hidden">
+    <div className="flex min-h-screen">
       <SideMenu
         teamId={TEAM_ID}
         dashboardList={dashboardList}
@@ -111,7 +111,8 @@ export default function Dashboard() {
         <HeaderDashboard variant="dashboard" dashboardId={dashboardId} />
 
         <main
-          className="flex flex-1 flex-col min-h-0 lg:flex-row overflow-y-auto
+          className="flex flex-1 flex-col lg:flex-row
+          overflow-y-auto min-h-0
         bg-white px-6 py-6"
         >
           {/* 칼럼 가로 스크롤 영역 */}

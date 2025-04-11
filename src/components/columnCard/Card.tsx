@@ -30,10 +30,11 @@ export default function Card({
           className={`
             mb-2 md:mb-0 md:mr-4 lg:mr-0
             shrink-0
-            w-full h-40
-            md:w-[91px] md:h-[53px]
-            lg:w-full lg:h-40
-          `}
+            w-full lg:w-full
+            lg:max-w-[100%] max-w-[77%]
+            lg:h-40 md:h-[53px] h-25
+            md:w-[90px]
+            `}
         >
           <Image
             className="rounded-md object-cover w-full h-full"
@@ -51,7 +52,7 @@ export default function Card({
           className={`
             text-black3 text-[14px] font-medium mt-2
             md:text-[16px] md:mt-0 lg:mt-2
-            truncate max-w-[180px] sm:max-w-none
+            truncate max-w-[190px] sm:max-w-[480px]
           `}
         >
           {title}
@@ -85,7 +86,7 @@ export default function Card({
           </div>
 
           {/* 날짜 + 닉네임 */}
-          <div className="flex items-center gap-2 md:gap-3 text-gray-500">
+          <div className="flex items-center gap-[29.5px] md:gap-3 sm:pr-4 text-[var(--color-gray1)]">
             <div className="flex items-center gap-1">
               <Image
                 src="/svgs/calendar.svg"
@@ -104,7 +105,7 @@ export default function Card({
                 className="w-6 h-6 rounded-full object-cover"
               />
             ) : (
-              <div className="w-6 h-6 flex items-center justify-center bg-[#A3C4A2] text-white font-bold rounded-full text-xs">
+              <div className="w-6 h-6 flex items-center justify-center bg-[#A3C4A2] text-white font-medium rounded-full text-xs">
                 {assignee.nickname[0]}
               </div>
             )}

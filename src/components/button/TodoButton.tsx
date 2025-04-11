@@ -5,7 +5,7 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   fullWidth?: boolean;
 }
 
-const TodoButton: React.FC<ButtonProps> = ({
+export const TodoButton: React.FC<ButtonProps> = ({
   fullWidth = false,
   className,
   children,
@@ -34,4 +34,23 @@ const TodoButton: React.FC<ButtonProps> = ({
   );
 };
 
-export default TodoButton;
+export const ShortTodoButton = () => {
+  return (
+    <button
+      className={clsx(
+        "flex justify-center items-center transition-all",
+        "cursor-pointer"
+      )}
+    >
+      <span
+        className={clsx(
+          "flex items-center justify-center leading-none",
+          "w-[20px] h-[20px] bg-white hover:bg-[var(--color-gray3)]",
+          "rounded-md text-[var(--primary)] font-medium text-[18px]"
+        )}
+      >
+        +
+      </span>
+    </button>
+  );
+};

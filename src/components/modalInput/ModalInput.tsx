@@ -182,8 +182,7 @@ export default function ModalInput({
   return (
     <div className="inline-flex flex-col items-start gap-2.5 w-full">
       <p className={inputClassNames.label}>
-        {label}{" "}
-        {required && <span className="text-[var(--color-purple)]"> *</span>}
+        {label} {required && <span className="text-[var(--primary)]"> *</span>}
       </p>
       <div className="w-full">{inputElement}</div>
     </div>

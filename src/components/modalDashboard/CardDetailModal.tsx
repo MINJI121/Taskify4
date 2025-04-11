@@ -194,7 +194,7 @@ export default function CardDetailPage({
               });
 
               if (onChangeCard) onChangeCard();
-              onClose();
+              setIsEditModalOpen(false);
               toast.success("카드가 수정되었습니다.");
             } catch (err) {
               console.error("카드 수정 실패:", err);
