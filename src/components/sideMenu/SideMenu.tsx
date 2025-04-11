@@ -52,33 +52,39 @@ export default function SideMenu({
     <aside
       className={clsx(
         "z-20 flex flex-col h-screen overflow-y-auto lg:overflow-y-hidden overflow-x-hidden transition-all duration-200",
-        "bg-white border-r border-[var(--color-gray3)] px-3 py-5",
+        "bg-white border-r border-[var(--color-gray3)] py-5",
         isCollapsed
-          ? "w-[67px]"
-          : "w-[67px] sm:w-[67px] md:w-[160px] lg:w-[300px]"
+          ? "w-[67px] items-center px-0"
+          : "w-[67px] sm:w-[67px] md:w-[160px] lg:w-[300px] px-3"
       )}
     >
       {/* 로고 영역 */}
-      <div className="flex flex-col items-center md:items-start mb-8 px-1">
+      <div
+        className={clsx(
+          "flex flex-col mb-8",
+          isCollapsed ? "items-center px-0" : "items-center md:items-start px-1"
+        )}
+      >
         <Link href="/mydashboard" className="mb-2">
-          <Image
-            src="/svgs/logo_taskify.svg"
-            alt="Taskify Large Logo"
-            width={109}
-            height={34}
-            className="hidden md:block"
-            priority
-            unoptimized
-          />
-          <Image
-            src="/svgs/logo.svg"
-            alt="Taskify Small Logo"
-            width={24}
-            height={28}
-            className="md:hidden"
-            priority
-            unoptimized
-          />
+          {isCollapsed ? (
+            <Image
+              src="/svgs/logo.svg"
+              alt="작은 로고"
+              width={24}
+              height={28}
+              priority
+              unoptimized
+            />
+          ) : (
+            <Image
+              src="/svgs/logo_taskify.svg"
+              alt="Taskify 로고"
+              width={109}
+              height={34}
+              priority
+              unoptimized
+            />
+          )}
         </Link>
 
         {/* 접기/펼치기 버튼 (모바일에서는 숨김) */}
