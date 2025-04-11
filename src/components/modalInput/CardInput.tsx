@@ -7,7 +7,6 @@ export interface CardInputProps {
   placeholder?: string;
   hasButton?: boolean;
   className?: string;
-  small?: boolean;
   onTextChange: (value: string) => void;
   onButtonClick: () => void;
 }
@@ -19,7 +18,6 @@ export default function CardInput({
   hasButton = false,
   onButtonClick = () => {},
   className = "",
-  small = false,
 }: CardInputProps) {
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
 
