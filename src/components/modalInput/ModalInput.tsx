@@ -150,7 +150,10 @@ export default function ModalInput({
 
     case "태그":
       inputElement = (
-        <div className="flex flex-wrap items-center gap-2 w-full max-w-[520px] min-h-[48px] border border-[var(--color-gray3)] rounded-md px-2 sm:px-4 overflow-x-auto scrollbar-hide focus-within:border-[var(--primary)]">
+        <div
+          className="flex flex-wrap items-center gap-2 py-2 pl-4
+        w-full max-w-[520px] min-h-[48px] border border-[var(--color-gray3)] rounded-md px-2 sm:px-4 overflow-x-auto scrollbar-hide focus-within:border-[var(--primary)]"
+        >
           {tags.map((tag, index) => (
             <ColorTagChip
               key={index}
@@ -158,7 +161,7 @@ export default function ModalInput({
               className={clsx(
                 tag.textColor,
                 tag.bgColor,
-                "px-3 py-1 rounded-lg font-14r"
+                "px-2 py-1 rounded-lg font-14r"
               )}
             >
               {tag.text}
@@ -172,7 +175,10 @@ export default function ModalInput({
             placeholder="입력 후 Enter"
             onChange={handleTagInputChange}
             onKeyDown={handleAddTag}
-            className="flex-grow min-w-[100px] h-full border-none font-normal text-[14px] sm:text-[16px] pl-2 outline-none"
+            className="flex-grow min-w-[100px] h-full
+            border-none outline-none
+            font-normal text-[14px] sm:text-[16px]
+            placeholder:sm:text-[14px] placeholder:text-[12px]"
           />
         </div>
       );

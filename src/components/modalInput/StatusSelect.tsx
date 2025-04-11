@@ -4,6 +4,7 @@ import Image from "next/image";
 import { useRouter } from "next/router";
 import axiosInstance from "@/api/axiosInstance";
 import { TEAM_ID } from "@/constants/team";
+import { ColumnNameTag } from "./chips/ColumnNameTag";
 
 export interface StatusOption {
   label: string;
@@ -77,12 +78,7 @@ export default function StatusSelect({
           onClick={() => setIsOpen(!isOpen)}
         >
           {selectedStatus ? (
-            <div className="flex items-center gap-2 bg-[#F3EDFF] rounded-full px-3 py-1">
-              <span className="w-2 h-2 rounded-full bg-[#5D2EFF]" />
-              <span className="text-sm text-[#5D2EFF]">
-                {selectedStatus.label}
-              </span>
-            </div>
+            <ColumnNameTag label={selectedStatus.label} />
           ) : (
             <span className="text-sm text-[var(--color-gray2)]">
               상태를 선택해 주세요

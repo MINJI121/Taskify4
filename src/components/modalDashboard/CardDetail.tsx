@@ -1,6 +1,6 @@
 import Image from "next/image";
 import { CardDetailType } from "@/types/cards";
-import { ProfileIcon } from "./profelicon";
+import { ColumnNameTag } from "../modalInput/chips/ColumnNameTag";
 import ColorTagChip, {
   getTagColor,
 } from "@/components/modalInput/chips/ColorTagChip";
@@ -12,69 +12,33 @@ interface CardDetailProps {
 
 export default function CardDetail({ card, columnName }: CardDetailProps) {
   return (
-    <div className="p-4">
-      {/* 담당자 정보 박스 */}
-      <div className="absolute w-[181px] h-[155px] lg:[200px] top-20 right-10 rounded-lg p-3.5 bg-white border border-[#D9D9D9]">
-        <div className="mb-3">
-          <p className="text-sm font-semibold text-black3 mb-1">담당자</p>
-          <div className="flex items-center gap-2">
-            <ProfileIcon
-              userId={card.assignee.id}
-              nickname={card.assignee.nickname}
-              profileImageUrl={card.assignee.profileImageUrl ?? ""}
-              id={card.assignee.id}
-              imgClassName="w-6 h-6"
-              fontClassName="text-sm"
-            />
-            <span className="text-sm text-black3">
-              {card.assignee.nickname}
-            </span>
-          </div>
-
-          <div>
-            <p className="text-sm font-semibold text-black3 mb-1 mt-3">
-              마감일
-            </p>
-            <p className="text-sm text-black3">
-              {new Date(card.dueDate).toLocaleString("ko-KR", {
-                year: "numeric",
-                month: "2-digit",
-                day: "2-digit",
-                hour: "2-digit",
-                minute: "2-digit",
-              })}
-            </p>
-          </div>
+    <div className="flex flex-col gap-5 w-full">
+      <div className="flex flex-wrap items-center gap-5">
+        {/* 칼럼 이름 태그 */}
+        <ColumnNameTag label={columnName} />
+        {/* 구분선 */}
+        <div className="w-[1px] h-[20px] bg-[var(--color-gray3)]" />
+        {/* 카드 태그 */}
+        <div className="flex flex-wrap gap-[6px]">
+          {card.tags.map((tag, idx) => {
+            const { textColor, bgColor } = getTagColor(idx);
+            return (
+              <ColorTagChip key={idx} className={`${textColor} ${bgColor}`}>
+                {tag}
+              </ColorTagChip>
+            );
+          })}
         </div>
       </div>
 
-      {/* 상태 + 태그 */}
-      <div className="flex items-center gap-2 mb-2">
-        <span
-          className="rounded-full bg-violet-200 px-3 py-1 text-sm text-violet-800"
-          title={`상태: ${columnName}`}
-        >
-          {columnName}
-        </span>
-        <span className="text-2xl font-extralight text-[#D9D9D9]">|</span>
-        {card.tags.map((tag, idx) => {
-          const { textColor, bgColor } = getTagColor(idx);
-          return (
-            <ColorTagChip key={idx} className={`${textColor} ${bgColor}`}>
-              {tag}
-            </ColorTagChip>
-          );
-        })}
-      </div>
-
-      {/* 설명 */}
+      {/* 내용 */}
       <p
         className="
-          text-black3 p-2 overflow-auto
-          w-full max-w-[470px] md:max-w-[349px]
+          text-black font-normal sm:text-[14px] text-[12px] overflow-auto pr-1
+          w-full lg:max-w-[445px] sm:max-w-[420px] max-w-[295px]
+          min-h-0 sm:max-h-[100px] max-h-[80px]
           whitespace-pre-wrap word-break break-words
-          h-[70px]
-        "
+          "
       >
         {card.description}
       </p>
@@ -85,9 +49,10 @@ export default function CardDetail({ card, columnName }: CardDetailProps) {
           <Image
             src={card.imageUrl}
             alt="카드 이미지"
-            width={420}
-            height={226}
-            className="rounded-lg object-cover lg:w-[445px] lg:h-[260px] w-[420px] h-[246px]"
+            width={290}
+            height={168}
+            className="rounded-lg object-cover
+            lg:w-[445px] md:w-[420px]"
           />
         </div>
       )}

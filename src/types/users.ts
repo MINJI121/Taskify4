@@ -11,7 +11,7 @@ export interface UserType {
 
 export interface UpdateUser {
   nickname: string;
-  profileImageUrl: string;
+  profileImageUrl?: string;
 }
 
 export interface UserMeImage {

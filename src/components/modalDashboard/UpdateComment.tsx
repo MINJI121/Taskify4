@@ -3,7 +3,7 @@ import { useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { deleteComment, updateComment } from "@/api/comment";
 import { Comment } from "@/types/comments";
-import { ProfileIcon } from "./profelicon";
+import { ProfileIcon } from "./ProfileIcon";
 import formatDate from "./formatDate";
 
 interface UpdateCommentProps {
@@ -51,44 +51,68 @@ export default function UpdateComment({
         id={0}
       />
 
-      {/* 댓글 내용 */}
+      {/* 댓글 */}
       <div className="flex flex-col w-full space-y-1">
         {/* 작성자 + 시간 */}
-        <div className="flex items-center gap-2 text-sm text-gray-600">
-          <span className="font-semibold text-black">
+        <div
+          className="flex items-center gap-2
+        text-[var(--color-gray2)] font-normal sm:text-[12px] text-[10px]"
+        >
+          <span className="text-black3 font-semibold sm:text-[14px] text-[12px]">
             {comment.author.nickname}
           </span>
           <span>{formatDate(comment.createdAt)}</span>
         </div>
 
-        {/* 본문 */}
+        {/* 댓글 수정 입력창 */}
         {isEditing ? (
           <>
             <textarea
-              className="w-full p-2 text-sm"
+              className="w-full text-black3 font-normal sm:text-[14px] text-[12px]
+              outline-none"
               value={editedContent}
               onChange={(e) => setEditedContent(e.target.value)}
               aria-label="댓글"
             />
-            <div className="flex gap-2 mt-1 text-sm">
+            <div className="flex gap-2 text-black3 font-normal sm:text-[14px] text-[12px]">
               <button
                 onClick={handleSave}
                 disabled={editedContent === comment.content}
+                className="font-normal text-black3 sm:text-[12px] text-[10px]
+                cursor-pointer"
               >
                 저장
               </button>
-              <button onClick={handleEditToggle}>취소</button>
+              <button
+                onClick={handleEditToggle}
+                className="font-normal text-[var(--color-gray2)] sm:text-[12px] text-[10px]
+              cursor-pointer"
+              >
+                취소
+              </button>
             </div>
           </>
         ) : (
           <>
-            <p className="text-sm whitespace-pre-wrap break-words">
+            {/* 댓글 내용 */}
+            <p
+              className="whitespace-pre-wrap break-words
+            text-black3 font-normal sm:text-[14px] text-[12px]"
+            >
               {comment.content}
             </p>
+            {/* 버튼 컨테이너 */}
             {currentUserId === comment.author.id && (
-              <div className="flex gap-2 text-xs text-gray-500 mt-1">
-                <button onClick={handleEditToggle}>수정</button>
-                <button onClick={handleDelete}>삭제</button>
+              <div
+                className="flex gap-2 mt-1
+              text-[var(--color-gray2)] font-normal sm:text-[12px] text-[10px]"
+              >
+                <button onClick={handleEditToggle} className="cursor-pointer">
+                  수정
+                </button>
+                <button onClick={handleDelete} className="cursor-pointer">
+                  삭제
+                </button>
               </div>
             )}
           </>

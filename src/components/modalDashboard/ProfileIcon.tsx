@@ -15,16 +15,17 @@ export const ProfileIcon: React.FC<ProfileIconProps> = ({
   nickname,
   profileImageUrl,
 }) => (
-  <div className="relative w-[34px] h-[34px] md:w-[38px] md:h-[38px] rounded-full overflow-hidden">
+  <>
     {profileImageUrl ? (
       <Image
         src={profileImageUrl}
         alt="유저 프로필 아이콘"
-        fill
-        className="object-cover"
+        width={34}
+        height={34}
+        className="object-cover w-[26px] h-[26px] rounded-full"
       />
     ) : (
       <RandomProfile name={nickname} />
     )}
-  </div>
+  </>
 );

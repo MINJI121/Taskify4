@@ -37,16 +37,29 @@ export default function CommentList({
     data?.pages.flatMap((page) => page.comments) ?? [];
 
   return (
-    <div className="min-h-[80px] p-2 rounded bg-white shadow-sm">
-      {allComments.map((comment) => (
-        <div key={comment.id} className="p-2  last:border-b-0">
-          <UpdateComment
-            comment={comment}
-            currentUserId={currentUserId}
-            teamId={""}
-          />
-        </div>
-      ))}
+    <div
+      className="min-h-[80px] sm:max-h-[240px] max-h-[215px] w-full
+      rounded bg-white
+      flex flex-col"
+    >
+      {allComments.length === 0 ? (
+        <p
+          className="sm:pt-8 pt-4 text-center text-[var(--color-gray1)]
+        font-normal sm:text-[14px] text-[12px]"
+        >
+          작성된 댓글이 없습니다.
+        </p>
+      ) : (
+        allComments.map((comment) => (
+          <div key={comment.id} className=" shrink-0 py-2 last:border-b-0">
+            <UpdateComment
+              comment={comment}
+              currentUserId={currentUserId}
+              teamId={""}
+            />
+          </div>
+        ))
+      )}
       <div ref={ref} />
     </div>
   );

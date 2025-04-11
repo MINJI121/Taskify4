@@ -3,6 +3,7 @@ import { MoreVertical, X } from "lucide-react";
 import CardDetail from "./CardDetail";
 import CommentList from "./CommentList";
 import CardInput from "@/components/modalInput/CardInput";
+import { Representative } from "@/components/modalDashboard/Representative";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { createComment } from "@/api/comment";
 import { deleteCard, EditCard } from "@/api/card";
@@ -95,78 +96,119 @@ export default function CardDetailPage({
 
   return (
     <>
-      <div className="fixed inset-0 bg-black/30 z-50 flex items-center justify-center px-4 sm:px-6">
+      {/* 모달 고정 div */}
+      <div
+        className="fixed inset-0 bg-black/30 z-50
+      flex items-center justify-center px-4 sm:px-6"
+      >
+        {/* 모달 컨테이너 */}
         <div
-          className="
-      relative bg-white rounded-lg shadow-lg flex flex-col
-      w-[327px] h-[710px]
-      md:w-[678px] md:h-[766px]
-      lg:w-[730px] lg:h-[763px]
-    "
+          className="relative flex flex-col
+          overflow-y-auto
+          max-w-[730px] max-h-[calc(100vh-4rem)]
+          lg:w-[730px] sm:w-[678px] w-[327px]
+          bg-white rounded-lg shadow-lg"
         >
-          <div className="flex justify-between items-center px-6 pt-6 pb-2">
-            <h2 className="font-24sb">{cardData.title}</h2>
-            <div className="flex items-center gap-3 relative" ref={popupRef}>
-              <button
-                onClick={() => setShowMenu((prev) => !prev)}
-                className="w-7 h-7 flex items-center justify-center hover:cursor-pointer"
-                title="수정하기"
-                type="button"
-              >
-                <MoreVertical className="w-8 h-8 text-black cursor-pointer" />
-              </button>
-              {showMenu && (
-                <div className="absolute right-0 top-10 p-2 w-27 bg-white border border-[#D9D9D9] z-40 rounded-lg">
+          <div className="flex items-center justify-center px-6 pt-6 pb-2">
+            {/* 내부 아이템 컨테이너 */}
+            <div className="flex flex-col lg:w-[674px] sm:w-[614px] w-[295px]">
+              {/* 헤더 */}
+              <div className="flex justify-between sm:mb-4 mb-2">
+                {/* 카드 제목 */}
+                <h2 className="text-black3 font-bold sm:text-[24px] text-[20px]">
+                  {cardData.title}
+                </h2>
+                {/* 버튼 컨테이너 */}
+                <div
+                  className="relative flex items-center sm:gap-[24px] gap-[16px]"
+                  ref={popupRef}
+                >
+                  {/* 메뉴 버튼 */}
                   <button
-                    className="block w-full px-4 py-2 text-base text-gray-800 hover:bg-[#F1EFFD] hover:text-[#5534DA] rounded-sm cursor-pointer"
+                    onClick={() => setShowMenu((prev) => !prev)}
+                    className="sm:w-[28px] sm:h-[28px] w-[20px] h-[20px]
+                    flex items-center justify-center hover:cursor-pointer"
+                    title="수정하기"
                     type="button"
-                    onClick={() => {
-                      setIsEditModalOpen(true);
-                      setShowMenu(false);
-                    }}
                   >
-                    수정하기
+                    <MoreVertical className="w-8 h-8 text-black3 cursor-pointer" />
                   </button>
-                  <button
-                    className="block w-full px-4 py-2 text-base text-gray-800 hover:bg-[#F1EFFD] hover:text-[#5534DA] rounded-sm cursor-pointer"
-                    type="button"
-                    onClick={() => deleteCardMutate()}
-                  >
-                    삭제하기
+                  {showMenu && (
+                    <div
+                      className="absolute right-0 top-9.5 p-2 z-40
+                    sm:w-28 w-20
+                    bg-white border border-[#D9D9D9] rounded-lg"
+                    >
+                      <button
+                        className="w-full rounded-sm
+                        font-normal sm:text-[14px] text-[12px] text-black3
+                        hover:bg-[#F1EFFD] hover:text-[#5534DA]
+                        cursor-pointer"
+                        type="button"
+                        onClick={() => {
+                          setIsEditModalOpen(true);
+                          setShowMenu(false);
+                        }}
+                      >
+                        수정하기
+                      </button>
+                      <button
+                        className="w-full rounded-sm
+                        font-normal sm:text-[14px] text-[12px] text-black3
+                        hover:bg-[#F1EFFD] hover:text-[#5534DA]
+                        cursor-pointer"
+                        type="button"
+                        onClick={() => deleteCardMutate()}
+                      >
+                        삭제하기
+                      </button>
+                    </div>
+                  )}
+                  {/* 닫기 버튼 */}
+                  <button onClick={handleClose} title="닫기">
+                    <X
+                      className="sm:w-[28px] sm:h-[28px] w-[20px] h-[20px]
+                    flex items-center justify-center hover:cursor-pointer"
+                    />
                   </button>
                 </div>
-              )}
-              <button onClick={handleClose} title="닫기">
-                <X className="w-7 h-7 flex items-center justify-center hover:cursor-pointer" />
-              </button>
-            </div>
-          </div>
+              </div>
 
-          {/* 콘텐츠 (스크롤 없음) */}
-          <div className="px-6 pb-4 flex flex-col gap-6 flex-1 overflow-hidden">
-            {/* 카드 상세 */}
-            <CardDetail card={cardData} columnName={columnName} />
+              {/* 카드 내용 + 담당자 컨테이너 */}
+              <div className="flex flex-col-reverse sm:flex-row gap-4">
+                <CardDetail card={cardData} columnName={columnName} />
+                <div>
+                  <Representative card={card} />
+                </div>
+              </div>
 
-            {/* 댓글 입력 */}
-            <div className="w-full max-w-[450px]">
-              <p className="text-sm font-semibold mb-2">댓글</p>
-              <CardInput
-                hasButton
-                small
-                value={commentText}
-                onTextChange={setCommentText}
-                onButtonClick={handleCommentSubmit}
-                placeholder="댓글 작성하기"
-              />
-            </div>
+              {/* 댓글 입력창 */}
+              <div className="mt-4 w-full lg:max-w-[445px] md:max-w-[420px]">
+                <p className="mb-1 text-black3 font-medium sm:text-[16px] text-[14px]">
+                  댓글
+                </p>
+                <CardInput
+                  hasButton
+                  small
+                  value={commentText}
+                  onTextChange={setCommentText}
+                  onButtonClick={handleCommentSubmit}
+                  placeholder="댓글 작성하기"
+                />
+              </div>
 
-            {/* 댓글 리스트 (스크롤 가능) */}
-            <div className="w-full max-w-[450px] text-base max-h-[180px] overflow-y-auto scrollbar-hidden">
-              <CommentList
-                cardId={card.id}
-                currentUserId={currentUserId}
-                teamId={""}
-              />
+              {/* 댓글 목록 (스크롤 가능) */}
+              <div
+                className="w-full lg:max-w-[445px] md:max-w-[420px]
+                sm:max-h-[140px] max-h-[70px]
+                my-2 overflow-y-auto"
+              >
+                <CommentList
+                  cardId={card.id}
+                  currentUserId={currentUserId}
+                  teamId={""}
+                />
+              </div>
             </div>
           </div>
         </div>

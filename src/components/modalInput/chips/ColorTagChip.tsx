@@ -40,7 +40,7 @@ export default function ColorTagChip({
     <button
       onClick={handleClick}
       className={clsx(
-        "px-3 py-2 rounded-lg font-14r whitespace-nowrap",
+        "px-3 py-1 rounded-[4px] font-12r whitespace-nowrap",
         className
       )}
     >

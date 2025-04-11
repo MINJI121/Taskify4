@@ -52,12 +52,22 @@ export const ProfileCard = () => {
   };
 
   const handleSave = async () => {
-    if (!nickname || !image) return;
+    if (!nickname) return;
 
     try {
-      await updateProfile({ nickname, profileImageUrl: image });
+      const payload: { nickname: string; profileImageUrl?: string } = {
+        nickname,
+      };
+      if (image) {
+        payload.profileImageUrl = image;
+      }
+
+      await updateProfile(payload);
       updateNickname(nickname);
-      updateProfileImage(image);
+
+      if (image) {
+        updateProfileImage(image);
+      }
       toast.success("프로필 변경이 완료되었습니다.");
     } catch (error) {
       console.error("프로필 변경 실패:", error);
