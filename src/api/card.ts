@@ -123,7 +123,7 @@ export const updateCard = async (
 export const getCardsByColumn = async ({
   columnId,
   cursorId,
-  size = 10,
+  size = 300,
 }: {
   columnId: number;
   cursorId?: number;

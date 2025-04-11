@@ -17,7 +17,7 @@ interface CardDetailModalProps {
   currentUserId: number;
   dashboardId: number;
   onClose: () => void;
-  updateCard: () => void;
+  onChangeCard?: () => void;
 }
 
 interface ColumnType {
@@ -31,7 +31,7 @@ export default function CardDetailPage({
   currentUserId,
   dashboardId,
   onClose,
-  updateCard,
+  onChangeCard,
 }: CardDetailModalProps) {
   const [cardData, setCardData] = useState<CardDetailType>(card);
   const [commentText, setCommentText] = useState("");
@@ -65,9 +65,9 @@ export default function CardDetailPage({
     mutationFn: () => deleteCard(card.id),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["cards"] });
-      toast.success("카드가 삭제되었습니다.");
+      if (onChangeCard) onChangeCard();
       onClose();
-      if (updateCard) updateCard();
+      toast.success("카드가 삭제되었습니다.");
     },
   });
 
@@ -182,17 +182,24 @@ export default function CardDetailPage({
             const matchedColumn = columns.find(
               (col) => col.title === data.status
             );
-            await updateCardMutate({
-              columnId: matchedColumn?.id,
-              assignee: { ...cardData.assignee, nickname: data.assignee },
-              title: data.title,
-              description: data.description,
-              dueDate: data.deadline,
-              tags: data.tags,
-              imageUrl: data.image || undefined,
-            });
-            setIsEditModalOpen(false);
-            if (updateCard) updateCard();
+            try {
+              await updateCardMutate({
+                columnId: matchedColumn?.id,
+                assignee: { ...cardData.assignee, nickname: data.assignee },
+                title: data.title,
+                description: data.description,
+                dueDate: data.deadline,
+                tags: data.tags,
+                imageUrl: data.image || undefined,
+              });
+
+              if (onChangeCard) onChangeCard();
+              onClose();
+              toast.success("카드가 수정되었습니다.");
+            } catch (err) {
+              console.error("카드 수정 실패:", err);
+              toast.error("카드 수정에 실패했습니다.");
+            }
           }}
           initialData={{
             status: columnName,

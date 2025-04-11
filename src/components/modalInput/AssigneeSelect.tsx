@@ -43,9 +43,9 @@ export default function AssigneeSelect({
   return (
     <div className="inline-flex flex-col items-start gap-2.5 w-full max-w-[520px]">
       {label && (
-        <p className="font-18m text-[var(--color-black)]">
+        <p className="text-black3 font-medium text-[14px] sm:text-[18px]">
           {label}
-          {required && <span className="text-[var(--color-purple)]">*</span>}
+          {required && <span className="text-[var(--color-purple)]"> *</span>}
         </p>
       )}
 
@@ -65,11 +65,13 @@ export default function AssigneeSelect({
                 >
                   {value.charAt(0).toUpperCase()}
                 </span>
-                <span className="font-18r">{value}</span>
+                <span className="font-normal text-[14px] sm:text-[16px]">
+                  {value}
+                </span>
               </>
             ) : (
-              <span className="font-18r text-[var(--color-gray2)]">
-                이름을 입력해주세요
+              <span className="font-normal text-[14px] sm:text-[16px] text-[var(--color-gray2)]">
+                담당자를 선택해 주세요
               </span>
             )}
           </div>

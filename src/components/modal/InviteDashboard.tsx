@@ -109,7 +109,7 @@ export default function InviteDashboard({ onClose }: { onClose?: () => void }) {
           onChange={setEmail}
           label="이메일"
           labelClassName="text-lg sm:text-base text-black3 mt-6"
-          placeholder="이메일을 입력해주세요"
+          placeholder="이메일을 입력해 주세요"
           className="max-w-[620px] mb-1"
         />
 

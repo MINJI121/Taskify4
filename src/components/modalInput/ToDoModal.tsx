@@ -10,7 +10,7 @@ import { toast } from "react-toastify";
 interface TaskModalProps {
   isOpen: boolean;
   onClose: () => void;
-  updateCard: () => void;
+  onChangeCard?: () => void;
   teamId: string;
   dashboardId: number;
   columnId: number;
@@ -31,7 +31,7 @@ interface TaskData {
 
 export default function TaskModal({
   onClose,
-  updateCard,
+  onChangeCard,
   dashboardId,
   columnId,
   members,
@@ -80,8 +80,8 @@ export default function TaskModal({
         tags: formData.tags,
         imageUrl: formData.image || undefined,
       });
+      if (onChangeCard) onChangeCard();
       onClose();
-      if (updateCard) updateCard();
       toast.success("카드가 생성되었습니다.");
     } catch (err) {
       console.error("카드 생성 실패:", err);
@@ -92,7 +92,9 @@ export default function TaskModal({
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black/35 p-4 z-50">
       <div className="w-full max-w-[584px] h-auto max-h-[90vh] rounded-lg bg-white p-4 sm:p-8 shadow-lg flex flex-col gap-4 sm:gap-8 overflow-y-auto">
-        <h2 className="text-xl font-bold">할 일 생성</h2>
+        <h2 className="text-black3 text-[16px] sm:text-[24px] font-bold">
+          할 일 생성
+        </h2>
 
         <div className="flex flex-col gap-4 sm:gap-8">
           <AssigneeSelect
@@ -139,7 +141,8 @@ export default function TaskModal({
             color="third"
             buttonSize="md"
             onClick={onClose}
-            className="w-full sm:w-[256px] h-[54px] border border-[var(--color-gray3)] bg-white text-black rounded-lg"
+            className="w-full sm:w-[256px] h-[54px] bg-white border border-[var(--color-gray3)]
+            text-[var(--color-gray1)] font-16m rounded-lg cursor-pointer"
           >
             취소
           </TextButton>
@@ -148,7 +151,7 @@ export default function TaskModal({
             color="primary"
             buttonSize="md"
             onClick={handleSubmit}
-            className="w-full sm:w-[256px] h-[54px] bg-[var(--primary)] text-white rounded-lg"
+            className="w-full sm:w-[256px] h-[54px] bg-[var(--primary)] text-white font-16m rounded-lg cursor-pointer"
             disabled={!isFormValid}
           >
             생성

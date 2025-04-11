@@ -10,7 +10,7 @@ import { updateColumn, deleteColumn } from "@/api/columns";
 import { getDashboardMembers, getCardDetail } from "@/api/card";
 import { MemberType } from "@/types/users";
 import { TEAM_ID } from "@/constants/team";
-import CardList from "./CardList";
+import { CardList } from "./CardList";
 import CardDetailModal from "@/components/modalDashboard/CardDetailModal";
 import { CardDetailType } from "@/types/cards";
 import { toast } from "react-toastify";
@@ -65,7 +65,7 @@ export default function Column({
 
   const handleEditColumn = async (newTitle: string) => {
     if (!newTitle.trim()) {
-      toast.error("칼럼 제목을 입력해주세요.");
+      toast.error("칼럼 제목을 입력해 주세요.");
       return;
     }
 
@@ -140,7 +140,7 @@ export default function Column({
           <TodoButton />
         </div>
 
-        {/* 무한스크롤 카드 리스트로 대체 */}
+        {/* 카드 리스트 */}
         <div
           className="flex-1 w-full overflow-y-auto overflow-x-hidden"
           style={{ scrollbarGutter: "stable" }}
@@ -163,7 +163,7 @@ export default function Column({
           dashboardId={dashboardId}
           columnId={columnId}
           members={members}
-          updateCard={fetchColumnsAndCards}
+          onChangeCard={fetchColumnsAndCards}
         />
       )}
 
@@ -196,7 +196,7 @@ export default function Column({
             setIsCardDetailModalOpen(false);
             setSelectedCard(null);
           }}
-          updateCard={fetchColumnsAndCards}
+          onChangeCard={fetchColumnsAndCards}
         />
       )}
     </div>

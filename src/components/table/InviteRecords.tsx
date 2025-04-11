@@ -30,9 +30,9 @@ const InviteRecords = ({ dashboardId }: { dashboardId: string }) => {
         if (res.data && Array.isArray(res.data.invitations)) {
           // 이메일 리스트를 객체 배열로 저장
           const inviteData = res.data.invitations.map(
-            (item: { id: number; invite: { email: string } }) => ({
+            (item: { id: number; invitee: { email: string } }) => ({
               id: item.id,
-              email: item.invite.email,
+              email: item.invitee.email,
             })
           );
           setInviteList(inviteData);
@@ -101,7 +101,7 @@ const InviteRecords = ({ dashboardId }: { dashboardId: string }) => {
   };
 
   return (
-    <div className="lg:w-[620px] w-[284px] sm:w-[544px] min:h-[337px] sm:h-[430px] relative p-6 rounded-lg bg-white">
+    <div className="lg:w-[620px] w-[284px] sm:w-[544px] min:h-[337px] sm:h-[430px] relative p-6 rounded-[12px] bg-white">
       <div className="flex justify-between items-start sm:items-center">
         {/* 제목 */}
         <p className="text-black3 text-[20px] sm:text-[24px] font-bold">

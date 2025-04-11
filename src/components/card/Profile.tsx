@@ -70,7 +70,7 @@ export const ProfileCard = () => {
   }, []);
 
   return (
-    <div className="flex flex-col w-[284px] sm:w-[544px] lg:w-[620px] h-[496px] sm:h-[366px] bg-white rounded-[16px] p-[24px]">
+    <div className="flex flex-col w-[284px] sm:w-[544px] lg:w-[620px] h-[496px] sm:h-[366px] bg-white rounded-[12px] p-[24px]">
       {/* 프로필 제목 */}
       <h2 className="text-black3 text-[18px] sm:text-[24px] font-bold mb-4">
         프로필

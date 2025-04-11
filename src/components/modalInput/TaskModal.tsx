@@ -61,13 +61,19 @@ export default function TaskModal({
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black/35 z-50">
       <div className="w-full max-w-[584px] h-auto max-h-[90vh] rounded-lg bg-white p-4 sm:p-8 shadow-lg flex flex-col gap-4 sm:gap-8 overflow-y-auto">
-        <h2 className="text-xl font-bold">
+        <h2 className="font-bold text-black3 text-[16px] sm:text-[24px]">
           {mode === "edit" ? "할 일 수정" : "할 일 생성"}
         </h2>
 
-        <div className="flex flex-col gap-4 sm:gap-8">
+        <div
+          className="flex flex-col gap-4 sm:gap-8
+        text-black3 font-medium text-[14px] sm:text-[18px]"
+        >
           {/* 상태 및 담당자 드롭다운 */}
-          <div className="flex flex-col sm:flex-row gap-4">
+          <div
+            className="flex flex-col sm:flex-row gap-4
+          text-black3 font-normal text-[14px] sm:text-[16px]"
+          >
             <StatusSelect
               label="상태"
               value={formData.status}
@@ -125,7 +131,8 @@ export default function TaskModal({
             color="third"
             buttonSize="md"
             onClick={onClose}
-            className="w-full sm:w-[256px] h-[54px] border border-[var(--color-gray3)] bg-white text-black rounded-lg"
+            className="w-full sm:w-[256px] h-[54px] border border-[var(--color-gray3)] bg-white
+            text-[var(--color-gray1)] font-16m rounded-lg cursor-pointer"
           >
             취소
           </TextButton>
@@ -134,7 +141,7 @@ export default function TaskModal({
             color="primary"
             buttonSize="md"
             onClick={() => onSubmit(formData)}
-            className="w-full sm:w-[256px] h-[54px] bg-[var(--primary)] text-white rounded-lg"
+            className="w-full sm:w-[256px] h-[54px] bg-[var(--primary)] text-white font-16m rounded-lg cursor-pointer"
             disabled={!isFormValid}
           >
             {mode === "edit" ? "수정" : "생성"}

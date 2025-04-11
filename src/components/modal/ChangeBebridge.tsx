@@ -77,7 +77,7 @@ const ChangeBebridge = ({ onUpdate }: ChangeBebridgeProps) => {
   };
 
   return (
-    <div className="lg:w-[620px] lg:h-[344px] sm:w-[544px] sm:h-[344px] w-[284px] h-[312px] bg-white sm:rounded-[16px] rounded-[8px] p-[24px] flex flex-col">
+    <div className="lg:w-[620px] lg:h-[344px] sm:w-[544px] sm:h-[344px] w-[284px] h-[312px] bg-white rounded-[12px] p-[24px] flex flex-col">
       <h2 className="text-black3 text-[20px] sm:text-[24px] font-bold">
         {dashboardDetail.title}
       </h2>

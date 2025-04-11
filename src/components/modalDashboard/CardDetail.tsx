@@ -16,7 +16,7 @@ export default function CardDetail({ card, columnName }: CardDetailProps) {
       {/* 담당자 정보 박스 */}
       <div className="absolute w-[181px] h-[155px] lg:[200px] top-20 right-10 rounded-lg p-3.5 bg-white border border-[#D9D9D9]">
         <div className="mb-3">
-          <p className="text-sm font-semibold text-gray-800 mb-1">담당자</p>
+          <p className="text-sm font-semibold text-black3 mb-1">담당자</p>
           <div className="flex items-center gap-2">
             <ProfileIcon
               userId={card.assignee.id}
@@ -26,16 +26,16 @@ export default function CardDetail({ card, columnName }: CardDetailProps) {
               imgClassName="w-6 h-6"
               fontClassName="text-sm"
             />
-            <span className="text-sm text-gray-700">
+            <span className="text-sm text-black3">
               {card.assignee.nickname}
             </span>
           </div>
 
           <div>
-            <p className="text-sm font-semibold text-gray-800 mb-1 mt-3">
+            <p className="text-sm font-semibold text-black3 mb-1 mt-3">
               마감일
             </p>
-            <p className="text-sm text-gray-700">
+            <p className="text-sm text-black3">
               {new Date(card.dueDate).toLocaleString("ko-KR", {
                 year: "numeric",
                 month: "2-digit",
@@ -70,7 +70,7 @@ export default function CardDetail({ card, columnName }: CardDetailProps) {
       {/* 설명 */}
       <p
         className="
-          text-gray-700 p-2 overflow-auto
+          text-black3 p-2 overflow-auto
           w-full max-w-[470px] md:max-w-[349px]
           whitespace-pre-wrap word-break break-words
           h-[70px]
