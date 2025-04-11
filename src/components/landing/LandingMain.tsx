@@ -9,19 +9,18 @@ export default function LandingMain() {
       <Section1 />
 
       {/* Section2와 Section3 영역 */}
-      <div className="md:mt-[180px] mt-[80px] md:mb-[160px] mb-[80px] w-full max-w-[1200px] flex flex-col items-center">
+      <div className="md:mt-[180px] mt-[80px] md:mb-[160px] mb-[80px] w-full flex flex-col items-center">
         {/* Section2: 우선순위 & 해야 할 일 등록 */}
         <Section2 />
 
-        {/* Section3 영역 시작 */}
-        <div className="mt-[120px] w-full flex flex-col gap-[36px]">
-          {/* 타이틀: 왼쪽 정렬 + 28px */}
-          <p className="text-[28px] font-bold leading-[42px] text-[var(--color-white)]">
+        {/* Section3 영역 */}
+        <div className="mt-[120px] w-full max-w-[1200px] px-4 lg:px-0 flex flex-col gap-[36px]">
+          <p className="text-[24px] sm:text-[28px] font-bold leading-[36px] sm:leading-[42px] text-[var(--color-white)] text-center sm:text-left">
             생산성을 높이는 다양한 설정 ⚡
           </p>
 
           {/* Section3 카드들 */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-[33px]">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-[24px] md:gap-[33px] w-full justify-center">
             <Section3
               src="/images/landing3.png"
               alt="대시보드 설정 이미지"

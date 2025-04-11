@@ -25,7 +25,7 @@ export default function Section3({
   });
 
   return (
-    <div className="col-span-1 w-full max-w-[378px] grid rounded-lg overflow-hidden shadow-sm">
+    <div className="w-full max-w-[320px] sm:max-w-[360px] md:max-w-[360px] lg:max-w-[378px] mx-auto grid rounded-lg overflow-hidden shadow-sm">
       {/* 상단 이미지 영역 */}
       <div
         className={clsx(
