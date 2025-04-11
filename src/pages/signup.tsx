@@ -97,6 +97,8 @@ export default function SignUpPage() {
           placeholder="닉네임을 입력해 주세요"
           onChange={setNickname}
           className="bg-white"
+          forceInvalid={nickName.length > 10}
+          invalidMessage="닉네임은 10자 이하로 입력해 주세요"
         />
 
         <Input

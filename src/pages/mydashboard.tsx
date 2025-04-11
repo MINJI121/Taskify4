@@ -57,13 +57,11 @@ export default function MyDashboardPage() {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [isConfirmDeleteModalOpen, setIsConfirmDeleteModalOpen] =
     useState(false);
-  const itemsPerPage = 6;
+  const itemsPerPage = 6; // 버튼 포함 6개
 
   const sensors = useSensors(
     useSensor(PointerSensor, {
-      activationConstraint: {
-        distance: 5,
-      },
+      activationConstraint: { distance: 5 },
     })
   );
 
@@ -72,9 +70,13 @@ export default function MyDashboardPage() {
   );
 
   const totalPages = Math.ceil(
-    (filteredDashboardList.length + 1) / itemsPerPage
+    filteredDashboardList.length / (itemsPerPage - 1)
   );
-  const startIndex = (currentPage - 1) * itemsPerPage;
+  const startIndex = (currentPage - 1) * (itemsPerPage - 1);
+  const paginatedDashboards = filteredDashboardList.slice(
+    startIndex,
+    startIndex + (itemsPerPage - 1)
+  );
 
   const fetchDashboards = async () => {
     try {
@@ -183,32 +185,30 @@ export default function MyDashboardPage() {
                 items={dashboardList.map((d) => d.id)}
                 strategy={rectSortingStrategy}
               >
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-[8px] md:gap-[10px] lg:gap-[13px]">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-[13px]">
                   <div key="add">
                     <DashboardAddButton onClick={() => setIsModalOpen(true)} />
                   </div>
 
-                  {filteredDashboardList
-                    .slice(startIndex, startIndex + (itemsPerPage - 1))
-                    .map((dashboard) => (
-                      <SortableCardButton
-                        key={dashboard.id}
-                        dashboard={dashboard}
-                        isEditMode={isEditMode}
-                        onDeleteClick={(id: number) => {
-                          setSelectedDashboardId(id);
-                          setSelectedCreatedByMe(true);
-                          setSelectedTitle(dashboard.title);
-                          setIsDeleteModalOpen(true);
-                        }}
-                        onLeaveClick={(id: number) => {
-                          setSelectedDashboardId(id);
-                          setSelectedCreatedByMe(false);
-                          setSelectedTitle(dashboard.title);
-                          setIsDeleteModalOpen(true);
-                        }}
-                      />
-                    ))}
+                  {paginatedDashboards.map((dashboard) => (
+                    <SortableCardButton
+                      key={dashboard.id}
+                      dashboard={dashboard}
+                      isEditMode={isEditMode}
+                      onDeleteClick={(id: number) => {
+                        setSelectedDashboardId(id);
+                        setSelectedCreatedByMe(true);
+                        setSelectedTitle(dashboard.title);
+                        setIsDeleteModalOpen(true);
+                      }}
+                      onLeaveClick={(id: number) => {
+                        setSelectedDashboardId(id);
+                        setSelectedCreatedByMe(false);
+                        setSelectedTitle(dashboard.title);
+                        setIsDeleteModalOpen(true);
+                      }}
+                    />
+                  ))}
                 </div>
               </SortableContext>
             </DndContext>

@@ -188,7 +188,7 @@ export default function SideMenu({
                 className={clsx(
                   "flex w-full justify-center md:justify-start p-3 font-18m text-[var(--color-gray1)] transition-colors duration-200",
                   dashboard.id.toString() === boardId &&
-                    "bg-[var(--color-violet8)] text-[var(--color-black)] font-semibold rounded-l-xl"
+                    "bg-[var(--color-violet8)] text-[var(--color-black)] font-semibold rounded-xl"
                 )}
               >
                 <Link

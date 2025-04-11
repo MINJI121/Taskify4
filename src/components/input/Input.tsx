@@ -146,7 +146,7 @@ export default function Input(props: InputProps) {
         )}
       </div>
 
-      {isInvalid && invalidMessage && (
+      {(isInvalid || forceInvalid) && invalidMessage && (
         <span className="font-14r block text-[var(--color-red)] mt-1">
           {invalidMessage}
         </span>
