@@ -2,7 +2,7 @@ import clsx from "clsx";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { PaginationButton } from "@/components/button/PaginationButton";
 import NewDashboard from "@/components/modal/NewDashboard";
 
@@ -22,6 +22,19 @@ interface SideMenuProps {
   onCreateDashboard?: (dashboard: Dashboard) => void;
 }
 
+function useMobile() {
+  const [isMobile, setIsMobile] = useState(false);
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 640); // sm 기준
+    };
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+  return isMobile;
+}
+
 export default function SideMenu({
   teamId,
   dashboardList,
@@ -29,6 +42,7 @@ export default function SideMenu({
 }: SideMenuProps) {
   const router = useRouter();
   const boardId = router.query.dashboardId?.toString();
+  const isMobile = useMobile();
 
   const [currentPage, setCurrentPage] = useState(1);
   const [isCollapsed, setIsCollapsed] = useState(false);
@@ -66,7 +80,7 @@ export default function SideMenu({
         )}
       >
         <Link href="/mydashboard" className="mb-2">
-          {isCollapsed ? (
+          {isCollapsed || isMobile ? (
             <Image
               src="/svgs/logo.svg"
               alt="작은 로고"
