@@ -38,7 +38,7 @@ export default function DeleteDashboardModal({
       onClose={onClose}
       width="w-[327px] sm:w-[568px]"
       height="h-[160px] sm:h-[174px]"
-      backgroundClassName="bg-black/30 z-50"
+      backgroundClassName="bg-black/35 z-50"
     >
       <div className="flex flex-col sm:gap-10 gap-6 text-center ">
         <p className="text-xl mt-1.5">멤버를 삭제하시겠습니까?</p>

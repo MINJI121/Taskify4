@@ -160,7 +160,7 @@ export default function Column({
       </div>
 
       {/* 스크롤바 컨테이너 */}
-      <div className="flex flex-col lg:pl-[21px] overflow-y-auto w-full lg:w-[357px] rounded-[12px] bg-[#F5F2FC]">
+      <div className="flex flex-col lg:pl-[21px] overflow-y-auto w-full lg:w-[357px] rounded-md bg-[#F5F2FC]">
         {/* 카드 리스트 */}
         <div
           className="flex-1 overflow-y-auto overflow-x-hidden"

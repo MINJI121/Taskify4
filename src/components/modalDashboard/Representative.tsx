@@ -17,7 +17,7 @@ export const Representative = ({ card }: RepresentativeProps) => {
       <div className="flex sm:flex-col sm:gap-4 gap-17">
         {/* 담당자 컨테이너 */}
         <div>
-          <p className="font-12sb text-black3 mb-1">담당자</p>
+          <p className="font-12sb text-black3 mb-[4px]">담당자</p>
           <div className="flex items-center gap-2">
             <ProfileIcon
               userId={card.assignee.id}
@@ -35,7 +35,7 @@ export const Representative = ({ card }: RepresentativeProps) => {
 
         {/* 마감일 컨테이너 */}
         <div>
-          <p className="font-12sb text-black3 sm:mb-1 mb-[8px]">마감일</p>
+          <p className="font-12sb text-black3 sm:mb-1 mb-[4px]">마감일</p>
           <p className="font-normal text-black3 sm:text-[14px] text-[12px]">
             {new Date(card.dueDate).toLocaleString("ko-KR", {
               year: "numeric",

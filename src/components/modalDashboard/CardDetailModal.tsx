@@ -98,10 +98,10 @@ export default function CardDetailPage({
     <>
       {/* 모달 고정 div */}
       <div
-        className="fixed inset-0 bg-black/30 z-50
+        className="fixed inset-0 bg-black/35 z-50
       flex items-center justify-center px-4 sm:px-6"
       >
-        {/* 모달 컨테이너 */}
+        {/* 모달창 */}
         <div
           className="relative flex flex-col
           overflow-y-auto
@@ -115,7 +115,7 @@ export default function CardDetailPage({
               {/* 헤더 */}
               <div className="flex justify-between sm:mb-4 mb-2">
                 {/* 카드 제목 */}
-                <h2 className="text-black3 font-bold sm:text-[24px] text-[20px]">
+                <h2 className="text-black3 font-bold sm:text-[20px] text-[16px]">
                   {cardData.title}
                 </h2>
                 {/* 버튼 컨테이너 */}
@@ -133,16 +133,18 @@ export default function CardDetailPage({
                   >
                     <MoreVertical className="w-8 h-8 text-black3 cursor-pointer" />
                   </button>
+                  {/* 카드 편집 드롭다운 메뉴 */}
                   {showMenu && (
                     <div
                       className="absolute right-0 top-9.5 p-2 z-40
-                    sm:w-28 w-20
+                      flex flex-col items-center justify-center sm:gap-[6px] gap-[11px]
+                      sm:w-28 w-20 sm:h-24
                     bg-white border border-[#D9D9D9] rounded-lg"
                     >
                       <button
-                        className="w-full rounded-sm
+                        className="w-full h-full rounded-sm
                         font-normal sm:text-[14px] text-[12px] text-black3
-                        hover:bg-[#F1EFFD] hover:text-[#5534DA]
+                        hover:bg-[var(--color-violet8)] hover:text-[var(--primary)]
                         cursor-pointer"
                         type="button"
                         onClick={() => {
@@ -153,9 +155,9 @@ export default function CardDetailPage({
                         수정하기
                       </button>
                       <button
-                        className="w-full rounded-sm
+                        className="w-full h-full rounded-sm
                         font-normal sm:text-[14px] text-[12px] text-black3
-                        hover:bg-[#F1EFFD] hover:text-[#5534DA]
+                        hover:bg-[var(--color-violet8)] hover:text-[var(--primary)]
                         cursor-pointer"
                         type="button"
                         onClick={() => deleteCardMutate()}
@@ -189,7 +191,6 @@ export default function CardDetailPage({
                 </p>
                 <CardInput
                   hasButton
-                  small
                   value={commentText}
                   onTextChange={setCommentText}
                   onButtonClick={handleCommentSubmit}

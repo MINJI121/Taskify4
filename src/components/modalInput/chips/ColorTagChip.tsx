@@ -2,16 +2,16 @@ import clsx from "clsx";
 
 const tagColorSet = [
   {
-    textColor: "text-[var(--sortTextGreen)]",
-    bgColor: "bg-[var(--sortTextBgGreen)]",
+    textColor: "text-[var(--sortTextBlue)]",
+    bgColor: "bg-[var(--sortTextBgBlue)]",
   },
   {
     textColor: "text-[var(--sortTextPink)]",
     bgColor: "bg-[var(--sortTextBgPink)]",
   },
   {
-    textColor: "text-[var(--sortTextBlue)]",
-    bgColor: "bg-[var(--sortTextBgBlue)]",
+    textColor: "text-[var(--sortTextGreen)]",
+    bgColor: "bg-[var(--sortTextBgGreen)]",
   },
   {
     textColor: "text-[var(--sortTextOrange)]",

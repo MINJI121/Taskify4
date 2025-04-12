@@ -6,6 +6,7 @@ import ColorTagChip, { getTagColor } from "./chips/ColorTagChip";
 import { inputClassNames } from "./InputClassNames";
 import clsx from "clsx";
 import { format } from "date-fns";
+import { toast } from "react-toastify";
 
 type ModalInputType = "제목" | "마감일" | "태그";
 
@@ -63,6 +64,18 @@ export default function ModalInput({
 
   const handleAddTag = (event: KeyboardEvent<HTMLInputElement>) => {
     if (event.key === "Enter" && tagInput.trim() !== "") {
+      if (tagInput.trim().length > 10) {
+        toast.error("10자 이하로 입력해 주세요.");
+        return;
+      }
+
+      // 태그 개수 제한
+      if (tags.length >= 4) {
+        setTagInput("");
+        toast.error("태그는 4개까지 입력할 수 있습니다.");
+        return;
+      }
+
       if (tags.some((tag) => tag.text === tagInput.trim())) {
         setTagInput("");
         return;
@@ -84,6 +97,17 @@ export default function ModalInput({
     const updatedTags = tags.filter((tag) => tag.text !== tagText);
     setTags(updatedTags);
     onValueChange(updatedTags.map((tag) => tag.text));
+  };
+
+  const handleKeydown = (e: KeyboardEvent<HTMLInputElement>) => {
+    handleAddTag(e);
+
+    if (e.key === "Backspace" && tagInput === "") {
+      const lastTag = tags[tags.length - 1];
+      if (lastTag) {
+        handleDeleteTag(lastTag.text);
+      }
+    }
   };
 
   const handleDateChange = (date: Date | null) => {
@@ -174,7 +198,7 @@ export default function ModalInput({
             value={tagInput}
             placeholder="입력 후 Enter"
             onChange={handleTagInputChange}
-            onKeyDown={handleAddTag}
+            onKeyDown={handleKeydown}
             className="flex-grow min-w-[100px] h-full
             border-none outline-none
             font-normal text-[14px] sm:text-[16px]
