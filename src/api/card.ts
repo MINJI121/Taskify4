@@ -1,7 +1,18 @@
 import axiosInstance from "./axiosInstance";
-import type { CardDetailType } from "@/types/cards"; // Dashboard 타입 import
+import type { CardDetailType } from "@/types/cards";
 import { apiRoutes } from "@/api/apiRoutes";
 import { TEAM_ID } from "@/constants/team";
+
+/** 카드 수정용 타입 */
+export interface EditCardPayload {
+  columnId?: number;
+  assigneeUserId?: number;
+  title?: string;
+  description?: string;
+  dueDate?: string;
+  tags?: string[];
+  imageUrl?: string;
+}
 
 /** 1. 카드 이미지 업로드 */
 export const uploadCardImage = async ({
@@ -83,43 +94,12 @@ export const getDashboardMembers = async ({
 };
 
 /** 4. 카드 수정 */
-export const updateCard = async (
-  id: number,
-  data: Partial<CardDetailType>,
-  {
-    cardId,
-    columnId,
-    assigneeUserId,
-    title,
-    description,
-    dueDate,
-    tags,
-    imageUrl,
-  }: {
-    cardId: number;
-    columnId: number;
-    assigneeUserId: number;
-    title: string;
-    description: string;
-    dueDate: string;
-    tags: string[];
-    imageUrl?: string;
-  }
-) => {
-  const response = await axiosInstance.put(apiRoutes.cardDetail(cardId), {
-    columnId,
-    assigneeUserId,
-    title,
-    description,
-    dueDate,
-    tags,
-    imageUrl,
-  });
-
+export const EditCard = async (cardId: number, data: EditCardPayload) => {
+  const response = await axiosInstance.put(apiRoutes.cardDetail(cardId), data);
   return response.data;
 };
 
-// 카드 목록 조회
+/** 5. 카드 목록 조회 */
 export const getCardsByColumn = async ({
   columnId,
   cursorId,
@@ -140,10 +120,9 @@ export const getCardsByColumn = async ({
   return res.data;
 };
 
-// 카드 상세 조회
+/** 6. 카드 상세 조회 */
 export async function getCardDetail(cardId: number): Promise<CardDetailType> {
   try {
-    // apiRoutes를 사용하여 URL 동적 생성
     const url = apiRoutes.cardDetail(cardId);
     const response = await axiosInstance.get(url);
     return response.data as CardDetailType;
@@ -153,17 +132,9 @@ export async function getCardDetail(cardId: number): Promise<CardDetailType> {
   }
 }
 
-// 카드 삭제
+/** 7. 카드 삭제 */
 export const deleteCard = async (cardId: number) => {
   const url = apiRoutes.cardDetail(cardId);
   const response = await axiosInstance.delete(url);
-  return response.data;
-};
-//카드 수정저장
-export const EditCard = async (
-  cardId: number,
-  data: Partial<CardDetailType>
-) => {
-  const response = await axiosInstance.put(apiRoutes.cardDetail(cardId), data);
   return response.data;
 };

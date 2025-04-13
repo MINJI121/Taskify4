@@ -13,7 +13,6 @@ interface TaskModalProps {
   initialData?: Partial<TaskData>;
   members: { nickname: string }[];
   columnId: number;
-  // ✅ teamId, dashboardId 제거됨
 }
 
 export interface TaskData {

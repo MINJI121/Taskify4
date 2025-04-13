@@ -6,7 +6,12 @@ import CardInput from "@/components/modalInput/CardInput";
 import { Representative } from "@/components/modalDashboard/Representative";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { createComment } from "@/api/comment";
-import { deleteCard, EditCard } from "@/api/card";
+import {
+  deleteCard,
+  EditCard,
+  getDashboardMembers,
+  EditCardPayload,
+} from "@/api/card";
 import type { CardDetailType } from "@/types/cards";
 import TaskModal from "@/components/modalInput/TaskModal";
 import { useClosePopup } from "@/hooks/useClosePopup";
@@ -45,6 +50,11 @@ export default function CardDetailPage({
   const { data: columns = [] } = useQuery<ColumnType[]>({
     queryKey: ["columns", dashboardId],
     queryFn: () => getColumn({ dashboardId, columnId: card.columnId }),
+  });
+
+  const { data: invitedMembers = [] } = useQuery({
+    queryKey: ["dashboardMembers", dashboardId],
+    queryFn: () => getDashboardMembers({ dashboardId }),
   });
 
   const columnName = useMemo(() => {
@@ -87,7 +97,7 @@ export default function CardDetailPage({
   };
 
   const { mutateAsync: updateCardMutate } = useMutation({
-    mutationFn: (data: Partial<CardDetailType>) => EditCard(cardData.id, data),
+    mutationFn: (data: EditCardPayload) => EditCard(cardData.id, data),
     onSuccess: (updatedCard) => {
       setCardData(updatedCard);
       queryClient.invalidateQueries({ queryKey: ["cards"] });
@@ -96,56 +106,30 @@ export default function CardDetailPage({
 
   return (
     <>
-      {/* 모달 고정 div */}
-      <div
-        className="fixed inset-0 bg-black/35 z-50
-      flex items-center justify-center px-4 sm:px-6"
-      >
-        {/* 모달창 */}
-        <div
-          className="relative flex flex-col
-          overflow-y-auto
-          max-w-[730px] max-h-[calc(100vh-4rem)]
-          lg:w-[730px] sm:w-[678px] w-[327px]
-          bg-white rounded-lg shadow-lg"
-        >
+      <div className="fixed inset-0 bg-black/35 z-50 flex items-center justify-center px-4 sm:px-6">
+        <div className="relative flex flex-col overflow-y-auto max-w-[730px] max-h-[calc(100vh-4rem)] lg:w-[730px] sm:w-[678px] w-[327px] bg-white rounded-lg shadow-lg">
           <div className="flex items-center justify-center px-6 pt-6 pb-2">
-            {/* 내부 아이템 컨테이너 */}
             <div className="flex flex-col lg:w-[674px] sm:w-[614px] w-[295px]">
-              {/* 헤더 */}
               <div className="flex justify-between sm:mb-4 mb-2">
-                {/* 카드 제목 */}
                 <h2 className="text-black3 font-bold sm:text-[20px] text-[16px]">
                   {cardData.title}
                 </h2>
-                {/* 버튼 컨테이너 */}
                 <div
                   className="relative flex items-center sm:gap-[24px] gap-[16px]"
                   ref={popupRef}
                 >
-                  {/* 메뉴 버튼 */}
                   <button
                     onClick={() => setShowMenu((prev) => !prev)}
-                    className="sm:w-[28px] sm:h-[28px] w-[20px] h-[20px]
-                    flex items-center justify-center hover:cursor-pointer"
+                    className="sm:w-[28px] sm:h-[28px] w-[20px] h-[20px] flex items-center justify-center hover:cursor-pointer"
                     title="수정하기"
                     type="button"
                   >
                     <MoreVertical className="w-8 h-8 text-black3 cursor-pointer" />
                   </button>
-                  {/* 카드 편집 드롭다운 메뉴 */}
                   {showMenu && (
-                    <div
-                      className="absolute right-0 top-9.5 p-2 z-40
-                      flex flex-col items-center justify-center sm:gap-[6px] gap-[11px]
-                      sm:w-28 w-20 sm:h-24
-                    bg-white border border-[#D9D9D9] rounded-lg"
-                    >
+                    <div className="absolute right-0 top-9.5 p-2 z-40 flex flex-col items-center justify-center sm:gap-[6px] gap-[11px] sm:w-28 w-20 sm:h-24 bg-white border border-[#D9D9D9] rounded-lg">
                       <button
-                        className="w-full h-full rounded-sm
-                        font-normal sm:text-[14px] text-[12px] text-black3
-                        hover:bg-[var(--color-violet8)] hover:text-[var(--primary)]
-                        cursor-pointer"
+                        className="w-full h-full rounded-sm font-normal sm:text-[14px] text-[12px] text-black3 hover:bg-[var(--color-violet8)] hover:text-[var(--primary)] cursor-pointer"
                         type="button"
                         onClick={() => {
                           setIsEditModalOpen(true);
@@ -155,10 +139,7 @@ export default function CardDetailPage({
                         수정하기
                       </button>
                       <button
-                        className="w-full h-full rounded-sm
-                        font-normal sm:text-[14px] text-[12px] text-black3
-                        hover:bg-[var(--color-violet8)] hover:text-[var(--primary)]
-                        cursor-pointer"
+                        className="w-full h-full rounded-sm font-normal sm:text-[14px] text-[12px] text-black3 hover:bg-[var(--color-violet8)] hover:text-[var(--primary)] cursor-pointer"
                         type="button"
                         onClick={() => deleteCardMutate()}
                       >
@@ -166,25 +147,19 @@ export default function CardDetailPage({
                       </button>
                     </div>
                   )}
-                  {/* 닫기 버튼 */}
                   <button onClick={handleClose} title="닫기">
-                    <X
-                      className="sm:w-[28px] sm:h-[28px] w-[20px] h-[20px]
-                    flex items-center justify-center hover:cursor-pointer"
-                    />
+                    <X className="sm:w-[28px] sm:h-[28px] w-[20px] h-[20px] flex items-center justify-center hover:cursor-pointer" />
                   </button>
                 </div>
               </div>
 
-              {/* 카드 내용 + 담당자 컨테이너 */}
               <div className="flex flex-col-reverse sm:flex-row gap-4">
                 <CardDetail card={cardData} columnName={columnName} />
                 <div>
-                  <Representative card={card} />
+                  <Representative card={cardData} />
                 </div>
               </div>
 
-              {/* 댓글 입력창 */}
               <div className="mt-4 w-full lg:max-w-[445px] md:max-w-[420px]">
                 <p className="mb-1 text-black3 font-medium sm:text-[16px] text-[14px]">
                   댓글
@@ -198,12 +173,7 @@ export default function CardDetailPage({
                 />
               </div>
 
-              {/* 댓글 목록 (스크롤 가능) */}
-              <div
-                className="w-full lg:max-w-[445px] md:max-w-[420px]
-                sm:max-h-[140px] max-h-[70px]
-                my-2 overflow-y-auto"
-              >
+              <div className="w-full lg:max-w-[445px] md:max-w-[420px] sm:max-h-[140px] max-h-[70px] my-2 overflow-y-auto">
                 <CommentList
                   cardId={card.id}
                   currentUserId={currentUserId}
@@ -215,7 +185,6 @@ export default function CardDetailPage({
         </div>
       </div>
 
-      {/* 수정 모달 */}
       {isEditModalOpen && (
         <TaskModal
           mode="edit"
@@ -225,16 +194,38 @@ export default function CardDetailPage({
             const matchedColumn = columns.find(
               (col) => col.title === data.status
             );
+
+            const selectedAssignee = invitedMembers.find(
+              (m: { nickname?: string; email?: string; userId: number }) =>
+                (m.nickname || m.email) === data.assignee
+            ) as {
+              userId: number;
+              nickname?: string;
+              email?: string;
+              profileImageUrl?: string;
+            };
+
             try {
               await updateCardMutate({
                 columnId: matchedColumn?.id,
-                assignee: { ...cardData.assignee, nickname: data.assignee },
+                assigneeUserId: selectedAssignee.userId,
                 title: data.title,
                 description: data.description,
                 dueDate: data.deadline,
                 tags: data.tags,
                 imageUrl: data.image || undefined,
               });
+
+              setCardData((prev) => ({
+                ...prev,
+                assignee: {
+                  ...prev.assignee,
+                  id: selectedAssignee.userId,
+                  nickname:
+                    selectedAssignee.nickname || selectedAssignee.email || "",
+                  profileImageUrl: selectedAssignee.profileImageUrl || "",
+                },
+              }));
 
               if (onChangeCard) onChangeCard();
               setIsEditModalOpen(false);
@@ -253,7 +244,11 @@ export default function CardDetailPage({
             tags: cardData.tags,
             image: cardData.imageUrl ?? "",
           }}
-          members={[{ nickname: cardData.assignee.nickname }]}
+          members={invitedMembers.map(
+            (m: { nickname?: string; email?: string }) => ({
+              nickname: m.nickname || m.email,
+            })
+          )}
         />
       )}
     </>
