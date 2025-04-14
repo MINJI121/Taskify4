@@ -163,6 +163,7 @@ export default function ModalInput({
               dateFormat="yyyy-MM-dd HH:mm"
               placeholderText="날짜를 입력해 주세요"
               className="w-full h-full text-black3 text-[14px] sm:text-[16px] font:normal outline-none bg-transparent"
+              calendarClassName="text-[14px]"
               popperPlacement="bottom-start"
               popperContainer={({ children }) => <div>{children}</div>}
               popperClassName="custom-datepicker-popper"
