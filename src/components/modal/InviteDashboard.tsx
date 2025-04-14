@@ -1,18 +1,17 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
-import Input from "../input/Input";
-import Image from "next/image";
 import axiosInstance from "@/api/axiosInstance";
 import { apiRoutes } from "@/api/apiRoutes";
 import { AxiosError } from "axios";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import FormModal from "@/components/modal/FormModal";
 
 export default function InviteDashboard({
   onClose,
   onUpdate,
 }: {
-  onClose?: () => void;
+  onClose: () => void;
   onUpdate?: () => void;
 }) {
   const [email, setEmail] = useState("");
@@ -101,46 +100,19 @@ export default function InviteDashboard({
   };
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-black/35 z-50">
-      <div className="bg-white p-6 rounded-lg shadow-lg w-[327px] sm:w-[568px] sm:h-[279px]">
-        <div className="flex justify-between items-center">
-          <h2 className="text-sm sm:text-[24px] font-bold">초대하기</h2>
-          <Image
-            src="/svgs/close-white.svg"
-            alt="닫기"
-            width={25}
-            height={25}
-            className="cursor-pointer"
-            onClick={onClose}
-          ></Image>
-        </div>
-        <Input
-          type="text"
-          onChange={setEmail}
-          label="이메일"
-          labelClassName="text-lg sm:text-base text-black3 mt-6"
-          placeholder="이메일을 입력해 주세요"
-          className="max-w-[620px] mb-1"
-        />
-
-        <div className="mt-8 flex justify-between">
-          <button
-            onClick={onClose}
-            className="cursor-pointer sm:w-[256px] sm:h-[54px] w-[295px] h-[54px] rounded-[8px] border border-[var(--color-gray3)] text-[var(--color-gray1)]"
-          >
-            취소
-          </button>
-          <button
-            onClick={handleSubmit}
-            disabled={!email || !isValidEmail(email)}
-            className={`cursor-pointer sm:w-[256px] sm:h-[54px] w-[295px] h-[54px] rounded-[8px] 
-                border border-[var(--color-gray3)] text-[var(--color-white)] 
-            ${!email || !isValidEmail(email) ? "bg-gray-300 cursor-not-allowed" : "bg-[var(--primary)]"}`}
-          >
-            초대
-          </button>
-        </div>
-      </div>
-    </div>
+    <FormModal
+      title="초대하기"
+      inputLabel="이메일"
+      inputValue={email}
+      inputPlaceholder="이메일을 입력해 주세요"
+      isInputValid={isValidEmail(email)}
+      onInputChange={setEmail}
+      onSubmit={handleSubmit}
+      submitText="초대"
+      errorMessage={
+        email && !isValidEmail(email) ? "이메일 형식을 확인해 주세요." : ""
+      }
+      onClose={onClose}
+    />
   );
 }

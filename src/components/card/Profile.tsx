@@ -3,8 +3,8 @@ import useUserStore from "@/store/useUserStore";
 import Image from "next/image";
 import { getUserInfo, updateProfile, uploadProfileImage } from "@/api/users";
 import Input from "@/components/input/Input";
-import { toast } from "react-toastify";
 import { useUserPermission } from "@/hooks/useUserPermission";
+import { toast } from "react-toastify";
 
 export const ProfileCard = () => {
   const { user, updateNickname, updateProfileImage } = useUserStore();
@@ -23,6 +23,7 @@ export const ProfileCard = () => {
       setEmail(data.email);
     } catch (err) {
       console.error("유저 정보 불러오기 실패:", err);
+      toast.error("유저 정보를 불러올 수 없습니다.");
     }
   };
 

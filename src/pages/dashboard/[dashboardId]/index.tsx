@@ -15,9 +15,9 @@ import HeaderDashboard from "@/components/gnb/HeaderDashboard";
 import Column from "@/components/columnCard/Column";
 import SideMenu from "@/components/sideMenu/SideMenu";
 import ColumnsButton from "@/components/button/ColumnsButton";
-import AddColumnModal from "@/components/columnCard/AddColumnModal";
 import { TEAM_ID } from "@/constants/team";
 import { toast } from "react-toastify";
+import FormModal from "@/components/modal/FormModal";
 import LoadingSpinner from "@/components/common/LoadingSpinner";
 
 export default function Dashboard() {
@@ -30,19 +30,30 @@ export default function Dashboard() {
 
   const [isReady, setIsReady] = useState(false);
   const [isAddColumnModalOpen, setIsAddColumnModalOpen] = useState(false);
+
   const [newColumnTitle, setNewColumnTitle] = useState("");
-  const openModal = () => setIsAddColumnModalOpen(true);
+  const [titleLength, setTitleLength] = useState<number>(0);
+
+  const isMaxColumns = columns.length >= 10;
+  const maxColumnTitleLength = 20;
+
+  // 모달이 열릴 때마다 입력값 초기화
+  const openModal = () => {
+    setNewColumnTitle("");
+    setIsAddColumnModalOpen(true);
+  };
   // 칼럼 이름 유효성 검사용
   const isDuplicate = columns.some(
     (col) => col.title.toLowerCase() === newColumnTitle.trim().toLowerCase()
   );
-  const pattern = isDuplicate ? "^$" : ".*\\S.*"; // 어떤 값이든 invalid처리. 공백이 있는 값은 invalid
-  const invalidMessage = isDuplicate
-    ? "중복된 칼럼 이름입니다."
-    : "칼럼 이름을 입력해 주세요.";
-  const isTitleEmpty = !newColumnTitle.trim();
-  const isMaxColumns = columns.length >= 10;
-  const isCreateDisabled = isTitleEmpty || isDuplicate || isMaxColumns;
+
+  /* 칼럼 이름 글자수 제한 */
+  const handleTitleCreate = async (value: string) => {
+    if (value.length <= maxColumnTitleLength) {
+      setNewColumnTitle(value);
+      setTitleLength(value.length);
+    }
+  };
 
   useEffect(() => {
     if (router.isReady && dashboardId && isInitialized && user) {
@@ -148,14 +159,29 @@ export default function Dashboard() {
 
           {/* 칼럼 추가 모달 */}
           {isAddColumnModalOpen && (
-            <AddColumnModal
-              isOpen={isAddColumnModalOpen}
-              onClose={() => setIsAddColumnModalOpen(false)}
-              newColumnTitle={newColumnTitle}
-              setNewColumnTitle={setNewColumnTitle}
-              pattern={pattern}
-              invalidMessage={invalidMessage}
-              isCreateDisabled={isCreateDisabled}
+            <FormModal
+              title="새 칼럼 생성"
+              inputLabel="이름"
+              inputPlaceholder="새로운 프로젝트"
+              inputValue={newColumnTitle}
+              onInputChange={handleTitleCreate}
+              isInputValid={
+                newColumnTitle.trim().length > 0 &&
+                !isDuplicate &&
+                !isMaxColumns
+              }
+              charCount={{
+                current: titleLength,
+                max: maxColumnTitleLength,
+              }}
+              errorMessage={
+                isDuplicate
+                  ? "중복된 칼럼 이름입니다."
+                  : isMaxColumns
+                    ? "최대 10개의 칼럼까지만 생성할 수 있습니다."
+                    : ""
+              }
+              submitText="생성"
               onSubmit={async () => {
                 if (!newColumnTitle.trim()) {
                   toast.error("칼럼 이름을 입력해 주세요.");
@@ -176,6 +202,7 @@ export default function Dashboard() {
                   toast.error("칼럼 생성에 실패했습니다.");
                 }
               }}
+              onClose={() => setIsAddColumnModalOpen(false)}
             />
           )}
         </main>

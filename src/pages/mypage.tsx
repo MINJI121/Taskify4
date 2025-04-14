@@ -14,10 +14,6 @@ export default function MyPage() {
   const { user, isInitialized } = useAuthGuard();
   const [dashboards, setDashboards] = useState<Dashboard[]>([]);
 
-  if (!isInitialized || !user) {
-    return <LoadingSpinner />;
-  }
-
   // 사이드메뉴 대시보드 목록 api 호출
   const fetchDashboards = async () => {
     try {
@@ -34,6 +30,10 @@ export default function MyPage() {
       fetchDashboards();
     }
   }, [isInitialized, user]);
+
+  if (!isInitialized || !user) {
+    return <LoadingSpinner />;
+  }
 
   return (
     <div className="flex h-[calc(var(--vh)_*_100)] overflow-hidden">

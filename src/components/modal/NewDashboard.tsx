@@ -60,18 +60,25 @@ export default function NewDashboard({ onClose, onCreate }: NewDashboardProps) {
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black/35 z-50">
       <div className="bg-white p-6 rounded-lg shadow-lg w-[327px] sm:w-[584px] sm:h-[344px]">
-        <h2 className="text-sm sm:text-[24px] font-bold">새로운 대시보드</h2>
+        <h2 className="text-[20px] sm:text-[24px] font-bold text-black3">
+          새로운 대시보드
+        </h2>
         <div className="relative w-full">
           <Input
             type="text"
             value={title}
             onChange={handleTitleChange}
             label="대시보드 이름"
-            labelClassName="text-lg sm:text-base text-black3 mt-6"
+            labelClassName="font-medium text-black3 sm:text-[18px] text-[16px] mt-6"
             placeholder="뉴 프로젝트"
-            className="max-w-[620px] mb-1 sm:pr-0 pr-14"
+            className="max-w-[620px] mb-1 pr-14
+          text-black3 font-normal sm:text-[16px] text-[14px]
+          placeholder:sm:text-[16px] placeholder:text-[14px]"
           />
-          <span className="absolute right-3 top-4/6 -translate-y-1/5 font-light text-[12px] sm:text-[14px] text-[var(--color-gray1)] sm:pr-1.5">
+          <span
+            className="absolute right-3 top-2/5 translate-y-6.5 font-light
+            text-[12px] sm:text-[14px] text-[var(--color-gray1)] sm:pr-1.5"
+          >
             {titleLength} / {maxTitleLength}
           </span>
         </div>
@@ -98,17 +105,19 @@ export default function NewDashboard({ onClose, onCreate }: NewDashboardProps) {
           ))}
         </div>
 
-        <div className="mt-8 flex justify-between">
+        <div className="mt-8 gap-2 flex justify-between">
           <button
             onClick={onClose}
-            className="cursor-pointer sm:w-[256px] sm:h-[54px] w-[295px] h-[54px] rounded-[8px] border border-[var(--color-gray3)] text-[var(--color-gray1)]"
+            className="cursor-pointer
+            sm:w-[256px] sm:h-[54px] w-[144px] h-[54px] rounded-[8px]
+            border border-[var(--color-gray3)] text-[var(--color-gray1)]"
           >
             취소
           </button>
           <button
             onClick={handleSubmit}
             disabled={!title || selected === null}
-            className={`cursor-pointer sm:w-[256px] sm:h-[54px] w-[295px] h-[54px] rounded-[8px] 
+            className={`cursor-pointer sm:w-[256px] sm:h-[54px] w-[144px] h-[54px] rounded-[8px] 
             border border-[var(--color-gray3)] text-[var(--color-white)] 
             ${!title || selected === null ? "bg-gray-300 cursor-not-allowed" : "bg-[var(--primary)]"}`}
           >
