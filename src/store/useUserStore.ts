@@ -10,7 +10,7 @@ interface UserState {
   updateProfileImage: (url: string) => void;
 }
 
-const useUserStore = create<UserState>((set) => ({
+const useUserStore = create<UserState>((set, get) => ({
   user: null,
   isInitialized: false,
   setUser: (user) => set({ user, isInitialized: true }),
@@ -21,6 +21,11 @@ const useUserStore = create<UserState>((set) => ({
     set((state) => ({
       user: state.user ? { ...state.user, profileImageUrl: url } : null,
     })),
+
+  get isGuest() {
+    const user = get().user;
+    return user?.email === "guest@gmail.com";
+  },
 }));
 
 export default useUserStore;

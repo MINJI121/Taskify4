@@ -79,7 +79,10 @@ const CardButton: React.FC<CardButtonProps> = ({
         <svg width="8" height="8" viewBox="0 0 8 8" fill={color}>
           <circle cx="4" cy="4" r="4" />
         </svg>
-        <span className="text-black3 text-[14px] sm:text-[16px] truncate max-w-[120px]">
+        <span
+          className="flex-1 text-black3 text-[14px] sm:text-[16px]
+        truncate min-w-0"
+        >
           {title}
         </span>
         {showCrown && (
@@ -96,7 +99,7 @@ const CardButton: React.FC<CardButtonProps> = ({
 
       {/* 오른쪽: 수정/삭제 버튼 또는 아이콘 */}
       {isEditMode ? (
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-col gap-2 ml-3 flex-shrink-0 whitespace-nowrap">
           {createdByMe && (
             <button
               onClick={handleEdit}

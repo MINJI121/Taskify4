@@ -12,6 +12,7 @@ import MembersProfileIconList from "@/components/gnb/MembersProfileIconList";
 import UserMenu from "@/components/gnb/UserMenu";
 import MemberListMenu from "@/components/gnb/MemberListMenu";
 import InviteDashboard from "@/components/modal/InviteDashboard";
+import { toast } from "react-toastify";
 
 interface HeaderDashboardProps {
   variant?: "mydashboard" | "dashboard" | "edit" | "mypage";
@@ -35,7 +36,6 @@ const HeaderDashboard: React.FC<HeaderDashboardProps> = ({
   const [members, setMembers] = useState<MemberType[]>([]);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isListOpen, setIsListOpen] = useState(false);
-  const [errorMessage, setErrorMessage] = useState("");
   const [dashboard, setDashboard] = useState<{
     title: string;
     createdByMe: boolean;
@@ -60,7 +60,7 @@ const HeaderDashboard: React.FC<HeaderDashboardProps> = ({
         setMembers(members);
       } catch (error) {
         console.error("멤버 불러오기 실패:", error);
-        setErrorMessage("멤버 정보를 불러오지 못했습니다.");
+        toast.error("멤버 정보를 불러오지 못했습니다.");
       } finally {
         setIsLoading(false);
       }
@@ -83,7 +83,7 @@ const HeaderDashboard: React.FC<HeaderDashboardProps> = ({
           setDashboard(dashboardData);
         } catch (error) {
           console.error("대시보드 정보 불러오기 실패", error);
-          setErrorMessage("대시보드를 불러오지 못했습니다.");
+          toast.error("대시보드를 불러오지 못했습니다.");
         } finally {
           setIsLoading(false);
         }
@@ -109,19 +109,20 @@ const HeaderDashboard: React.FC<HeaderDashboardProps> = ({
         "border-b-[1px] border-b-[var(--color-gray3)]"
       )}
     >
-      <div className="w-full flex items-center justify-between pl-[4vw]">
-        {errorMessage && (
-          <p className="text-sm text-[var(--color-red)] px-4 py-2">
-            {errorMessage}
-          </p>
+      <div
+        className={clsx(
+          "w-full flex items-center justify-between",
+          variant === "mydashboard" || variant === "mypage"
+            ? "pl-[4vw]"
+            : "sm:pl-[4vw] pl-[2vw]"
         )}
-
+      >
         {/*헤더 제목*/}
-        <div className="flex font-bold items-center gap-[8px]">
+        <div className="flex items-center gap-[8px] flex-1 min-w-0 overflow-hidden pr-2">
           <p
             className={clsx(
-              "text-[16px] sm:text-[20px] text-black3",
-              "whitespace-nowrap truncate max-w-[100px] md:max-w-[400px]",
+              "font-bold text-[16px] sm:text-[20px] text-black3",
+              "truncate whitespace-nowrap",
               variant !== "mydashboard" && variant !== "mypage"
                 ? "hidden lg:block"
                 : ""
@@ -214,7 +215,10 @@ const HeaderDashboard: React.FC<HeaderDashboardProps> = ({
 
           {/*멤버 목록*/}
           {variant !== "mydashboard" && (
-            <div className="relative flex items-center justify-center w-full h-[60px] md:h-[70px] whitespace-nowrap">
+            <div
+              className="relative flex items-center justify-center
+              w-full h-[60px] md:h-[70px] whitespace-nowrap"
+            >
               {isLoading ? (
                 <SkeletonUser />
               ) : (
@@ -222,7 +226,7 @@ const HeaderDashboard: React.FC<HeaderDashboardProps> = ({
                   <div
                     onMouseDown={(e) => e.stopPropagation()}
                     onClick={() => setIsListOpen((prev) => !prev)}
-                    className="flex items-center pl-[15px] md:pl-[25px] lg:pl-[30px] pr-[15px] md:pr-[25px] lg:pr-[30px] cursor-pointer"
+                    className="flex items-center pl-[15px] md:pl-[25px] lg:pl-[30px] pr-[10px] md:pr-[25px] lg:pr-[30px] cursor-pointer"
                   >
                     <MembersProfileIconList
                       members={members}
@@ -240,14 +244,15 @@ const HeaderDashboard: React.FC<HeaderDashboardProps> = ({
           )}
 
           {/*드롭다운 메뉴 너비 지정 목적의 유저 섹션 div*/}
-          <div className="relative flex items-center h-[60px] md:h-[70px] pr-[10px] md:pr-[30px] lg:pr-[80px]">
+          <div className="relative flex items-center h-[60px] md:h-[70px] sm:pr-[4vw] pr-[2vw]">
             {/*구분선*/}
             <div className="h-[34px] md:h-[38px] w-[1px] bg-[var(--color-gray3)]" />
             {/*유저 드롭다운 메뉴*/}
             <div
               onMouseDown={(e) => e.stopPropagation()}
               onClick={() => setIsMenuOpen((prev) => !prev)}
-              className="flex items-center gap-[12px] pl-[20px] md:pl-[30px] lg:pl-[35px] cursor-pointer overflow-hidden"
+              className="flex items-center gap-[12px]
+              pl-[15px] sm:pl-[30px] lg:pl-[35px] cursor-pointer overflow-hidden"
             >
               <UserMenu
                 user={user}

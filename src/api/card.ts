@@ -94,7 +94,7 @@ export const getDashboardMembers = async ({
 };
 
 /** 4. 카드 수정 */
-export const EditCard = async (cardId: number, data: EditCardPayload) => {
+export const editCard = async (cardId: number, data: EditCardPayload) => {
   const response = await axiosInstance.put(apiRoutes.cardDetail(cardId), data);
   return response.data;
 };

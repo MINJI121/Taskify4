@@ -10,7 +10,6 @@ import { PaginationButton } from "@/components/button/PaginationButton";
 import InvitedDashBoard from "@/components/table/invited/InvitedDashBoard";
 import NewDashboard from "@/components/modal/NewDashboard";
 import { DeleteModal } from "@/components/modal/DeleteModal";
-import LoadingSpinner from "@/components/common/LoadingSpinner";
 import { TEAM_ID } from "@/constants/team";
 import { Search } from "lucide-react";
 import { toast } from "react-toastify";
@@ -132,10 +131,6 @@ export default function MyDashboardPage() {
     const newOrder = arrayMove(dashboardList, oldIndex, newIndex);
     setDashboardList(newOrder);
   };
-
-  if (!isInitialized || !user) {
-    return <LoadingSpinner />;
-  }
 
   return (
     <div className="flex h-screen overflow-hidden bg-[var(--color-violet5)]">

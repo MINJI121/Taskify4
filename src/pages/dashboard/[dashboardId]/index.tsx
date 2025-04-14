@@ -18,7 +18,6 @@ import ColumnsButton from "@/components/button/ColumnsButton";
 import AddColumnModal from "@/components/columnCard/AddColumnModal";
 import { TEAM_ID } from "@/constants/team";
 import { toast } from "react-toastify";
-import LoadingSpinner from "@/components/common/LoadingSpinner";
 
 export default function Dashboard() {
   const router = useRouter();
@@ -96,9 +95,10 @@ export default function Dashboard() {
     fetchColumnsAndCards();
   }, [isReady, dashboardId, isInitialized, user]);
 
-  if (!isReady || !isInitialized || !user) {
-    return <LoadingSpinner />;
-  }
+  // 현재 대시보드 id 추출
+  const currentDashboard = dashboardList.find(
+    (db) => db.id === Number(dashboardId)
+  );
 
   return (
     <div className="flex h-screen min-h-screen">
@@ -130,6 +130,7 @@ export default function Dashboard() {
                 title={col.title}
                 tasks={tasksByColumn[col.id] || []}
                 dashboardId={Number(dashboardId)}
+                createdByMe={currentDashboard?.createdByMe ?? false}
                 columnDelete={fetchColumnsAndCards}
                 fetchColumnsAndCards={fetchColumnsAndCards}
               />

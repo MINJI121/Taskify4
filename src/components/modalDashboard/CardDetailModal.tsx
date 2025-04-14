@@ -7,22 +7,20 @@ import CommentInput from "@/components/modalInput/CardInput";
 import { Representative } from "@/components/modalDashboard/Representative";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { createComment } from "@/api/comment";
-import {
-  deleteCard,
-  EditCard,
-  getDashboardMembers,
-  EditCardPayload,
-} from "@/api/card";
+import { deleteCard, getDashboardMembers } from "@/api/card";
 import type { CardDetailType } from "@/types/cards";
 import TaskModal from "@/components/modalInput/TaskModal";
 import { useClosePopup } from "@/hooks/useClosePopup";
 import { getColumn } from "@/api/columns";
 import { toast } from "react-toastify";
+import { TEAM_ID } from "@/constants/team";
+import { useDashboardPermission } from "@/hooks/useDashboardPermission";
 
 interface CardDetailModalProps {
   card: CardDetailType;
   currentUserId: number;
   dashboardId: number;
+  createdByMe: boolean;
   onClose: () => void;
   onChangeCard?: () => void;
 }
@@ -37,9 +35,12 @@ export default function CardDetailPage({
   card,
   currentUserId,
   dashboardId,
+  createdByMe,
   onClose,
   onChangeCard,
 }: CardDetailModalProps) {
+  const { canEditCards } = useDashboardPermission(dashboardId, createdByMe);
+
   const [cardData, setCardData] = useState<CardDetailType>(card);
   const [commentText, setCommentText] = useState("");
   const [showMenu, setShowMenu] = useState(false);
@@ -50,18 +51,17 @@ export default function CardDetailPage({
 
   const { data: columns = [] } = useQuery<ColumnType[]>({
     queryKey: ["columns", dashboardId],
-    queryFn: () => getColumn({ dashboardId, columnId: card.columnId }),
+    queryFn: () => getColumn({ dashboardId, columnId: cardData.columnId }),
   });
 
-  const { data: invitedMembers = [] } = useQuery({
+  const { data: members = [] } = useQuery({
     queryKey: ["dashboardMembers", dashboardId],
     queryFn: () => getDashboardMembers({ dashboardId }),
   });
 
   const columnName = useMemo(() => {
     return (
-      columns.find((col) => String(col.id) === String(cardData.columnId))
-        ?.title || "알 수 없음"
+      columns.find((col) => col.id === cardData.columnId)?.title || "알 수 없음"
     );
   }, [columns, cardData.columnId]);
 
@@ -69,12 +69,12 @@ export default function CardDetailPage({
     mutationFn: createComment,
     onSuccess: () => {
       setCommentText("");
-      queryClient.invalidateQueries({ queryKey: ["comments", card.id] });
+      queryClient.invalidateQueries({ queryKey: ["comments", cardData.id] });
     },
   });
 
   const { mutate: deleteCardMutate } = useMutation({
-    mutationFn: () => deleteCard(card.id),
+    mutationFn: () => deleteCard(cardData.id),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["cards"] });
       if (onChangeCard) onChangeCard();
@@ -91,19 +91,11 @@ export default function CardDetailPage({
     if (!commentText.trim()) return;
     createCommentMutate({
       content: commentText,
-      cardId: card.id,
-      columnId: card.columnId,
+      cardId: cardData.id,
+      columnId: cardData.columnId,
       dashboardId,
     });
   };
-
-  const { mutateAsync: updateCardMutate } = useMutation({
-    mutationFn: (data: EditCardPayload) => EditCard(cardData.id, data),
-    onSuccess: (updatedCard) => {
-      setCardData(updatedCard);
-      queryClient.invalidateQueries({ queryKey: ["cards"] });
-    },
-  });
 
   return (
     <>
@@ -154,6 +146,10 @@ export default function CardDetailPage({
                         className="w-full h-full rounded-sm font-normal sm:text-[14px] text-[12px] text-black3 hover:bg-[var(--color-violet8)] hover:text-[var(--primary)] cursor-pointer"
                         type="button"
                         onClick={() => {
+                          if (!canEditCards) {
+                            toast.error("읽기 전용 대시보드입니다.");
+                            return;
+                          }
                           setIsEditModalOpen(true);
                           setShowMenu(false);
                         }}
@@ -163,7 +159,13 @@ export default function CardDetailPage({
                       <button
                         className="w-full h-full rounded-sm font-normal sm:text-[14px] text-[12px] text-black3 hover:bg-[var(--color-violet8)] hover:text-[var(--primary)] cursor-pointer"
                         type="button"
-                        onClick={() => deleteCardMutate()}
+                        onClick={() => {
+                          if (!canEditCards) {
+                            toast.error("읽기 전용 대시보드입니다.");
+                            return;
+                          }
+                          deleteCardMutate();
+                        }}
                       >
                         삭제하기
                       </button>
@@ -199,9 +201,9 @@ export default function CardDetailPage({
 
               <div className="w-full lg:max-w-[445px] md:max-w-[420px] sm:max-h-[140px] max-h-[70px] my-2 overflow-y-auto">
                 <CommentList
-                  cardId={card.id}
+                  cardId={cardData.id}
                   currentUserId={currentUserId}
-                  teamId={""}
+                  teamId={TEAM_ID}
                 />
               </div>
             </div>
@@ -211,53 +213,32 @@ export default function CardDetailPage({
 
       {isEditModalOpen && (
         <TaskModal
+          isOpen={true}
           mode="edit"
-          columnId={card.columnId}
+          columnId={cardData.columnId}
+          cardId={cardData.id}
+          dashboardId={dashboardId}
+          members={members}
           onClose={() => setIsEditModalOpen(false)}
-          onSubmit={async (data) => {
-            const matchedColumn = columns.find(
-              (col) => col.title === data.status
-            );
-
-            const selectedAssignee = invitedMembers.find(
-              (m: { nickname?: string; email?: string; userId: number }) =>
-                (m.nickname || m.email) === data.assignee
-            ) as {
-              userId: number;
-              nickname?: string;
-              email?: string;
-              profileImageUrl?: string;
-            };
-
-            try {
-              await updateCardMutate({
-                columnId: matchedColumn?.id,
-                assigneeUserId: selectedAssignee.userId,
-                title: data.title,
-                description: data.description,
-                dueDate: data.deadline,
-                tags: data.tags,
-                imageUrl: data.image || undefined,
-              });
-
-              setCardData((prev) => ({
-                ...prev,
-                assignee: {
-                  ...prev.assignee,
-                  id: selectedAssignee.userId,
-                  nickname:
-                    selectedAssignee.nickname || selectedAssignee.email || "",
-                  profileImageUrl: selectedAssignee.profileImageUrl || "",
-                },
-              }));
-
-              if (onChangeCard) onChangeCard();
-              setIsEditModalOpen(false);
-              toast.success("카드가 수정되었습니다.");
-            } catch (err) {
-              console.error("카드 수정 실패:", err);
-              toast.error("카드 수정에 실패했습니다.");
-            }
+          onSubmit={(updatedData) => {
+            if (onChangeCard) onChangeCard();
+            queryClient.invalidateQueries({ queryKey: ["cards"] });
+            setCardData((prev) => ({
+              ...prev,
+              title: updatedData.title,
+              description: updatedData.description,
+              dueDate: updatedData.deadline,
+              tags: updatedData.tags,
+              imageUrl: updatedData.image ?? "",
+              assignee: {
+                ...prev.assignee,
+                nickname: updatedData.assignee,
+              },
+              columnId:
+                columns.find((col) => col.title === updatedData.status)?.id ??
+                prev.columnId,
+            }));
+            setIsEditModalOpen(false);
           }}
           initialData={{
             status: columnName,
@@ -268,11 +249,6 @@ export default function CardDetailPage({
             tags: cardData.tags,
             image: cardData.imageUrl ?? "",
           }}
-          members={invitedMembers.map(
-            (m: { nickname?: string; email?: string }) => ({
-              nickname: m.nickname || m.email,
-            })
-          )}
         />
       )}
     </>

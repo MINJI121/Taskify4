@@ -2,12 +2,15 @@ import { useState } from "react";
 import { changePassword } from "@/api/changepassword";
 import Input from "@/components/input/Input";
 import { toast } from "react-toastify";
+import { useUserPermission } from "@/hooks/useUserPermission";
 
 export default function ChangePassword() {
   const [password, setPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [checkNewpassword, setCheckNewPassword] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const isGuest = useUserPermission();
 
   const isPasswordMismatch =
     !!checkNewpassword && checkNewpassword !== newPassword;
@@ -20,6 +23,11 @@ export default function ChangePassword() {
 
   const handleChangePassword = async () => {
     if (isDisabled) return;
+
+    if (isGuest) {
+      toast.error("게스트 계정은 정보를 변경할 수 없습니다.");
+      return;
+    }
 
     setIsSubmitting(true);
 

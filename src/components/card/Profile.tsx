@@ -4,6 +4,7 @@ import Image from "next/image";
 import { getUserInfo, updateProfile, uploadProfileImage } from "@/api/users";
 import Input from "@/components/input/Input";
 import { toast } from "react-toastify";
+import { useUserPermission } from "@/hooks/useUserPermission";
 
 export const ProfileCard = () => {
   const { user, updateNickname, updateProfileImage } = useUserStore();
@@ -11,6 +12,8 @@ export const ProfileCard = () => {
   const [nickname, setNickname] = useState(user?.nickname);
   const [email, setEmail] = useState("");
   const [preview, setPreview] = useState<string | null>(null);
+
+  const isGuest = useUserPermission();
 
   const fetchUserData = async () => {
     try {
@@ -27,6 +30,11 @@ export const ProfileCard = () => {
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
     const MAX_IMAGE_SIZE = 3.5 * 1024 * 1024;
+
+    if (isGuest) {
+      toast.error("게스트 계정은 정보를 변경할 수 없습니다.");
+      return;
+    }
 
     if (event.target.files && event.target.files[0]) {
       const file = event.target.files[0];
@@ -53,6 +61,11 @@ export const ProfileCard = () => {
 
   const handleSave = async () => {
     if (!nickname) return;
+
+    if (isGuest) {
+      toast.error("게스트 계정은 정보를 변경할 수 없습니다.");
+      return;
+    }
 
     try {
       const payload: { nickname: string; profileImageUrl?: string } = {

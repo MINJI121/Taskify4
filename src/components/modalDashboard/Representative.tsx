@@ -1,4 +1,4 @@
-import { ProfileIcon } from "./ProfileIcon";
+import { ProfileIcon } from "./CardProfileIcon";
 import { CardDetailType } from "@/types/cards";
 
 interface RepresentativeProps {

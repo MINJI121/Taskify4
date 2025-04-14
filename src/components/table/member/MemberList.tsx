@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import Pagination from "../TablePagination";
-import RandomProfile from "./RandomProfile";
+import RandomProfile from "@/components/common/RandomProfile";
 import { MemberType } from "@/types/users";
 import { getMembers } from "@/api/members";
 import Image from "next/image";
@@ -94,7 +94,7 @@ const MemberList: React.FC<HeaderBebridgeProps> = ({ dashboardId }) => {
                     {member.profileImageUrl ? (
                       <div
                         className="relative w-[34px] h-[34px] md:w-[38px] md:h-[38px]
-                      rounded-full border-[2px] border-white overflow-hidden"
+                      rounded-full overflow-hidden"
                       >
                         <Image
                           src={member.profileImageUrl}
@@ -104,7 +104,11 @@ const MemberList: React.FC<HeaderBebridgeProps> = ({ dashboardId }) => {
                         />
                       </div>
                     ) : (
-                      <RandomProfile name={member.nickname} index={index} />
+                      <RandomProfile
+                        userId={member.id}
+                        name={member.nickname}
+                        className="w-[34px] h-[34px] md:w-[38px] md:h-[38px]"
+                      />
                     )}
 
                     <p className="text-black3 font-normal sm:text-[16px] text-[14px]">

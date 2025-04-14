@@ -4,6 +4,9 @@ import { NextPage } from "next";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import useUserStore from "@/store/useUserStore";
+import GlobalRouteLoadingWatcher from "@/components/common/GlobalRouteLoadingWatcher";
+import useLoadingStore from "@/store/useLoadingStore";
+import LoadingSpinner from "@/components/common/LoadingSpinner";
 import HeaderDefault from "@/components/gnb/HeaderDefault";
 import { getUserInfo } from "@/api/users";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
@@ -17,11 +20,14 @@ type AppPropsWithLayout = AppProps & {
   Component: NextPageWithLayout;
 };
 
-// 앱 최초 실행 시 로그인 여부 판단
 export default function App({ Component, pageProps }: AppPropsWithLayout) {
   // React Query Client 생성
   const [queryClient] = useState(() => new QueryClient());
 
+  // 로딩 상태 관리
+  const isLoading = useLoadingStore((state) => state.isLoading);
+
+  // 앱 최초 실행 시 로그인 여부 판단
   useEffect(() => {
     const initializeUser = async () => {
       const token = localStorage.getItem("accessToken");
@@ -64,6 +70,8 @@ export default function App({ Component, pageProps }: AppPropsWithLayout) {
 
   return (
     <QueryClientProvider client={queryClient}>
+      <GlobalRouteLoadingWatcher />
+      {isLoading && <LoadingSpinner />}
       {renderHeader()}
       <Component {...pageProps} />
       <CustomToastContainer />

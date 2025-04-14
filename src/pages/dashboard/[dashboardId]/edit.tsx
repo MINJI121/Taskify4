@@ -11,7 +11,6 @@ import { getDashboards } from "@/api/dashboards";
 import DeleteDashboardModal from "@/components/modal/DeleteDashboardModal";
 import { DashboardType } from "@/types/task";
 import { TEAM_ID } from "@/constants/team";
-import LoadingSpinner from "@/components/common/LoadingSpinner";
 
 export default function EditDashboard() {
   const router = useRouter();
@@ -48,10 +47,6 @@ export default function EditDashboard() {
     }
   }, [isInitialized, user]);
 
-  if (!isInitialized || !user) {
-    return <LoadingSpinner />;
-  }
-
   return (
     <div className="flex h-screen overflow-hidden">
       <SideMenu
@@ -77,10 +72,10 @@ export default function EditDashboard() {
             <MemberList dashboardId={dashboardId} />
             <InviteRecords dashboardId={dashboardIdString || ""} />{" "}
             {/* undefined일 경우 빈 문자열로 전달*/}
-            <div className="flex mt-6 sm:mt-0">
+            <div className="flex">
               <button
                 onClick={openModal}
-                className="text-base sm:text-lg cursor-pointer w-[284px] h-[52px] sm:w-[320px] sm:h-[62px] text-black3 rounded-[8px] border-[1px] border-[var(--color-gray3)] hover:scale-105 transition-transform duration-200"
+                className="bg-white text-base sm:text-lg cursor-pointer w-[284px] h-[52px] sm:w-[320px] sm:h-[62px] text-black3 rounded-[8px] border border-[var(--color-gray4)] hover:scale-105 transition-transform duration-200"
               >
                 대시보드 삭제하기
               </button>

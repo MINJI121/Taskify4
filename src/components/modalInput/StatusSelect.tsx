@@ -102,7 +102,7 @@ export default function StatusSelect({
                   setIsOpen(false);
                 }}
                 className={clsx(
-                  "flex items-center justify-between cursor-pointer mb-1 last:mb-0 rounded-full px-3 py-1 hover:bg-[#F3EDFF]",
+                  "flex items-center justify-between cursor-pointer mb-1 last:mb-0 rounded-full px-3 py-2 hover:bg-[#F3EDFF]",
                   value === status.label && "bg-[#F3EDFF]"
                 )}
               >

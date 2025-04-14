@@ -1,6 +1,7 @@
 import { useRouter } from "next/router";
 import useUserStore from "@/store/useUserStore";
 import Image from "next/image";
+import GuestModeButton from "../button/GuestModeButton";
 
 export default function Section1() {
   const user = useUserStore((state) => state.user);
@@ -46,13 +47,19 @@ export default function Section1() {
         {/* 설명 문구 필요시 여기에 추가 */}
       </span>
 
-      {/* CTA 버튼 */}
-      <button
-        onClick={handleMainClick}
-        className="mt-[66px] w-[280px] h-[54px] flex items-center justify-center rounded-lg bg-[var(--primary)] text-[var(--color-white)] font-16m sm:mt-[70px] cursor-pointer"
-      >
-        {isLoggedIn ? "대시보드 이동하기" : "로그인하기"}
-      </button>
+      {/* CTA 버튼들 */}
+      <div className="sm:mt-[70px] mt-[45px] flex gap-4 flex-col sm:flex-row">
+        <GuestModeButton />
+        <button
+          onClick={handleMainClick}
+          className="flex items-center justify-center
+          sm:w-[220px] w-[280px] h-[54px]
+          rounded-lg bg-[var(--primary)] cursor-pointer
+          text-[var(--color-white)] font-medium sm:text-[18px] text-[16px]"
+        >
+          {isLoggedIn ? "대시보드 이동하기" : "로그인하기"}
+        </button>
+      </div>
     </section>
   );
 }

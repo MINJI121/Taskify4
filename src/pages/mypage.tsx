@@ -7,7 +7,6 @@ import ChangePassword from "@/components/card/ChangePassword";
 import BackButton from "@/components/button/BackButton";
 import { Dashboard, getDashboards } from "@/api/dashboards";
 import { TEAM_ID } from "@/constants/team";
-import LoadingSpinner from "@/components/common/LoadingSpinner";
 import { toast } from "react-toastify";
 
 export default function MyPage() {
@@ -30,10 +29,6 @@ export default function MyPage() {
       fetchDashboards();
     }
   }, [isInitialized]);
-
-  if (!isInitialized || !user) {
-    return <LoadingSpinner />;
-  }
 
   return (
     <div className="flex h-screen overflow-hidden">

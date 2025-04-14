@@ -2,7 +2,7 @@
 import { useEffect, useState, useRef } from "react";
 import Image from "next/image";
 import { CardType } from "@/types/task";
-import TodoModal from "@/components/modalInput/ToDoModal";
+import TaskModal from "@/components/modalInput/TaskModal";
 import { TodoButton, ShortTodoButton } from "@/components/button/TodoButton";
 import ColumnManageModal from "@/components/columnCard/ColumnManageModal";
 import ColumnDeleteModal from "@/components/columnCard/ColumnDeleteModal";
@@ -14,12 +14,14 @@ import { CardList } from "./CardList";
 import CardDetailModal from "@/components/modalDashboard/CardDetailModal";
 import { CardDetailType } from "@/types/cards";
 import { toast } from "react-toastify";
+import { useDashboardPermission } from "@/hooks/useDashboardPermission";
 
 type ColumnProps = {
   columnId: number;
   title?: string;
   tasks?: CardType[];
   dashboardId: number;
+  createdByMe: boolean;
   columnDelete: (columnId: number) => void;
   fetchColumnsAndCards: () => void;
 };
@@ -29,13 +31,16 @@ export default function Column({
   title = "new Task",
   tasks = [],
   dashboardId,
+  createdByMe,
   columnDelete,
   fetchColumnsAndCards,
 }: ColumnProps) {
+  const { canEditColumns } = useDashboardPermission(dashboardId, createdByMe);
+
   const [columnTitle, setColumnTitle] = useState(title);
   const [isColumnModalOpen, setIsColumnModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
-  const [isTodoModalOpen, setIsTodoModalOpen] = useState(false);
+  const [isTaskModalOpen, setIsTaskModalOpen] = useState(false);
   const [isCardDetailModalOpen, setIsCardDetailModalOpen] = useState(false);
   const [selectedCard, setSelectedCard] = useState<CardDetailType | null>(null);
   const [members, setMembers] = useState<
@@ -71,6 +76,7 @@ export default function Column({
       toast.error("칼럼 제목을 입력해 주세요.");
       return;
     }
+    setIsColumnModalOpen(false);
 
     try {
       const updated = await updateColumn({ columnId, title: newTitle });
@@ -132,7 +138,13 @@ export default function Column({
           {/* 오른쪽: 생성 버튼 + 설정 버튼 */}
           <div className="flex items-center gap-2">
             <div
-              onClick={() => setIsTodoModalOpen(true)}
+              onClick={() => {
+                if (!canEditColumns) {
+                  toast.error("읽기 전용 대시보드입니다.");
+                  return;
+                }
+                setIsTaskModalOpen(true);
+              }}
               className="block lg:hidden"
             >
               <ShortTodoButton />
@@ -144,14 +156,26 @@ export default function Column({
                 fill
                 priority
                 className="object-contain cursor-pointer"
-                onClick={() => setIsColumnModalOpen(true)}
+                onClick={() => {
+                  if (!canEditColumns) {
+                    toast.error("읽기 전용 대시보드입니다.");
+                    return;
+                  }
+                  setIsColumnModalOpen(true);
+                }}
               />
             </div>
           </div>
         </div>
         <div className="flex items-center justify-center">
           <div
-            onClick={() => setIsTodoModalOpen(true)}
+            onClick={() => {
+              if (!canEditColumns) {
+                toast.error("읽기 전용 대시보드입니다.");
+                return;
+              }
+              setIsTaskModalOpen(true);
+            }}
             className="mb-2 hidden lg:block"
           >
             <TodoButton />
@@ -177,16 +201,19 @@ export default function Column({
         </div>
       </div>
 
-      {/* Todo 모달 */}
-      {isTodoModalOpen && (
-        <TodoModal
-          isOpen={isTodoModalOpen}
-          onClose={() => setIsTodoModalOpen(false)}
-          teamId={TEAM_ID}
+      {/* 카드 생성 모달 */}
+      {isTaskModalOpen && (
+        <TaskModal
+          mode="create"
+          isOpen={isTaskModalOpen}
+          onClose={() => setIsTaskModalOpen(false)}
           dashboardId={dashboardId}
           columnId={columnId}
           members={members}
-          onChangeCard={fetchColumnsAndCards}
+          initialData={{
+            status: columnTitle,
+          }}
+          onSubmit={fetchColumnsAndCards}
         />
       )}
 
@@ -220,6 +247,7 @@ export default function Column({
             setSelectedCard(null);
           }}
           onChangeCard={fetchColumnsAndCards}
+          createdByMe={createdByMe}
         />
       )}
     </div>

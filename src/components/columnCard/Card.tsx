@@ -1,7 +1,7 @@
 import { AssigneeType, CardType } from "@/types/task";
 import Image from "next/image";
 import { getTagColor } from "../modalInput/chips/ColorTagChip";
-import RandomProfile from "../table/member/RandomProfile";
+import RandomProfile from "@/components/common/RandomProfile";
 
 type CardProps = CardType & {
   imageUrl?: string | null;
@@ -109,7 +109,11 @@ export default function Card({
                 className="sm:w-[24px] sm:h-[24px] w-[22px] h-[22px] rounded-full
                 overflow-hidden flex items-center justify-center"
               >
-                <RandomProfile name={assignee.nickname} />
+                <RandomProfile
+                  userId={assignee.id}
+                  name={assignee.nickname}
+                  className="sm:w-[24px] sm:h-[24px] w-[22px] h-[22px]"
+                />
               </div>
             )}
           </div>

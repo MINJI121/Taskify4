@@ -3,7 +3,7 @@ import { useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { deleteComment, updateComment } from "@/api/comment";
 import { Comment } from "@/types/comments";
-import { ProfileIcon } from "./ProfileIcon";
+import { ProfileIcon } from "./CardProfileIcon";
 import formatDate from "./formatDate";
 
 interface UpdateCommentProps {
@@ -46,7 +46,7 @@ export default function UpdateComment({
         userId={comment.author.id}
         nickname={comment.author.nickname}
         profileImageUrl={comment.author.profileImageUrl}
-        imgClassName="w-8 h-8"
+        imgClassName="sm:w-[34px] sm:h-[34px] w-[26px] h-[26px]"
         fontClassName="text-sm"
         id={0}
       />
