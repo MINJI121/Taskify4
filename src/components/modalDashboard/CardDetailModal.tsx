@@ -1,8 +1,9 @@
 import { useMemo, useRef, useState } from "react";
+import clsx from "clsx";
 import { MoreVertical, X } from "lucide-react";
 import CardDetail from "./CardDetail";
 import CommentList from "./CommentList";
-import CardInput from "@/components/modalInput/CardInput";
+import CommentInput from "@/components/modalInput/CardInput";
 import { Representative } from "@/components/modalDashboard/Representative";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { createComment } from "@/api/comment";
@@ -106,18 +107,38 @@ export default function CardDetailPage({
 
   return (
     <>
-      <div className="fixed inset-0 bg-black/35 z-50 flex items-center justify-center px-4 sm:px-6">
-        <div className="relative flex flex-col overflow-y-auto max-w-[730px] max-h-[calc(100vh-4rem)] lg:w-[730px] sm:w-[678px] w-[327px] bg-white rounded-lg shadow-lg">
+      {/* 모달 고정 div */}
+      <div
+        className={clsx(
+          "fixed inset-0 z-50",
+          "flex items-center justify-center px-4 sm:px-6",
+          "bg-black/35"
+        )}
+      >
+        {/* 모달창 */}
+        <div
+          className={clsx(
+            "relative flex flex-col overflow-y-auto",
+            "lg:w-[730px] sm:w-[678px] w-[327px]",
+            "max-w-[730px] max-h-[calc(100vh-6rem)]",
+            "bg-white rounded-lg shadow-lg"
+          )}
+        >
           <div className="flex items-center justify-center px-6 pt-6 pb-2">
+            {/* 내부 아이템 컨테이너 */}
             <div className="flex flex-col lg:w-[674px] sm:w-[614px] w-[295px]">
+              {/* 헤더 컨테이너 */}
               <div className="flex justify-between sm:mb-4 mb-2">
+                {/* 제목 */}
                 <h2 className="text-black3 font-bold sm:text-[20px] text-[16px]">
                   {cardData.title}
                 </h2>
+                {/* 버튼 컨테이너 */}
                 <div
                   className="relative flex items-center sm:gap-[24px] gap-[16px]"
                   ref={popupRef}
                 >
+                  {/* 메뉴 버튼 */}
                   <button
                     onClick={() => setShowMenu((prev) => !prev)}
                     className="sm:w-[28px] sm:h-[28px] w-[20px] h-[20px] flex items-center justify-center hover:cursor-pointer"
@@ -126,6 +147,7 @@ export default function CardDetailPage({
                   >
                     <MoreVertical className="w-8 h-8 text-black3 cursor-pointer" />
                   </button>
+                  {/* 수정/삭제 드롭다운 메뉴 */}
                   {showMenu && (
                     <div className="absolute right-0 top-9.5 p-2 z-40 flex flex-col items-center justify-center sm:gap-[6px] gap-[11px] sm:w-28 w-20 sm:h-24 bg-white border border-[#D9D9D9] rounded-lg">
                       <button
@@ -153,6 +175,7 @@ export default function CardDetailPage({
                 </div>
               </div>
 
+              {/* 카드 내용 */}
               <div className="flex flex-col-reverse sm:flex-row gap-4">
                 <CardDetail card={cardData} columnName={columnName} />
                 <div>
@@ -160,11 +183,12 @@ export default function CardDetailPage({
                 </div>
               </div>
 
+              {/* 댓글 */}
               <div className="mt-4 w-full lg:max-w-[445px] md:max-w-[420px]">
                 <p className="mb-1 text-black3 font-medium sm:text-[16px] text-[14px]">
                   댓글
                 </p>
-                <CardInput
+                <CommentInput
                   hasButton
                   value={commentText}
                   onTextChange={setCommentText}

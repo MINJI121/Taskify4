@@ -34,7 +34,7 @@ export default function CardInput({
         placeholder={placeholder}
         className={clsx(
           "sm:p-4 p-2 w-full resize-none",
-          "sm:h-[110px] h-[55px]",
+          "sm:h-[80px] h-[55px]",
           "bg-white rounded-md border border-[var(--color-gray3)]",
           "text-black3 font-normal sm:text-[14px] text-[12px]",
           "focus:border-[var(--primary)] outline-none",
@@ -62,7 +62,7 @@ export default function CardInput({
           text-[var(--primary)] font-12m
           cursor-pointer whitespace-nowrap"
           >
-            입력
+            등록
           </TextButton>
         </div>
       )}

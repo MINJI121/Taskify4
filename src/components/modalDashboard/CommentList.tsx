@@ -44,7 +44,7 @@ export default function CommentList({
     >
       {allComments.length === 0 ? (
         <p
-          className="sm:pt-8 pt-4 text-center text-[var(--color-gray1)]
+          className="sm:pt-4 pt-2 text-center text-[var(--color-gray1)]
         font-normal sm:text-[14px] text-[12px]"
         >
           작성된 댓글이 없습니다.
