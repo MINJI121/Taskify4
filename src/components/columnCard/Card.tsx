@@ -21,9 +21,11 @@ export default function Card({
     <div
       onClick={onClick}
       className={`
+        relative
         flex flex-col md:flex-row lg:flex-col cursor-pointer
-        items-start rounded-md bg-white border border-gray-200 p-4
-        w-[284px] sm:w-full md:w-[544px] md:h-[93px] lg:w-[314px] lg:h-auto
+        sm:items-center items-start
+        rounded-md bg-white border border-gray-200 p-4
+        w-[284px] md:w-[510px] md:h-[93px] lg:w-[314px] lg:h-auto
       `}
     >
       {/* 이미지 영역 */}
@@ -48,7 +50,7 @@ export default function Card({
         </div>
       )}
 
-      <div className="flex flex-col justify-between flex-1 w-full">
+      <div className="flex flex-col justify-between w-full">
         {/* 제목 */}
         <h3
           className={`
@@ -64,7 +66,7 @@ export default function Card({
         <div
           className={`
             flex flex-col gap-2 mt-2 whitespace-nowrap
-            sm:max-w-none max-w-[192px] 
+            sm:max-w-none max-w-[190px]
             md:flex-row md:items-center md:justify-between md:mt-1
             lg:flex-col lg:items-start lg:mt-2
             text-sm md:text-xs
@@ -85,8 +87,11 @@ export default function Card({
             })}
           </div>
 
-          {/* 날짜 + 닉네임 */}
-          <div className="flex items-center gap-[29.5px] md:gap-3 sm:pr-4 text-[var(--color-gray1)]">
+          {/* 마감일 */}
+          <div
+            className="flex items-center justify-between
+          lg:gap-37 gap-8 sm:pr-4 text-[var(--color-gray1)]"
+          >
             <div className="flex items-center gap-1">
               <Image
                 src="/svgs/calendar.svg"
@@ -94,28 +99,31 @@ export default function Card({
                 width={16}
                 height={16}
               />
-              <span>{dueDate}</span>
+              <span>{dueDate ?? "마감일 없음"}</span>
             </div>
-            {assignee.profileImageUrl ? (
-              <Image
-                src={assignee.profileImageUrl}
-                alt="프로필 이미지"
-                width={22}
-                height={22}
-                className="sm:w-[24px] sm:h-[24px] rounded-full object-cover"
-              />
-            ) : (
-              <div
-                className="sm:w-[24px] sm:h-[24px] w-[22px] h-[22px] rounded-full
-                overflow-hidden flex items-center justify-center"
-              >
-                <RandomProfile
-                  userId={assignee.id}
-                  name={assignee.nickname}
-                  className="sm:w-[24px] sm:h-[24px] w-[22px] h-[22px]"
+            {/* 프로필 아이콘 */}
+            <div className="shrink-0">
+              {assignee.profileImageUrl ? (
+                <Image
+                  src={assignee.profileImageUrl}
+                  alt="프로필 이미지"
+                  width={22}
+                  height={22}
+                  className="sm:w-[24px] sm:h-[24px] rounded-full object-cover shrink-0"
                 />
-              </div>
-            )}
+              ) : (
+                <div
+                  className="sm:w-[24px] sm:h-[24px] w-[22px] h-[22px] rounded-full
+                flex items-center justify-center"
+                >
+                  <RandomProfile
+                    userId={assignee.id}
+                    name={assignee.nickname}
+                    className="sm:w-[24px] sm:h-[24px] w-[22px] h-[22px]"
+                  />
+                </div>
+              )}
+            </div>
           </div>
         </div>
       </div>

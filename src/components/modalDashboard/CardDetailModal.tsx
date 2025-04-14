@@ -10,6 +10,7 @@ import { createComment } from "@/api/comment";
 import { deleteCard, getDashboardMembers } from "@/api/card";
 import type { CardDetailType } from "@/types/cards";
 import TaskModal from "@/components/modalInput/TaskModal";
+import { DeleteModal } from "@/components/modal/DeleteModal";
 import { useClosePopup } from "@/hooks/useClosePopup";
 import { getColumn } from "@/api/columns";
 import { toast } from "react-toastify";
@@ -45,6 +46,8 @@ export default function CardDetailPage({
   const [commentText, setCommentText] = useState("");
   const [showMenu, setShowMenu] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+
   const queryClient = useQueryClient();
   const popupRef = useRef(null);
   useClosePopup(popupRef, () => setShowMenu(false));
@@ -78,8 +81,7 @@ export default function CardDetailPage({
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["cards"] });
       if (onChangeCard) onChangeCard();
-      onClose();
-      toast.success("카드가 삭제되었습니다.");
+      setIsDeleteModalOpen(true);
     },
   });
 
@@ -164,7 +166,7 @@ export default function CardDetailPage({
                             toast.error("읽기 전용 대시보드입니다.");
                             return;
                           }
-                          deleteCardMutate();
+                          setIsDeleteModalOpen(true);
                         }}
                       >
                         삭제하기
@@ -227,7 +229,7 @@ export default function CardDetailPage({
               ...prev,
               title: updatedData.title,
               description: updatedData.description,
-              dueDate: updatedData.deadline,
+              dueDate: updatedData.deadline ?? "",
               tags: updatedData.tags,
               imageUrl: updatedData.image ?? "",
               assignee: {
@@ -245,12 +247,32 @@ export default function CardDetailPage({
             assignee: cardData.assignee.nickname,
             title: cardData.title,
             description: cardData.description,
-            deadline: cardData.dueDate,
+            deadline: cardData.dueDate ?? "",
             tags: cardData.tags,
             image: cardData.imageUrl ?? "",
           }}
         />
       )}
+      <DeleteModal
+        title="카드를"
+        isOpen={isDeleteModalOpen}
+        onCancel={() => setIsDeleteModalOpen(false)}
+        onConfirm={() => {
+          deleteCardMutate(undefined, {
+            onSuccess: () => {
+              queryClient.invalidateQueries({ queryKey: ["cards"] });
+              if (onChangeCard) onChangeCard();
+              setIsDeleteModalOpen(false);
+              onClose();
+              toast.success("카드가 삭제되었습니다.");
+            },
+            onError: () => {
+              toast.error("카드 삭제에 실패했습니다.");
+              setIsDeleteModalOpen(false);
+            },
+          });
+        }}
+      />
     </>
   );
 }

@@ -9,7 +9,7 @@ import DashboardAddButton from "@/components/button/DashboardAddButton";
 import { PaginationButton } from "@/components/button/PaginationButton";
 import InvitedDashBoard from "@/components/table/invited/InvitedDashBoard";
 import NewDashboard from "@/components/modal/NewDashboard";
-import { DeleteModal } from "@/components/modal/DeleteModal";
+import { DeleteCheckModal } from "@/components/modal/DeleteCheckModal";
 import { TEAM_ID } from "@/constants/team";
 import { Search } from "lucide-react";
 import { toast } from "react-toastify";
@@ -267,7 +267,7 @@ export default function MyDashboardPage() {
         />
       )}
 
-      <DeleteModal
+      <DeleteCheckModal
         isDeleteModalOpen={isDeleteModalOpen}
         setIsDeleteModalOpen={setIsDeleteModalOpen}
         isConfirmDeleteModalOpen={isConfirmDeleteModalOpen}

@@ -49,7 +49,7 @@ export default function Column({
     { id: number; userId: number; nickname: string }[]
   >([]);
 
-  const maxColumnTitleLength = 20;
+  const maxColumnTitleLength = 15;
 
   // 카드리스트의 스크롤을 칼럼 영역으로 이동
   const scrollRef = useRef<HTMLDivElement | null>(null);
@@ -130,7 +130,10 @@ export default function Column({
           {/* 왼쪽: 타이틀 + 카드 개수 */}
           <div className="flex items-center gap-2">
             <Image src="/svgs/ellipse.svg" alt="circle" width={8} height={8} />
-            <h2 className="text-black3 text-[16px] md:text-[18px] font-bold">
+            <h2
+              className="text-black3 text-[16px] md:text-[18px] font-bold
+            break-words sm:max-w-none max-w-[90px]"
+            >
               {columnTitle}
             </h2>
             <span

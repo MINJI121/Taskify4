@@ -59,7 +59,7 @@ export default function TaskModal({
     assignee: initialData.assignee || "",
     title: initialData.title || "",
     description: initialData.description || "",
-    deadline: initialData.deadline || "",
+    deadline: initialData.deadline ?? "",
     tags: initialData.tags || [],
     image: initialData.image || "",
   });
@@ -86,9 +86,8 @@ export default function TaskModal({
   const isFormValid =
     formData.assignee &&
     formData.status &&
-    formData.title &&
-    formData.description &&
-    formData.deadline;
+    formData.title.trim() &&
+    formData.description.trim();
 
   const handleSubmit = async () => {
     try {
@@ -109,7 +108,7 @@ export default function TaskModal({
           columnId: updatedColumnId,
           title: formData.title,
           description: formData.description,
-          dueDate: formData.deadline,
+          dueDate: formData.deadline.trim() ? formData.deadline : undefined,
           tags: formData.tags,
           imageUrl: formData.image || undefined,
         });
@@ -125,7 +124,7 @@ export default function TaskModal({
           columnId: updatedColumnId,
           title: formData.title,
           description: formData.description,
-          dueDate: formData.deadline,
+          dueDate: formData.deadline.trim() ? formData.deadline : undefined,
           tags: formData.tags,
           imageUrl: formData.image || undefined,
         });
@@ -143,7 +142,7 @@ export default function TaskModal({
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black/35 z-50">
-      <div className="sm:w-[584px] w-[327px] h-auto max-h-[90vh] rounded-lg bg-white p-4 sm:p-8 shadow-lg flex flex-col gap-4 sm:gap-8 overflow-y-auto">
+      <div className="sm:w-[584px] w-[327px] h-[calc(var(--vh)_*_90)] rounded-lg bg-white p-4 sm:p-8 shadow-lg flex flex-col gap-4 sm:gap-8 overflow-y-auto">
         <h2 className="font-bold text-black3 text-[16px] sm:text-[24px]">
           {mode === "edit" ? "할 일 수정" : "할 일 생성"}
         </h2>
@@ -187,7 +186,7 @@ export default function TaskModal({
 
           <ModalInput
             label="마감일"
-            required
+            required={false}
             defaultValue={formData.deadline}
             onValueChange={(value) => handleChange("deadline", value[0])}
           />

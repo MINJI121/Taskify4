@@ -5,6 +5,8 @@ import { deleteComment, updateComment } from "@/api/comment";
 import { Comment } from "@/types/comments";
 import { ProfileIcon } from "./CardProfileIcon";
 import formatDate from "./formatDate";
+import { DeleteModal } from "@/components/modal/DeleteModal";
+import { toast } from "react-toastify";
 
 interface UpdateCommentProps {
   comment: Comment;
@@ -18,6 +20,8 @@ export default function UpdateComment({
 }: UpdateCommentProps) {
   const [isEditing, setIsEditing] = useState(false);
   const [editedContent, setEditedContent] = useState(comment.content);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+
   const queryClient = useQueryClient();
 
   const handleEditToggle = () => {
@@ -28,6 +32,8 @@ export default function UpdateComment({
   const handleDelete = async () => {
     await deleteComment({ commentId: comment.id });
     queryClient.invalidateQueries({ queryKey: ["comments", comment.cardId] });
+    setIsDeleteModalOpen(false);
+    toast.success("댓글이 삭제되었습니다.");
   };
 
   const handleSave = async () => {
@@ -37,6 +43,7 @@ export default function UpdateComment({
     });
     queryClient.invalidateQueries({ queryKey: ["comments", comment.cardId] });
     setIsEditing(false);
+    toast.success("댓글이 수정되었습니다.");
   };
 
   return (
@@ -110,7 +117,10 @@ export default function UpdateComment({
                 <button onClick={handleEditToggle} className="cursor-pointer">
                   수정
                 </button>
-                <button onClick={handleDelete} className="cursor-pointer">
+                <button
+                  onClick={() => setIsDeleteModalOpen(true)}
+                  className="cursor-pointer"
+                >
                   삭제
                 </button>
               </div>
@@ -118,6 +128,12 @@ export default function UpdateComment({
           </>
         )}
       </div>
+      <DeleteModal
+        title="댓글을"
+        isOpen={isDeleteModalOpen}
+        onConfirm={handleDelete}
+        onCancel={() => setIsDeleteModalOpen(false)}
+      />
     </div>
   );
 }

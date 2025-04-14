@@ -54,7 +54,7 @@ export const createCard = async ({
   columnId: number;
   title: string;
   description: string;
-  dueDate: string;
+  dueDate?: string;
   tags: string[];
   imageUrl?: string;
 }) => {

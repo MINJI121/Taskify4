@@ -35,7 +35,7 @@ export default function Dashboard() {
   const [titleLength, setTitleLength] = useState<number>(0);
 
   const isMaxColumns = columns.length >= 10;
-  const maxColumnTitleLength = 20;
+  const maxColumnTitleLength = 15;
 
   // 모달이 열릴 때마다 입력값 초기화
   const openModal = () => {
