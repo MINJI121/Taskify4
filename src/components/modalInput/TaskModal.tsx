@@ -83,7 +83,7 @@ export default function TaskModal({
               label="담당자"
               value={formData.assignee}
               required
-              users={members} // ✅ 전체 멤버 데이터 전달
+              users={members}
               onChange={(value) => handleChange("assignee", value)}
             />
           </div>

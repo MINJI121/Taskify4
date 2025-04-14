@@ -1,4 +1,5 @@
 import { useState } from "react";
+import RandomProfile from "@/components/common/RandomProfile";
 
 interface User {
   id: number;
@@ -55,7 +56,11 @@ export default function AssigneeSelect({
                     className="w-[26px] h-[26px] rounded-full object-cover"
                   />
                 ) : (
-                  <div className="w-[26px] h-[26px] rounded-full bg-gray-300" />
+                  <RandomProfile
+                    userId={selectedUser.userId}
+                    name={selectedUser.nickname}
+                    className="w-[26px] h-[26px] rounded-full text-white text-xs flex items-center justify-center"
+                  />
                 )}
                 <span className="font-normal text-[14px] sm:text-[16px]">
                   {selectedUser.nickname}
@@ -90,7 +95,11 @@ export default function AssigneeSelect({
                       className="w-[26px] h-[26px] rounded-full object-cover"
                     />
                   ) : (
-                    <div className="w-[26px] h-[26px] rounded-full bg-gray-300" />
+                    <RandomProfile
+                      userId={user.userId}
+                      name={user.nickname}
+                      className="w-[26px] h-[26px] rounded-full text-white text-xs flex items-center justify-center"
+                    />
                   )}
                   <span className="font-normal text-black3 sm:text-[16px] text-[14px]">
                     {user.nickname}
