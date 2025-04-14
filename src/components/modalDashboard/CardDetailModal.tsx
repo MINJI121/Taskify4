@@ -1,21 +1,18 @@
-import { useMemo, useRef, useState } from "react";
+import { useRef } from "react";
 import clsx from "clsx";
 import { MoreVertical, X } from "lucide-react";
 import CardDetail from "./CardDetail";
 import CommentList from "./CommentList";
 import CommentInput from "@/components/modalInput/CardInput";
 import { Representative } from "@/components/modalDashboard/Representative";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { createComment } from "@/api/comment";
-import { deleteCard, getDashboardMembers } from "@/api/card";
-import type { CardDetailType } from "@/types/cards";
 import TaskModal from "@/components/modalInput/TaskModal";
 import { DeleteModal } from "@/components/modal/DeleteModal";
-import { useClosePopup } from "@/hooks/useClosePopup";
-import { getColumn } from "@/api/columns";
 import { toast } from "react-toastify";
 import { TEAM_ID } from "@/constants/team";
 import { useDashboardPermission } from "@/hooks/useDashboardPermission";
+import { useCardDetailState } from "@/hooks/useCardDetailState";
+import { useCardDetail } from "@/hooks/useCardDetail";
+import type { CardDetailType } from "@/types/cards";
 
 interface CardDetailModalProps {
   card: CardDetailType;
@@ -24,12 +21,6 @@ interface CardDetailModalProps {
   createdByMe: boolean;
   onClose: () => void;
   onChangeCard?: () => void;
-}
-
-interface ColumnType {
-  id: number;
-  title: string;
-  status: string;
 }
 
 export default function CardDetailPage({
@@ -41,67 +32,25 @@ export default function CardDetailPage({
   onChangeCard,
 }: CardDetailModalProps) {
   const { canEditCards } = useDashboardPermission(dashboardId, createdByMe);
+  const { cardData, setCardData, columnName, columns, members } =
+    useCardDetailState(card, dashboardId);
 
-  const [cardData, setCardData] = useState<CardDetailType>(card);
-  const [commentText, setCommentText] = useState("");
-  const [showMenu, setShowMenu] = useState(false);
-  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
-
-  const queryClient = useQueryClient();
-  const popupRef = useRef(null);
-  useClosePopup(popupRef, () => setShowMenu(false));
-
-  const { data: columns = [] } = useQuery<ColumnType[]>({
-    queryKey: ["columns", dashboardId],
-    queryFn: () => getColumn({ dashboardId, columnId: cardData.columnId }),
-  });
-
-  const { data: members = [] } = useQuery({
-    queryKey: ["dashboardMembers", dashboardId],
-    queryFn: () => getDashboardMembers({ dashboardId }),
-  });
-
-  const columnName = useMemo(() => {
-    return (
-      columns.find((col) => col.id === cardData.columnId)?.title || "알 수 없음"
-    );
-  }, [columns, cardData.columnId]);
-
-  const { mutate: createCommentMutate } = useMutation({
-    mutationFn: createComment,
-    onSuccess: () => {
-      setCommentText("");
-      queryClient.invalidateQueries({ queryKey: ["comments", cardData.id] });
-    },
-  });
-
-  const { mutate: deleteCardMutate } = useMutation({
-    mutationFn: () => deleteCard(cardData.id),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["cards"] });
-      if (onChangeCard) onChangeCard();
-      setIsDeleteModalOpen(true);
-    },
-  });
-
-  const handleClose = () => {
-    onClose();
-  };
-
-  const handleCommentSubmit = () => {
-    if (!commentText.trim()) return;
-    createCommentMutate({
-      content: commentText,
-      cardId: cardData.id,
-      columnId: cardData.columnId,
-      dashboardId,
-    });
-  };
+  const {
+    commentText,
+    setCommentText,
+    isEditModalOpen,
+    setIsEditModalOpen,
+    isDeleteModalOpen,
+    setIsDeleteModalOpen,
+    showMenu,
+    setShowMenu,
+    popupRef,
+    handleCommentSubmit,
+    handleConfirmDelete,
+  } = useCardDetail(card, dashboardId, onChangeCard, onClose);
 
   return (
     <>
-      {/* 모달 고정 div */}
       <div
         className={clsx(
           "fixed inset-0 z-50",
@@ -109,7 +58,6 @@ export default function CardDetailPage({
           "bg-black/35"
         )}
       >
-        {/* 모달창 */}
         <div
           className={clsx(
             "relative flex flex-col overflow-y-auto",
@@ -119,20 +67,15 @@ export default function CardDetailPage({
           )}
         >
           <div className="flex items-center justify-center px-6 pt-6 pb-2">
-            {/* 내부 아이템 컨테이너 */}
             <div className="flex flex-col lg:w-[674px] sm:w-[614px] w-[295px]">
-              {/* 헤더 컨테이너 */}
               <div className="flex justify-between sm:mb-4 mb-2">
-                {/* 제목 */}
                 <h2 className="text-black3 font-bold sm:text-[20px] text-[16px]">
                   {cardData.title}
                 </h2>
-                {/* 버튼 컨테이너 */}
                 <div
                   className="relative flex items-center sm:gap-[24px] gap-[16px]"
                   ref={popupRef}
                 >
-                  {/* 메뉴 버튼 */}
                   <button
                     onClick={() => setShowMenu((prev) => !prev)}
                     className="sm:w-[28px] sm:h-[28px] w-[20px] h-[20px] flex items-center justify-center hover:cursor-pointer"
@@ -141,7 +84,6 @@ export default function CardDetailPage({
                   >
                     <MoreVertical className="w-8 h-8 text-black3 cursor-pointer" />
                   </button>
-                  {/* 수정/삭제 드롭다운 메뉴 */}
                   {showMenu && (
                     <div className="absolute right-0 top-9.5 p-2 z-40 flex flex-col items-center justify-center sm:gap-[6px] gap-[11px] sm:w-28 w-20 sm:h-24 bg-white border border-[#D9D9D9] rounded-lg">
                       <button
@@ -173,13 +115,12 @@ export default function CardDetailPage({
                       </button>
                     </div>
                   )}
-                  <button onClick={handleClose} title="닫기">
+                  <button onClick={onClose} title="닫기">
                     <X className="sm:w-[28px] sm:h-[28px] w-[20px] h-[20px] flex items-center justify-center hover:cursor-pointer" />
                   </button>
                 </div>
               </div>
 
-              {/* 카드 내용 */}
               <div className="flex flex-col-reverse sm:flex-row gap-4">
                 <CardDetail card={cardData} columnName={columnName} />
                 <div>
@@ -187,7 +128,6 @@ export default function CardDetailPage({
                 </div>
               </div>
 
-              {/* 댓글 */}
               <div className="mt-4 w-full lg:max-w-[445px] md:max-w-[420px]">
                 <p className="mb-1 text-black3 font-medium sm:text-[16px] text-[14px]">
                   댓글
@@ -223,8 +163,7 @@ export default function CardDetailPage({
           members={members}
           onClose={() => setIsEditModalOpen(false)}
           onSubmit={(updatedData) => {
-            if (onChangeCard) onChangeCard();
-            queryClient.invalidateQueries({ queryKey: ["cards"] });
+            onChangeCard?.();
             setCardData((prev) => ({
               ...prev,
               title: updatedData.title,
@@ -253,25 +192,12 @@ export default function CardDetailPage({
           }}
         />
       )}
+
       <DeleteModal
         title="카드를"
         isOpen={isDeleteModalOpen}
         onCancel={() => setIsDeleteModalOpen(false)}
-        onConfirm={() => {
-          deleteCardMutate(undefined, {
-            onSuccess: () => {
-              queryClient.invalidateQueries({ queryKey: ["cards"] });
-              if (onChangeCard) onChangeCard();
-              setIsDeleteModalOpen(false);
-              onClose();
-              toast.success("카드가 삭제되었습니다.");
-            },
-            onError: () => {
-              toast.error("카드 삭제에 실패했습니다.");
-              setIsDeleteModalOpen(false);
-            },
-          });
-        }}
+        onConfirm={handleConfirmDelete}
       />
     </>
   );

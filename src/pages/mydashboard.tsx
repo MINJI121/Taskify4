@@ -1,7 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import axiosInstance from "@/api/axiosInstance";
 import { apiRoutes } from "@/api/apiRoutes";
-import { getDashboards } from "@/api/dashboards";
 import { useAuthGuard } from "@/hooks/useAuthGuard";
 import SideMenu from "@/components/sideMenu/SideMenu";
 import HeaderDashboard from "@/components/gnb/HeaderDashboard";
@@ -14,22 +13,17 @@ import { TEAM_ID } from "@/constants/team";
 import { Search } from "lucide-react";
 import { toast } from "react-toastify";
 import LoadingSpinner from "@/components/common/LoadingSpinner";
-
 import {
   DndContext,
   closestCenter,
   PointerSensor,
   useSensor,
   useSensors,
-  DragEndEvent,
 } from "@dnd-kit/core";
-import {
-  SortableContext,
-  rectSortingStrategy,
-  arrayMove,
-} from "@dnd-kit/sortable";
+import { SortableContext, rectSortingStrategy } from "@dnd-kit/sortable";
 import SortableCardButton from "@/components/button/SortableCardButton";
-import { dashboardOrdersTable } from "@/lib/dashboardOrderDB";
+import { useDashboardDragHandler } from "@/lib/useDashboardDragHandler";
+import { fetchOrderedDashboards } from "@/lib/dashboardUtils";
 
 interface Dashboard {
   id: number;
@@ -48,79 +42,59 @@ export default function MyDashboardPage() {
   const [currentPage, setCurrentPage] = useState(1);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isEditMode, setIsEditMode] = useState(false);
-  const [selectedDashboardId, setSelectedDashboardId] = useState<number | null>(
-    null
-  );
-  const [selectedCreatedByMe, setSelectedCreatedByMe] = useState<
-    boolean | null
-  >(null);
-  const [selectedTitle, setSelectedTitle] = useState<string | null>(null);
+  const [selectedDashboard, setSelectedDashboard] = useState<{
+    id: number | null;
+    title: string | null;
+    createdByMe: boolean | null;
+  }>({ id: null, title: null, createdByMe: null });
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [isConfirmDeleteModalOpen, setIsConfirmDeleteModalOpen] =
     useState(false);
+
   const itemsPerPage = 6;
-
   const sensors = useSensors(
-    useSensor(PointerSensor, {
-      activationConstraint: { distance: 5 },
-    })
+    useSensor(PointerSensor, { activationConstraint: { distance: 5 } })
+  );
+  const handleDragEnd = useDashboardDragHandler(
+    dashboardList,
+    setDashboardList
   );
 
-  const filteredDashboardList = dashboardList.filter((dashboard) =>
-    dashboard.title.toLowerCase().includes(searchKeyword.toLowerCase())
-  );
+  const filteredDashboardList = useMemo(() => {
+    return dashboardList.filter((dashboard) =>
+      dashboard.title.toLowerCase().includes(searchKeyword.toLowerCase())
+    );
+  }, [dashboardList, searchKeyword]);
 
   const totalPages = Math.ceil(
     filteredDashboardList.length / (itemsPerPage - 1)
   );
-  const startIndex = (currentPage - 1) * (itemsPerPage - 1);
   const paginatedDashboards = filteredDashboardList.slice(
-    startIndex,
-    startIndex + (itemsPerPage - 1)
+    (currentPage - 1) * (itemsPerPage - 1),
+    currentPage * (itemsPerPage - 1)
   );
 
   const fetchDashboards = async () => {
     try {
-      const res = await getDashboards({});
-      const localOrder = await dashboardOrdersTable.get(TEAM_ID);
-
-      let orderedList = res.dashboards;
-      if (localOrder?.order) {
-        orderedList = res.dashboards
-          .slice()
-          .sort(
-            (a, b) =>
-              localOrder.order.indexOf(a.id) - localOrder.order.indexOf(b.id)
-          );
-      }
-      setDashboardList(orderedList);
+      const ordered = await fetchOrderedDashboards(TEAM_ID);
+      setDashboardList(ordered);
     } catch (error) {
       console.error("대시보드 불러오기 실패:", error);
     }
   };
 
   useEffect(() => {
-    if (isInitialized && user) {
-      fetchDashboards();
-    }
+    if (isInitialized && user) fetchDashboards();
   }, [isInitialized, user]);
 
-  const handlePrevPage = () => {
-    if (currentPage > 1) setCurrentPage((prev) => prev - 1);
-  };
-
-  const handleNextPage = () => {
-    if (currentPage < totalPages) setCurrentPage((prev) => prev + 1);
-  };
-
   const handleDelete = async () => {
-    if (!selectedDashboardId) return;
+    if (!selectedDashboard.id) return;
     try {
       await axiosInstance.delete(
-        apiRoutes.dashboardDetail(selectedDashboardId)
+        apiRoutes.dashboardDetail(selectedDashboard.id)
       );
       setIsDeleteModalOpen(false);
-      setSelectedDashboardId(null);
+      setSelectedDashboard({ id: null, title: null, createdByMe: null });
       fetchDashboards();
     } catch (error) {
       toast.error("대시보드 삭제에 실패했습니다.");
@@ -129,38 +103,18 @@ export default function MyDashboardPage() {
   };
 
   const handleLeave = () => {
-    if (!selectedDashboardId) return;
     setIsDeleteModalOpen(false);
-    setSelectedDashboardId(null);
+    setSelectedDashboard({ id: null, title: null, createdByMe: null });
   };
 
-  const handleDragEnd = async (event: DragEndEvent) => {
-    const { active, over } = event;
-    if (!over || active.id === over.id) return;
-
-    const oldIndex = dashboardList.findIndex((d) => d.id === active.id);
-    const newIndex = dashboardList.findIndex((d) => d.id === over.id);
-
-    const newOrder = arrayMove(dashboardList, oldIndex, newIndex);
-    setDashboardList(newOrder);
-
-    //D&D 로컬 순서 저장
-    await dashboardOrdersTable.put({
-      teamId: TEAM_ID,
-      order: newOrder.map((d) => d.id),
-    });
-  };
-
-  if (!isInitialized || !user) {
-    return <LoadingSpinner />;
-  }
+  if (!isInitialized || !user) return <LoadingSpinner />;
 
   return (
     <div className="flex h-[calc(var(--vh)_*_100)] overflow-hidden bg-[var(--color-violet5)]">
       <SideMenu
         teamId={TEAM_ID}
         dashboardList={dashboardList}
-        onCreateDashboard={() => fetchDashboards()}
+        onCreateDashboard={fetchDashboards}
       />
 
       <div className="flex flex-col flex-1 overflow-hidden">
@@ -213,16 +167,20 @@ export default function MyDashboardPage() {
                       key={dashboard.id}
                       dashboard={dashboard}
                       isEditMode={isEditMode}
-                      onDeleteClick={(id: number) => {
-                        setSelectedDashboardId(id);
-                        setSelectedCreatedByMe(true);
-                        setSelectedTitle(dashboard.title);
+                      onDeleteClick={() => {
+                        setSelectedDashboard({
+                          id: dashboard.id,
+                          title: dashboard.title,
+                          createdByMe: true,
+                        });
                         setIsDeleteModalOpen(true);
                       }}
-                      onLeaveClick={(id: number) => {
-                        setSelectedDashboardId(id);
-                        setSelectedCreatedByMe(false);
-                        setSelectedTitle(dashboard.title);
+                      onLeaveClick={() => {
+                        setSelectedDashboard({
+                          id: dashboard.id,
+                          title: dashboard.title,
+                          createdByMe: false,
+                        });
                         setIsDeleteModalOpen(true);
                       }}
                     />
@@ -239,12 +197,12 @@ export default function MyDashboardPage() {
                 <PaginationButton
                   direction="left"
                   disabled={currentPage === 1}
-                  onClick={handlePrevPage}
+                  onClick={() => setCurrentPage((prev) => prev - 1)}
                 />
                 <PaginationButton
                   direction="right"
                   disabled={currentPage === totalPages}
-                  onClick={handleNextPage}
+                  onClick={() => setCurrentPage((prev) => prev + 1)}
                 />
               </div>
             )}
@@ -263,7 +221,7 @@ export default function MyDashboardPage() {
             setIsModalOpen(false);
             fetchDashboards();
           }}
-          onCreate={() => fetchDashboards()}
+          onCreate={fetchDashboards}
         />
       )}
 
@@ -272,8 +230,8 @@ export default function MyDashboardPage() {
         setIsDeleteModalOpen={setIsDeleteModalOpen}
         isConfirmDeleteModalOpen={isConfirmDeleteModalOpen}
         setIsConfirmDeleteModalOpen={setIsConfirmDeleteModalOpen}
-        selectedTitle={selectedTitle}
-        selectedCreatedByMe={selectedCreatedByMe}
+        selectedTitle={selectedDashboard.title}
+        selectedCreatedByMe={selectedDashboard.createdByMe}
         handleDelete={handleDelete}
         handleLeave={handleLeave}
       />
