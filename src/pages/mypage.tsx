@@ -8,10 +8,15 @@ import BackButton from "@/components/button/BackButton";
 import { Dashboard, getDashboards } from "@/api/dashboards";
 import { TEAM_ID } from "@/constants/team";
 import { toast } from "react-toastify";
+import LoadingSpinner from "@/components/common/LoadingSpinner";
 
 export default function MyPage() {
   const { user, isInitialized } = useAuthGuard();
   const [dashboards, setDashboards] = useState<Dashboard[]>([]);
+
+  if (!isInitialized || !user) {
+    return <LoadingSpinner />;
+  }
 
   // 사이드메뉴 대시보드 목록 api 호출
   const fetchDashboards = async () => {
@@ -25,13 +30,13 @@ export default function MyPage() {
   };
 
   useEffect(() => {
-    if (isInitialized) {
+    if (isInitialized && user) {
       fetchDashboards();
     }
-  }, [isInitialized]);
+  }, [isInitialized, user]);
 
   return (
-    <div className="flex h-screen overflow-hidden">
+    <div className="flex h-[calc(var(--vh)_*_100)] overflow-hidden">
       <SideMenu
         teamId={TEAM_ID}
         dashboardList={dashboards}

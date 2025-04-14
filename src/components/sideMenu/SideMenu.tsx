@@ -65,7 +65,7 @@ export default function SideMenu({
   return (
     <aside
       className={clsx(
-        "z-20 flex flex-col h-screen overflow-y-auto lg:overflow-y-hidden overflow-x-hidden transition-all duration-200",
+        "z-20 flex flex-col h-[calc(var(--vh)_*_100)] overflow-y-auto lg:overflow-y-hidden overflow-x-hidden transition-all duration-200",
         "bg-white border-r border-[var(--color-gray3)] py-5",
         isCollapsed
           ? "w-[67px] items-center px-0"

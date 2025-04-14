@@ -16,7 +16,7 @@ const DashboardLayout = ({
   dashboardId,
 }: DashboardLayoutProps) => {
   return (
-    <div className="flex h-screen overflow-hidden">
+    <div className="flex h-[calc(var(--vh)_*_100)] overflow-hidden">
       <SideMenu teamId={TEAM_ID} dashboardList={dashboardList} />
       <div className="flex flex-col flex-1">
         <HeaderDashboard variant="dashboard" dashboardId={dashboardId} />

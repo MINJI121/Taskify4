@@ -57,7 +57,7 @@ export default function SignUpPage() {
 
   return (
     <div
-      className="flex flex-col min-h-screen
+      className="flex flex-col min-h-[calc(var(--vh)_*_100)]
     items-center justify-center
     bg-white py-10"
     >

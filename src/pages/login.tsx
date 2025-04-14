@@ -44,7 +44,7 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center h-screen bg-white py-10">
+    <div className="flex flex-col items-center justify-center h-[calc(var(--vh)_*_100)] bg-white py-10">
       <div className="flex flex-col items-center justify-center mb-[30px]">
         <Image
           src="/svgs/main-logo.svg"

@@ -11,6 +11,7 @@ import { getDashboards } from "@/api/dashboards";
 import DeleteDashboardModal from "@/components/modal/DeleteDashboardModal";
 import { DashboardType } from "@/types/task";
 import { TEAM_ID } from "@/constants/team";
+import LoadingSpinner from "@/components/common/LoadingSpinner";
 
 export default function EditDashboard() {
   const router = useRouter();
@@ -47,8 +48,12 @@ export default function EditDashboard() {
     }
   }, [isInitialized, user]);
 
+  if (!isInitialized || !user) {
+    return <LoadingSpinner />;
+  }
+
   return (
-    <div className="flex h-screen overflow-hidden">
+    <div className="flex h-[calc(var(--vh)_*_100)] overflow-hidden">
       <SideMenu
         teamId={TEAM_ID}
         dashboardList={dashboardList}
