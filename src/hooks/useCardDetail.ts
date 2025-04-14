@@ -1,5 +1,4 @@
-// src/hooks/useCardDetail.ts
-import { useState, useRef, useMemo } from "react";
+import { useState, useRef } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { deleteCard } from "@/api/card";
 import { toast } from "react-toastify";

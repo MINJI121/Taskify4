@@ -21,6 +21,7 @@ export const ProfileIcon: React.FC<ProfileIconProps> = ({
   <>
     {profileImageUrl ? (
       <Image
+        key={profileImageUrl}
         src={profileImageUrl}
         alt="유저 프로필 아이콘"
         width={26}

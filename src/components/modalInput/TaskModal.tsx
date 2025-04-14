@@ -17,6 +17,7 @@ interface TaskModalProps {
     id: number;
     userId: number;
     nickname: string;
+    profileImageUrl: string | null;
   }[];
   columnId: number;
   dashboardId: number;
@@ -60,7 +61,7 @@ export default function TaskModal({
     onClose,
     onSubmit,
   });
-
+  console.log("🔍 members in TaskModal", members);
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black/35 z-50">
       <div className="sm:w-[584px] w-[327px] h-[calc(var(--vh)_*_90)] rounded-lg bg-white p-4 sm:p-8 shadow-lg flex flex-col gap-4 sm:gap-8 overflow-y-auto">
@@ -69,6 +70,7 @@ export default function TaskModal({
         </h2>
 
         <div className="flex flex-col gap-4 sm:gap-8">
+          {/* 상태 및 담당자 */}
           <div className="flex flex-col sm:flex-row gap-4 text-black3 font-normal text-[14px] sm:text-[16px]">
             <StatusSelect
               label="상태"
@@ -81,7 +83,7 @@ export default function TaskModal({
               label="담당자"
               value={formData.assignee}
               required
-              users={members.map((m) => ({ id: m.id, name: m.nickname }))}
+              users={members} // ✅ 전체 멤버 데이터 전달
               onChange={(value) => handleChange("assignee", value)}
             />
           </div>

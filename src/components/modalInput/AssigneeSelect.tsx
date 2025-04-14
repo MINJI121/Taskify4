@@ -1,9 +1,10 @@
 import { useState } from "react";
-import RandomProfile from "@/components/common/RandomProfile";
 
 interface User {
   id: number;
-  name: string;
+  userId: number;
+  nickname: string;
+  profileImageUrl: string | null;
 }
 
 interface AssigneeSelectProps {
@@ -23,11 +24,10 @@ export default function AssigneeSelect({
 }: AssigneeSelectProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [filter, setFilter] = useState("");
-  const selectedUser = users.find((u) => u.name === value);
 
-  // 유저 필터링
+  const selectedUser = users.find((u) => u.nickname === value);
   const filtered = users.filter((user) =>
-    user.name.toLowerCase().includes(filter.toLowerCase())
+    user.nickname.toLowerCase().includes(filter.toLowerCase())
   );
 
   return (
@@ -40,21 +40,25 @@ export default function AssigneeSelect({
       )}
 
       <div className="relative w-full">
-        {/* 선택된 담당자 */}
+        {/* 선택된 담당자 표시 */}
         <div
           className="flex items-center justify-between h-[48px] px-4 border border-[var(--color-gray3)] rounded-md cursor-pointer focus-within:border-[var(--primary)]"
           onClick={() => setIsOpen(!isOpen)}
         >
           <div className="flex items-center gap-2">
-            {value ? (
+            {selectedUser ? (
               <>
-                <RandomProfile
-                  name={value}
-                  userId={selectedUser?.id ?? 0}
-                  className="w-[26px] h-[26px]"
-                />
+                {selectedUser.profileImageUrl ? (
+                  <img
+                    src={selectedUser.profileImageUrl}
+                    alt={`${selectedUser.nickname} 프로필`}
+                    className="w-[26px] h-[26px] rounded-full object-cover"
+                  />
+                ) : (
+                  <div className="w-[26px] h-[26px] rounded-full bg-gray-300" />
+                )}
                 <span className="font-normal text-[14px] sm:text-[16px]">
-                  {value}
+                  {selectedUser.nickname}
                 </span>
               </>
             ) : (
@@ -65,35 +69,34 @@ export default function AssigneeSelect({
           </div>
         </div>
 
-        {/* 드롭다운 */}
+        {/* 드롭다운 목록 */}
         {isOpen && (
-          <ul
-            className="absolute z-10 top-full left-0 mt-1
-          w-full max-h-[200px] overflow-y-auto
-          bg-white border border-[var(--color-gray3)] rounded-md shadow-lg"
-          >
-            {filtered.map((user, idx) => (
+          <ul className="absolute z-10 top-full left-0 mt-1 w-full max-h-[200px] overflow-y-auto bg-white border border-[var(--color-gray3)] rounded-md shadow-lg">
+            {filtered.map((user) => (
               <li
-                key={idx}
+                key={user.userId}
                 onClick={() => {
-                  onChange(user.name);
+                  onChange(user.nickname);
                   setIsOpen(false);
                   setFilter("");
                 }}
-                className="flex items-center justify-between
-                px-4 py-2 cursor-pointer hover:bg-gray-100"
+                className="flex items-center justify-between px-4 py-2 cursor-pointer hover:bg-gray-100"
               >
                 <div className="flex items-center gap-2">
-                  <RandomProfile
-                    name={user.name}
-                    userId={user.id}
-                    className="w-[26px] h-[26px]"
-                  />
+                  {user.profileImageUrl ? (
+                    <img
+                      src={user.profileImageUrl}
+                      alt={`${user.nickname} 프로필`}
+                      className="w-[26px] h-[26px] rounded-full object-cover"
+                    />
+                  ) : (
+                    <div className="w-[26px] h-[26px] rounded-full bg-gray-300" />
+                  )}
                   <span className="font-normal text-black3 sm:text-[16px] text-[14px]">
-                    {user.name}
+                    {user.nickname}
                   </span>
                 </div>
-                {value === user.name && (
+                {value === user.nickname && (
                   <span className="text-[var(--primary)]">✔</span>
                 )}
               </li>

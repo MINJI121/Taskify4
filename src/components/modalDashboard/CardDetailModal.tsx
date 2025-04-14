@@ -1,4 +1,3 @@
-import { useRef } from "react";
 import clsx from "clsx";
 import { MoreVertical, X } from "lucide-react";
 import CardDetail from "./CardDetail";
@@ -12,6 +11,7 @@ import { TEAM_ID } from "@/constants/team";
 import { useDashboardPermission } from "@/hooks/useDashboardPermission";
 import { useCardDetailState } from "@/hooks/useCardDetailState";
 import { useCardDetail } from "@/hooks/useCardDetail";
+import { getCardDetail } from "@/api/card";
 import type { CardDetailType } from "@/types/cards";
 
 interface CardDetailModalProps {
@@ -162,24 +162,16 @@ export default function CardDetailPage({
           dashboardId={dashboardId}
           members={members}
           onClose={() => setIsEditModalOpen(false)}
-          onSubmit={(updatedData) => {
-            onChangeCard?.();
-            setCardData((prev) => ({
-              ...prev,
-              title: updatedData.title,
-              description: updatedData.description,
-              dueDate: updatedData.deadline ?? "",
-              tags: updatedData.tags,
-              imageUrl: updatedData.image ?? "",
-              assignee: {
-                ...prev.assignee,
-                nickname: updatedData.assignee,
-              },
-              columnId:
-                columns.find((col) => col.title === updatedData.status)?.id ??
-                prev.columnId,
-            }));
-            setIsEditModalOpen(false);
+          onSubmit={async () => {
+            try {
+              const updatedCard = await getCardDetail(cardData.id);
+              setCardData(updatedCard);
+              onChangeCard?.();
+            } catch (error) {
+              toast.error("카드 정보를 불러오는 데 실패했습니다.");
+            } finally {
+              setIsEditModalOpen(false);
+            }
           }}
           initialData={{
             status: columnName,

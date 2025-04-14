@@ -46,7 +46,12 @@ export default function Column({
   const [isCardDetailModalOpen, setIsCardDetailModalOpen] = useState(false);
   const [selectedCard, setSelectedCard] = useState<CardDetailType | null>(null);
   const [members, setMembers] = useState<
-    { id: number; userId: number; nickname: string }[]
+    {
+      id: number;
+      userId: number;
+      nickname: string;
+      profileImageUrl: string | null;
+    }[]
   >([]);
 
   const maxColumnTitleLength = 15;
@@ -64,6 +69,7 @@ export default function Column({
           id: m.id,
           userId: m.userId,
           nickname: m.nickname || m.email,
+          profileImageUrl: m.profileImageUrl,
         }));
 
         setMembers(parsed);

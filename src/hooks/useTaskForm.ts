@@ -27,7 +27,6 @@ export function useTaskForm({
   initialData,
   members,
   dashboardId,
-  columnId,
   cardId,
   updatedColumnId,
   onClose,

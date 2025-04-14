@@ -20,6 +20,7 @@ export const Representative = ({ card }: RepresentativeProps) => {
           <p className="font-12sb text-black3 mb-[4px]">담당자</p>
           <div className="flex items-center gap-2">
             <ProfileIcon
+              key={card.assignee.profileImageUrl}
               userId={card.assignee.id}
               nickname={card.assignee.nickname}
               profileImageUrl={card.assignee.profileImageUrl ?? ""}
