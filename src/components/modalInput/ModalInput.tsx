@@ -140,7 +140,7 @@ export default function ModalInput({
             id="title"
             placeholder="제목을 입력해 주세요"
             defaultValue={defaultValue}
-            className="w-full max-w-[520px] h-[48px] rounded-md pl-4 pr-18
+            className="w-full max-w-[520px] h-[48px] rounded-md pl-4 pr-16
             text-black3 text-[16px] sm:text-[18px] font:normal
             outline-none border border-[var(--color-gray3)] focus:border-[var(--primary)]"
             onChange={handleTitleValue}
