@@ -50,7 +50,7 @@ export default function Section1() {
       {/* CTA 버튼들 */}
       <div
         className="sm:mt-[70px] mt-[45px] flex gap-4 flex-col sm:flex-row
-      min-w-0 w-full sm:max-w-[380px] max-w-[280px]"
+      min-w-0 w-full sm:max-w-[420px] max-w-[280px]"
       >
         <GuestModeButton />
         <button

@@ -8,6 +8,7 @@ import Input from "@/components/input/Input";
 import { Modal } from "@/components/modal/Modal";
 import { CustomBtn } from "@/components/button/CustomButton";
 import { toast } from "react-toastify";
+import { AxiosError } from "axios";
 
 export default function SignUpPage() {
   const [email, setEmail] = useState("");
@@ -54,8 +55,13 @@ export default function SignUpPage() {
         setIsSuccessModalOpen(true);
       });
     } catch (error) {
-      console.error("회원가입 실패", error);
-      toast.error("회원가입에 실패했습니다.");
+      const AxiosError = error as AxiosError<{ message: string }>;
+      if (AxiosError.response?.status === 409) {
+        toast.error("중복된 이메일입니다.");
+      } else {
+        console.error("회원가입 실패", error);
+        toast.error("회원가입에 실패했습니다.");
+      }
     }
   };
 

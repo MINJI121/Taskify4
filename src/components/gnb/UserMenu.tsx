@@ -16,7 +16,7 @@ const dropdownButtonStyles = clsx(
   "flex justify-center md:justify-start items-center",
   "w-full px-3 py-3 gap-3",
   "text-sm lg:text-base text-black3",
-  "hover:text-[var(--primary)] hover:bg-[#f9f9f9] cursor-pointer"
+  "hover:text-[var(--primary)] hover:bg-[var(--color-violet8)] cursor-pointer"
 );
 
 const UserMenu: React.FC<UserMenuProps> = ({ isMenuOpen, setIsMenuOpen }) => {
@@ -38,7 +38,7 @@ const UserMenu: React.FC<UserMenuProps> = ({ isMenuOpen, setIsMenuOpen }) => {
       ref={ref}
       className={clsx(
         "absolute top-full right-0 w-full z-50",
-        "bg-white border border-[var(--color-gray3)] shadow",
+        "bg-white border border-[var(--color-gray3)] rounded-lg shadow",
         "transition-all duration-200 ease-out",
         isMenuOpen
           ? "opacity-100 translate-y-0"

@@ -24,7 +24,7 @@ const MemberListMenu: React.FC<MemberListMenuProps> = ({
       ref={ref}
       className={clsx(
         "absolute top-full right-0 w-[140px] sm:w-[190px] z-50",
-        "bg-white border border-[var(--color-gray3)] shadow",
+        "bg-white border border-[var(--color-gray3)] rounded-lg shadow",
         "transition-all duration-200 ease-out",
         isListOpen
           ? "opacity-100 translate-y-0"
