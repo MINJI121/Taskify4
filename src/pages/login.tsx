@@ -1,15 +1,18 @@
 import { useState } from "react";
 import { useRouter } from "next/router";
-import Image from "next/image";
 import useUserStore from "@/store/useUserStore";
 import { getUserInfo } from "@/api/users";
 import { postAuthData } from "@/api/auth";
+import { usePostGuard } from "@/hooks/usePostGuard";
+import Image from "next/image";
 import Link from "next/link";
 import Input from "@/components/input/Input";
 import { toast } from "react-toastify";
 
 export default function LoginPage() {
   const router = useRouter();
+  const { guard: postGuard, isLoading } = usePostGuard();
+
   const [values, setValues] = useState({
     email: "",
     password: "",
@@ -28,15 +31,17 @@ export default function LoginPage() {
     const { email, password } = values;
 
     try {
-      const response = await postAuthData({ email, password });
-      const token = response.accessToken;
-      localStorage.setItem("accessToken", token);
-      // 로그인 성공 시 사용자 정보 요청
-      const userData = await getUserInfo();
-      // Zustand에 저장
-      useUserStore.getState().setUser(userData);
+      // 중복 요청 방지
+      await postGuard(async () => {
+        const response = await postAuthData({ email, password });
+        const token = response.accessToken;
+        localStorage.setItem("accessToken", token);
 
-      router.push("/mydashboard");
+        const userData = await getUserInfo();
+        // user info Zustand에 저장
+        useUserStore.getState().setUser(userData);
+        router.push("/mydashboard");
+      });
     } catch (error) {
       console.error("로그인 실패:", error);
       toast.error("로그인에 실패했습니다.");
@@ -86,14 +91,14 @@ export default function LoginPage() {
 
         <button
           type="submit"
-          disabled={!isFormValid}
+          disabled={!isFormValid || isLoading}
           className={`w-full h-[50px] rounded-[8px] text-white font-18m transition mt-1 ${
             isFormValid
               ? "bg-[var(--primary)] cursor-pointer hover:opacity-90}"
               : "bg-[var(--color-gray2)] cursor-not-allowed"
           }`}
         >
-          로그인
+          {isLoading ? "로그인 중..." : "로그인"}
         </button>
 
         <span className="font-16r text-center text-black3">

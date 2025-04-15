@@ -32,11 +32,9 @@ export const getMembers = async ({
     });
 
     const members: Member[] = response.data.members || [];
-
-    console.log("✅ getMembers 응답 데이터:", members); // 디버깅용 로그
     return members;
   } catch (error) {
-    console.error("🚨 getMembers API 실패:", error);
+    console.error("getMembers API 실패:", error);
     return [];
   }
 };

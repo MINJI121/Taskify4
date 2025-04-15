@@ -38,7 +38,9 @@ export default function DeleteDashboardModal({
       height="h-[160px] sm:h-[174px]"
     >
       <div className="flex flex-col sm:gap-10 gap-6 text-center">
-        <p className="text-xl mt-1.5">대시보드를 삭제하시겠습니까?</p>
+        <p className="text-black3 font-medium sm:text-[20px] text-[18px] mt-1.5">
+          대시보드를 삭제하시겠습니까?
+        </p>
         <div className="flex justify-between gap-3">
           <CustomBtn variant="outlineDisabled" onClick={onClose}>
             취소

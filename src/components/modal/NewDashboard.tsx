@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { usePostGuard } from "@/hooks/usePostGuard";
 import Input from "../input/Input";
 import Image from "next/image";
 import { createDashboard } from "@/api/dashboards";
@@ -23,8 +24,9 @@ interface NewDashboardProps {
 export default function NewDashboard({ onClose, onCreate }: NewDashboardProps) {
   const [title, setTitle] = useState("");
   const [selected, setSelected] = useState<number | null>(null);
-  const [loading, setLoading] = useState(false);
   const [titleLength, setTitleLength] = useState<number>(0);
+
+  const { guard: postGuard, isLoading } = usePostGuard();
 
   const maxTitleLength = 30;
   const colors = ["#7ac555", "#760DDE", "#FF9800", "#76A5EA", "#E876EA"];
@@ -44,16 +46,15 @@ export default function NewDashboard({ onClose, onCreate }: NewDashboardProps) {
     };
 
     try {
-      setLoading(true);
-      const response = await createDashboard(payload);
-      onCreate?.(response.data);
-      onClose?.();
-      toast.success("대시보드가 생성되었습니다.");
+      await postGuard(async () => {
+        const response = await createDashboard(payload);
+        onCreate?.(response.data);
+        onClose?.();
+        toast.success("대시보드가 생성되었습니다.");
+      });
     } catch (error) {
       console.error("대시보드 생성 실패:", error);
       toast.error("대시보드 생성에 실패했습니다.");
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -116,12 +117,12 @@ export default function NewDashboard({ onClose, onCreate }: NewDashboardProps) {
           </button>
           <button
             onClick={handleSubmit}
-            disabled={!title || selected === null}
+            disabled={!title || selected === null || isLoading}
             className={`cursor-pointer sm:w-[256px] sm:h-[54px] w-[144px] h-[54px] rounded-[8px] 
             border border-[var(--color-gray3)] text-[var(--color-white)] 
             ${!title || selected === null ? "bg-gray-300 cursor-not-allowed" : "bg-[var(--primary)]"}`}
           >
-            {loading ? "생성 중..." : "생성"}
+            {isLoading ? "생성 중..." : "생성"}
           </button>
         </div>
       </div>

@@ -1,7 +1,6 @@
 import React from "react";
 import { Modal } from "@/components/modal/Modal";
 import { CustomBtn } from "../button/CustomButton";
-import { toast } from "react-toastify";
 
 interface DeleteModalProps {
   isOpen: boolean;

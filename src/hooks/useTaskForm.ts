@@ -3,6 +3,7 @@ import { toast } from "react-toastify";
 import { useQueryClient } from "@tanstack/react-query";
 import { createCard, editCard } from "@/api/card";
 import { TaskData } from "@/components/modalInput/TaskModal";
+import { usePostGuard } from "@/hooks/usePostGuard";
 
 interface Member {
   id: number;
@@ -33,6 +34,8 @@ export function useTaskForm({
   onSubmit,
 }: UseTaskFormProps) {
   const queryClient = useQueryClient();
+
+  const { guard: postGuard } = usePostGuard();
 
   const [formData, setFormData] = useState<TaskData>({
     status: initialData.status || "",
@@ -73,33 +76,37 @@ export function useTaskForm({
       }
 
       if (mode === "create") {
-        await createCard({
-          assigneeUserId,
-          dashboardId,
-          columnId: updatedColumnId,
-          title: formData.title,
-          description: formData.description,
-          dueDate: formData.deadline.trim() ? formData.deadline : undefined,
-          tags: formData.tags,
-          imageUrl: formData.image || undefined,
+        await postGuard(async () => {
+          await createCard({
+            assigneeUserId,
+            dashboardId,
+            columnId: updatedColumnId,
+            title: formData.title,
+            description: formData.description,
+            dueDate: formData.deadline.trim() ? formData.deadline : undefined,
+            tags: formData.tags,
+            imageUrl: formData.image || undefined,
+          });
+          toast.success("카드가 생성되었습니다.");
         });
-        toast.success("카드가 생성되었습니다.");
       } else {
         if (!cardId) {
           toast.error("카드 ID가 없습니다.");
           return;
         }
-        await editCard(cardId, {
-          assigneeUserId,
-          columnId: updatedColumnId,
-          title: formData.title,
-          description: formData.description,
-          dueDate: formData.deadline.trim() ? formData.deadline : undefined,
-          tags: formData.tags,
-          imageUrl: formData.image || undefined,
+        await postGuard(async () => {
+          await editCard(cardId, {
+            assigneeUserId,
+            columnId: updatedColumnId,
+            title: formData.title,
+            description: formData.description,
+            dueDate: formData.deadline.trim() ? formData.deadline : undefined,
+            tags: formData.tags,
+            imageUrl: formData.image || undefined,
+          });
+          queryClient.invalidateQueries({ queryKey: ["cards"] });
+          toast.success("카드가 수정되었습니다.");
         });
-        queryClient.invalidateQueries({ queryKey: ["cards"] });
-        toast.success("카드가 수정되었습니다.");
       }
 
       onSubmit(formData);

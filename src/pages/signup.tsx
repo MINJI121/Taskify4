@@ -1,9 +1,10 @@
 import { useState } from "react";
 import { useRouter } from "next/router";
-import Image from "next/image";
 import { signUp } from "@/api/users";
-import Input from "@/components/input/Input";
+import { usePostGuard } from "@/hooks/usePostGuard";
+import Image from "next/image";
 import Link from "next/link";
+import Input from "@/components/input/Input";
 import { Modal } from "@/components/modal/Modal";
 import { CustomBtn } from "@/components/button/CustomButton";
 import { toast } from "react-toastify";
@@ -17,6 +18,7 @@ export default function SignUpPage() {
   const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
 
   const router = useRouter();
+  const { guard: postGuard, isLoading } = usePostGuard();
 
   const isFormValid =
     email.trim() !== "" &&
@@ -38,17 +40,19 @@ export default function SignUpPage() {
       toast.error("비밀번호가 일치하지 않습니다.");
       return;
     }
-
     if (!isFormValid) return;
+
     try {
-      await signUp({
-        payload: {
-          email,
-          nickname: nickName,
-          password,
-        },
+      await postGuard(async () => {
+        await signUp({
+          payload: {
+            email,
+            nickname: nickName,
+            password,
+          },
+        });
+        setIsSuccessModalOpen(true);
       });
-      setIsSuccessModalOpen(true);
     } catch (error) {
       console.error("회원가입 실패", error);
       toast.error("회원가입에 실패했습니다.");
@@ -141,14 +145,14 @@ export default function SignUpPage() {
 
         <button
           type="submit"
-          disabled={!isFormValid}
+          disabled={!isFormValid || isLoading}
           className={`w-full h-[50px] rounded-[8px] text-white font-18m transition mt-1 ${
             isFormValid
               ? "bg-[var(--primary)] cursor-pointer hover:opacity-90}"
               : "bg-[var(--color-gray2)] cursor-not-allowed"
           }`}
         >
-          가입하기
+          {isLoading ? "가입 중..." : "가입하기"}
         </button>
 
         <span className="font-16r text-center text-black3">

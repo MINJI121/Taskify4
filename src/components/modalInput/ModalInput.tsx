@@ -39,6 +39,13 @@ export default function ModalInput({
   const [titleLength, setTitleLength] = useState<number>(0);
   const maxTitleLength = 50;
 
+  // 기존 제목이 있다면 글자수 업데이트
+  useEffect(() => {
+    if (label === "제목" && defaultValue) {
+      setTitleLength(defaultValue.length);
+    }
+  }, [label, defaultValue]);
+
   useEffect(() => {
     if (label === "태그" && defaultValueArray.length > 0) {
       const initialTags = defaultValueArray.map((text, index) => ({

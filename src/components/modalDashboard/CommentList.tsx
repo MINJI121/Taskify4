@@ -1,21 +1,19 @@
 import { useEffect } from "react";
 import { useInView } from "react-intersection-observer";
 import { useInfiniteQuery } from "@tanstack/react-query";
+import useUserStore from "@/store/useUserStore";
 import { getComments } from "@/api/comment";
 import type { Comment as CommentType } from "@/types/comments";
 import UpdateComment from "./UpdateComment";
+import { TEAM_ID } from "@/constants/team";
 
 interface CommentListProps {
   cardId: number;
-  currentUserId: number;
-  teamId: string;
 }
 
-export default function CommentList({
-  cardId,
-  currentUserId,
-}: CommentListProps) {
+export default function CommentList({ cardId }: CommentListProps) {
   const { ref, inView } = useInView();
+  const { user } = useUserStore();
 
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage } =
     useInfiniteQuery({
@@ -36,6 +34,8 @@ export default function CommentList({
   const allComments: CommentType[] =
     data?.pages.flatMap((page) => page.comments) ?? [];
 
+  if (!user) return null;
+
   return (
     <div
       className="min-h-[80px] sm:max-h-[240px] max-h-[215px] w-full
@@ -54,8 +54,8 @@ export default function CommentList({
           <div key={comment.id} className=" shrink-0 py-2 last:border-b-0">
             <UpdateComment
               comment={comment}
-              currentUserId={currentUserId}
-              teamId={""}
+              currentUserId={user.id}
+              teamId={TEAM_ID}
             />
           </div>
         ))

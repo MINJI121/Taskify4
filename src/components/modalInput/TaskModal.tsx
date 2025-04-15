@@ -61,7 +61,6 @@ export default function TaskModal({
     onClose,
     onSubmit,
   });
-  console.log("🔍 members in TaskModal", members);
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black/35 z-50">
       <div className="sm:w-[584px] w-[327px] h-[calc(var(--vh)_*_90)] rounded-lg bg-white p-4 sm:p-8 shadow-lg flex flex-col gap-4 sm:gap-8 overflow-y-auto">

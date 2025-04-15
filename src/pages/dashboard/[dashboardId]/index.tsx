@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import { useAuthGuard } from "@/hooks/useAuthGuard";
+import { usePostGuard } from "@/hooks/usePostGuard";
 import { getColumns, createColumn } from "@/api/columns";
 import { getCardsByColumn } from "@/api/card";
 import { getDashboards } from "@/api/dashboards";
@@ -23,6 +24,8 @@ import LoadingSpinner from "@/components/common/LoadingSpinner";
 export default function Dashboard() {
   const router = useRouter();
   const { user, isInitialized } = useAuthGuard();
+  const { guard: postGuard, isLoading } = usePostGuard();
+
   const { dashboardId } = router.query;
   const [columns, setColumns] = useState<ColumnType[]>([]);
   const [tasksByColumn, setTasksByColumn] = useState<TasksByColumn>({});
@@ -97,6 +100,7 @@ export default function Dashboard() {
       setTasksByColumn(columnTasks);
     } catch (err) {
       console.error("❌ 칼럼 또는 카드 로딩 에러:", err);
+      toast.error("데이터 로딩에 실패했습니다.");
     }
   };
 
@@ -189,14 +193,17 @@ export default function Dashboard() {
                 }
 
                 try {
-                  const newColumn = await createColumn({
-                    title: newColumnTitle,
-                    dashboardId: Number(dashboardId),
-                  });
+                  await postGuard(async () => {
+                    const newColumn = await createColumn({
+                      title: newColumnTitle,
+                      dashboardId: Number(dashboardId),
+                    });
 
-                  setColumns((prev) => [...prev, newColumn]);
-                  setNewColumnTitle("");
-                  setIsAddColumnModalOpen(false);
+                    setColumns((prev) => [...prev, newColumn]);
+                    setNewColumnTitle("");
+                    setIsAddColumnModalOpen(false);
+                    toast.success("칼럼이 생성되었습니다.");
+                  });
                 } catch (error) {
                   console.error("칼럼 생성 실패:", error);
                   toast.error("칼럼 생성에 실패했습니다.");

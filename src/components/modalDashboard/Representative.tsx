@@ -8,13 +8,17 @@ interface RepresentativeProps {
 export const Representative = ({ card }: RepresentativeProps) => {
   return (
     <div
-      className="flex flex-col justify-center gap-4 sm:pl-4 pl-3
+      className="flex flex-col justify-center gap-4 sm:pl-4
       lg:w-[200px] sm:w-[180px] w-[290px]
       sm:h-[155px] h-[65px]
       rounded-lg bg-white border border-[#D9D9D9]"
     >
       {/* 내부 아이템 컨테이너 */}
-      <div className="flex sm:flex-col sm:gap-4 gap-17">
+      <div
+        className="flex items-center justify-center
+      sm:items-start sm:justify-between
+      sm:flex-col sm:gap-4 gap-18"
+      >
         {/* 담당자 컨테이너 */}
         <div>
           <p className="font-12sb text-black3 mb-[4px]">담당자</p>
@@ -36,18 +40,20 @@ export const Representative = ({ card }: RepresentativeProps) => {
 
         {/* 마감일 컨테이너 */}
         <div>
-          <p className="font-12sb text-black3 sm:mb-1 mb-[7px]">마감일</p>
-          <p className="font-normal text-black3 sm:text-[14px] text-[12px]">
-            {card.dueDate
-              ? new Date(card.dueDate).toLocaleString("ko-KR", {
-                  year: "numeric",
-                  month: "2-digit",
-                  day: "2-digit",
-                  hour: "2-digit",
-                  minute: "2-digit",
-                })
-              : "마감일 없음"}
-          </p>
+          <p className="font-12sb text-black3 mb-[4px]">마감일</p>
+          <div className="flex items-center w-full h-6">
+            <p className="font-normal text-black3 sm:text-[14px] text-[12px]">
+              {card.dueDate
+                ? new Date(card.dueDate).toLocaleString("ko-KR", {
+                    year: "numeric",
+                    month: "2-digit",
+                    day: "2-digit",
+                    hour: "2-digit",
+                    minute: "2-digit",
+                  })
+                : "마감일 없음"}
+            </p>
+          </div>
         </div>
       </div>
     </div>
