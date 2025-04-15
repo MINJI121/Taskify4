@@ -7,7 +7,10 @@ import { inputClassNames } from "./InputClassNames";
 import clsx from "clsx";
 import { format } from "date-fns";
 import { toast } from "react-toastify";
+import { ko } from "date-fns/locale";
+import { registerLocale } from "react-datepicker";
 
+registerLocale("ko", ko);
 type ModalInputType = "제목" | "마감일" | "태그";
 
 interface ModalInputProps {
@@ -162,6 +165,7 @@ export default function ModalInput({
               priority
             />
             <DatePicker
+              locale="ko"
               selected={selectedDate}
               onChange={handleDateChange}
               showTimeSelect
