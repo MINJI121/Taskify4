@@ -6,7 +6,7 @@ interface ModalTextareaProps {
   required?: boolean;
   isButton: boolean;
   small?: boolean;
-  defaultValue?: string; // ✅ 추가됨
+  defaultValue?: string;
   onTextChange: (value: string) => void;
   onButtonClick?: () => void;
 }
@@ -35,7 +35,6 @@ export default function ModalTextarea({
     }
   };
 
-  // ✅ 초기 defaultValue 기준으로 height 조절
   useEffect(() => {
     const textarea = textareaRef.current;
     if (textarea) {
@@ -48,7 +47,7 @@ export default function ModalTextarea({
     <div className="inline-flex flex-col items-start gap-2.5 w-full">
       <label
         htmlFor="comment"
-        className="font-medium text-black3 text-[16px] sm:text-[18px]"
+        className="font-medium text-black3 text-[14px] sm:text-[18px]"
       >
         {label} {required && <span className="text-[var(--primary)]"> *</span>}
       </label>
@@ -71,7 +70,7 @@ export default function ModalTextarea({
           onChange={handleTextareaChange}
           className={`
             w-full resize-none rounded-md border-none px-4 py-3
-            text-black3 text-[16px] sm:text-[18px] font:normal
+            text-black3 text-[14px] sm:text-[16px] font:normal
             outline-none bg-transparent overflow-hidden
             ${small ? "h-[50px]" : "min-h-[110px]"}
           `}

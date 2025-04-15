@@ -3,7 +3,7 @@ import axiosInstance from "./axiosInstance";
 import { apiRoutes } from "./apiRoutes";
 import { TEAM_ID } from "@/constants/team";
 
-// 칼럼 생성
+//  칼럼 생성
 export const createColumn = async ({
   title,
   dashboardId,
@@ -19,8 +19,11 @@ export const createColumn = async ({
   return res.data;
 };
 
-// 칼럼 목록 조회
-export const getColumns = async ({ dashboardId }: { dashboardId: number }) => {
+export const getColumns = async ({
+  dashboardId,
+}: {
+  dashboardId: number;
+}): Promise<ColumnType[]> => {
   const res = await axiosInstance.get(apiRoutes.columns(), {
     params: {
       dashboardId,
@@ -29,8 +32,7 @@ export const getColumns = async ({ dashboardId }: { dashboardId: number }) => {
 
   return res.data;
 };
-
-// 칼럼 수정
+//  칼럼 수정
 export const updateColumn = async ({
   columnId,
   title,
@@ -44,22 +46,8 @@ export const updateColumn = async ({
   return res.data;
 };
 
-// 칼럼 삭제
+//  칼럼 삭제
 export const deleteColumn = async ({ columnId }: { columnId: number }) => {
   const res = await axiosInstance.delete(apiRoutes.columnDetail(columnId));
   return res;
-};
-
-export const getColumn = async ({
-  dashboardId,
-}: {
-  dashboardId: number;
-  columnId: number;
-}) => {
-  const res = await axiosInstance.get(apiRoutes.columns(), {
-    params: {
-      dashboardId,
-    },
-  });
-  return res.data.data;
 };

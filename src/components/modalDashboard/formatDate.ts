@@ -1,5 +1,3 @@
-// src/utils/formatDate.ts (혹은 components 폴더 내)
-
 export default function formatDate(
   dateString: string,
   includeTime: boolean = true,

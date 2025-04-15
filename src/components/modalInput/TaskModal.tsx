@@ -5,7 +5,7 @@ import TextButton from "@/components/modalInput/TextButton";
 import StatusSelect from "@/components/modalInput/StatusSelect";
 import AssigneeSelect from "@/components/modalInput/AssigneeSelect";
 import { useTaskForm } from "@/hooks/useTaskForm";
-import { useColumnStatus } from "@/hooks/useColumnStatus";
+import { ColumnType } from "@/types/task";
 
 interface TaskModalProps {
   mode?: "create" | "edit";
@@ -22,6 +22,7 @@ interface TaskModalProps {
   columnId: number;
   dashboardId: number;
   cardId?: number;
+  columns: ColumnType[];
 }
 
 export interface TaskData {
@@ -43,24 +44,34 @@ export default function TaskModal({
   columnId,
   dashboardId,
   cardId,
+  columns,
 }: TaskModalProps) {
-  const updatedColumnId = useColumnStatus(
-    dashboardId,
-    columnId,
-    initialData.status || ""
-  );
-
-  const { formData, handleChange, isFormValid, handleSubmit } = useTaskForm({
+  const {
+    formData,
+    handleChange,
+    isFormValid,
+    handleSubmit: baseHandleSubmit,
+  } = useTaskForm({
     mode,
     initialData,
     members,
     dashboardId,
     columnId,
     cardId,
-    updatedColumnId,
+    columns,
     onClose,
     onSubmit,
   });
+
+  const updatedColumnId =
+    columns?.find(
+      (col) => col.title.toLowerCase() === formData.status?.toLowerCase()
+    )?.id ?? columnId;
+
+  const handleSubmit = () => {
+    baseHandleSubmit(updatedColumnId);
+  };
+
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black/35 z-50">
       <div className="sm:w-[584px] w-[320px] h-[calc(var(--vh)_*_90)] rounded-lg bg-white p-4 sm:p-8 shadow-lg flex flex-col gap-4 sm:gap-8 overflow-y-auto">
@@ -77,7 +88,6 @@ export default function TaskModal({
               required
               onChange={(value) => handleChange("status", value)}
             />
-
             <AssigneeSelect
               label="담당자"
               value={formData.assignee}

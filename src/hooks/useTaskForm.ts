@@ -4,6 +4,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { createCard, editCard } from "@/api/card";
 import { TaskData } from "@/components/modalInput/TaskModal";
 import { usePostGuard } from "@/hooks/usePostGuard";
+import { ColumnType } from "@/types/task";
 
 interface Member {
   id: number;
@@ -18,7 +19,7 @@ interface UseTaskFormProps {
   dashboardId: number;
   columnId: number;
   cardId?: number;
-  updatedColumnId: number;
+  columns: ColumnType[]; // ✅ 추가
   onClose: () => void;
   onSubmit: (data: TaskData) => void;
 }
@@ -28,17 +29,20 @@ export function useTaskForm({
   initialData,
   members,
   dashboardId,
+  columnId,
   cardId,
-  updatedColumnId,
+  columns,
   onClose,
   onSubmit,
 }: UseTaskFormProps) {
   const queryClient = useQueryClient();
-
   const { guard: postGuard } = usePostGuard();
 
   const [formData, setFormData] = useState<TaskData>({
-    status: initialData.status || "",
+    status:
+      initialData.status ||
+      columns.find((col) => col.id === columnId)?.title ||
+      "",
     assignee: initialData.assignee || "",
     title: initialData.title || "",
     description: initialData.description || "",
@@ -63,7 +67,7 @@ export function useTaskForm({
     );
   }, [formData]);
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (updatedColumnId: number) => {
     try {
       const selectedAssignee = members.find(
         (m) => m.nickname === formData.assignee
@@ -72,6 +76,19 @@ export function useTaskForm({
 
       if (!assigneeUserId) {
         toast.error("담당자를 선택해 주세요.");
+        return;
+      }
+
+      const matchedColumn = Array.isArray(columns)
+        ? columns.find(
+            (col) => col.title.toLowerCase() === formData.status?.toLowerCase()
+          )
+        : undefined;
+
+      const updatedColumnId = matchedColumn?.id;
+
+      if (!updatedColumnId) {
+        toast.error("선택한 상태에 맞는 칼럼이 없습니다.");
         return;
       }
 
@@ -94,6 +111,7 @@ export function useTaskForm({
           toast.error("카드 ID가 없습니다.");
           return;
         }
+
         await postGuard(async () => {
           await editCard(cardId, {
             assigneeUserId,
@@ -104,7 +122,7 @@ export function useTaskForm({
             tags: formData.tags,
             imageUrl: formData.image || undefined,
           });
-          queryClient.invalidateQueries({ queryKey: ["cards"] });
+
           toast.success("카드가 수정되었습니다.");
         });
       }
