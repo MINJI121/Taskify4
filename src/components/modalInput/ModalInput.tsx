@@ -138,7 +138,7 @@ export default function ModalInput({
             placeholder="제목을 입력해 주세요"
             defaultValue={defaultValue}
             className="w-full max-w-[520px] h-[48px] rounded-md pl-4 pr-18
-            text-black3 text-[14px] sm:text-[16px] font:normal
+            text-black3 text-[16px] sm:text-[18px] font:normal
             outline-none border border-[var(--color-gray3)] focus:border-[var(--primary)]"
             onChange={handleTitleValue}
             maxLength={maxTitleLength}
@@ -169,7 +169,7 @@ export default function ModalInput({
               timeIntervals={15}
               dateFormat="yyyy-MM-dd HH:mm"
               placeholderText="날짜를 입력해 주세요"
-              className="w-full h-full text-black3 text-[14px] sm:text-[16px] font:normal outline-none bg-transparent"
+              className="w-full h-full text-black3 text-[16px] sm:text-[18px] font:normal outline-none bg-transparent"
               calendarClassName="text-[14px]"
               popperPlacement="bottom-start"
               popperContainer={({ children }) => <div>{children}</div>}
@@ -209,8 +209,8 @@ export default function ModalInput({
             onKeyDown={handleKeydown}
             className="flex-grow min-w-[100px] h-full
             border-none outline-none
-            font-normal text-[14px] sm:text-[16px]
-            placeholder:sm:text-[14px] placeholder:text-[12px]"
+            font-normal text-[16px] sm:text-[18px]
+            placeholder:sm:text-[16px] placeholder:text-[14px]"
           />
         </div>
       );

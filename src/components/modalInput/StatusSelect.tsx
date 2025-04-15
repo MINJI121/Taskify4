@@ -66,7 +66,7 @@ export default function StatusSelect({
   return (
     <div className="inline-flex flex-col items-start gap-2.5 w-full max-w-[520px]">
       {label && (
-        <p className="text-black3 font-medium text-[14px] sm:text-[18px]">
+        <p className="text-black3 font-medium text-[16px] sm:text-[18px]">
           {label}
           {required && <span className="text-[var(--primary)]"> *</span>}
         </p>

@@ -24,7 +24,7 @@ import LoadingSpinner from "@/components/common/LoadingSpinner";
 export default function Dashboard() {
   const router = useRouter();
   const { user, isInitialized } = useAuthGuard();
-  const { guard: postGuard, isLoading } = usePostGuard();
+  const { guard: postGuard } = usePostGuard();
 
   const { dashboardId } = router.query;
   const [columns, setColumns] = useState<ColumnType[]>([]);

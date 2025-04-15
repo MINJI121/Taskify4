@@ -61,8 +61,8 @@ export default function FormModal({
             labelClassName="font-medium text-black3 sm:text-[18px] text-[16px] mt-6"
             placeholder={inputPlaceholder}
             className="max-w-[620px] mb-1 pr-14
-          text-black3 font-normal sm:text-[16px] text-[14px]
-          placeholder:sm:text-[16px] placeholder:text-[14px]"
+          text-black3 font-normal sm:text-[18px] text-[16px]
+          placeholder:sm:text-[18px] placeholder:text-[16px]"
           />
           {charCount && (
             <span
