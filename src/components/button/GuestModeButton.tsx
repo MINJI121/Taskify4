@@ -33,7 +33,7 @@ export default function GuestModeButton() {
     <button
       onClick={handleGuestLogin}
       className="flex items-center justify-center
-      sm:w-[220px] w-[280px] h-[54px]
+      w-full h-[54px]
       rounded-lg bg-white cursor-pointer
       text-[var(--primary)] font-medium sm:text-[18px] text-[16px]"
     >

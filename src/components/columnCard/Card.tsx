@@ -25,7 +25,8 @@ export default function Card({
         flex flex-col md:flex-row lg:flex-col cursor-pointer
         sm:items-center items-start
         rounded-md bg-white border border-gray-200 p-4
-        w-[284px] md:w-[510px] md:h-[93px] lg:w-[314px] lg:h-auto
+        w-[284px] md:w-[510px]
+        lg:w-[314px] lg:h-auto min-h-[93px]
       `}
     >
       {/* 이미지 영역 */}
@@ -89,10 +90,10 @@ export default function Card({
 
           {/* 마감일 */}
           <div
-            className="flex items-center justify-between
-          lg:gap-37 gap-8 sm:pr-4 text-[var(--color-gray1)]"
+            className="flex items-center justify-between gap-8
+          w-full text-[var(--color-gray1)]"
           >
-            <div className="flex items-center gap-1">
+            <div className="flex flex-1 items-center gap-1">
               <Image
                 src="/svgs/calendar.svg"
                 alt="calendar"

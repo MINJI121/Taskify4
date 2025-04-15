@@ -48,12 +48,15 @@ export default function Section1() {
       </span>
 
       {/* CTA 버튼들 */}
-      <div className="sm:mt-[70px] mt-[45px] flex gap-4 flex-col sm:flex-row">
+      <div
+        className="sm:mt-[70px] mt-[45px] flex gap-4 flex-col sm:flex-row
+      min-w-0 w-full sm:max-w-[220px] max-w-[280px]"
+      >
         <GuestModeButton />
         <button
           onClick={handleMainClick}
           className="flex items-center justify-center
-          sm:w-[220px] w-[280px] h-[54px]
+          w-full h-[54px]
           rounded-lg bg-[var(--primary)] cursor-pointer
           text-[var(--color-white)] font-medium sm:text-[18px] text-[16px]"
         >

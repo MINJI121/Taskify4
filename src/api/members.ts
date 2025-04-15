@@ -1,24 +1,13 @@
 import axiosInstance from "./axiosInstance";
 import { apiRoutes } from "./apiRoutes";
-
-// 멤버 타입 정의
-export interface Member {
-  id: number;
-  userId: number;
-  email: string;
-  nickname: string;
-  profileImageUrl: string | null;
-  isOwner: boolean;
-  createdAt?: string;
-  updatedAt?: string;
-}
+import { MemberType } from "@/types/users";
 
 // 🔹 대시보드 멤버 목록 조회
 export const getMembers = async ({
   dashboardId,
 }: {
   dashboardId: number;
-}): Promise<Member[]> => {
+}): Promise<MemberType[]> => {
   if (!dashboardId) {
     console.error("dashboardId가 없습니다.");
     return [];
@@ -31,7 +20,7 @@ export const getMembers = async ({
       },
     });
 
-    const members: Member[] = response.data.members || [];
+    const members: MemberType[] = response.data.members || [];
     return members;
   } catch (error) {
     console.error("getMembers API 실패:", error);

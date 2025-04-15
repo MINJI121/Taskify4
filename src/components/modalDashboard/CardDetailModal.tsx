@@ -16,6 +16,7 @@ import type { ColumnType } from "@/types/task";
 
 interface CardDetailModalProps {
   card: CardDetailType;
+  currentUserId: number;
   dashboardId: number;
   createdByMe: boolean;
   onClose: () => void;
