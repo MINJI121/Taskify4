@@ -12,7 +12,6 @@ import { useCardDetailState } from "@/hooks/useCardDetailState";
 import { useCardDetail } from "@/hooks/useCardDetail";
 import { getCardDetail } from "@/api/card";
 import type { CardDetailType } from "@/types/cards";
-import type { ColumnType } from "@/types/task";
 
 interface CardDetailModalProps {
   card: CardDetailType;
@@ -21,8 +20,6 @@ interface CardDetailModalProps {
   createdByMe: boolean;
   onClose: () => void;
   onChangeCard?: () => void;
-  columns: ColumnType[];
-  currentUserId?: number;
 }
 
 export default function CardDetailPage({
@@ -31,7 +28,6 @@ export default function CardDetailPage({
   createdByMe,
   onClose,
   onChangeCard,
-  columns,
 }: CardDetailModalProps) {
   const { canEditCards } = useDashboardPermission(dashboardId, createdByMe);
   const { cardData, setCardData, columnName, members } = useCardDetailState(
@@ -153,7 +149,6 @@ export default function CardDetailPage({
         </div>
       </div>
 
-      {/* 수정 모달 */}
       {isEditModalOpen && (
         <TaskModal
           isOpen={true}
@@ -162,7 +157,6 @@ export default function CardDetailPage({
           cardId={cardData.id}
           dashboardId={dashboardId}
           members={members}
-          columns={columns}
           onClose={() => setIsEditModalOpen(false)}
           onSubmit={async () => {
             try {
@@ -177,8 +171,7 @@ export default function CardDetailPage({
             }
           }}
           initialData={{
-            status:
-              columns.find((col) => col.id === cardData.columnId)?.title ?? "",
+            status: columnName,
             assignee: cardData.assignee.nickname,
             title: cardData.title,
             description: cardData.description,

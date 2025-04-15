@@ -1,5 +1,5 @@
 import { useState } from "react";
-import RandomProfile from "@/components/common/RandomProfile";
+import RandomProfile from "../common/RandomProfile";
 
 interface User {
   id: number;

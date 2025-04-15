@@ -1,3 +1,4 @@
+// ✅ UpdateComment.tsx
 import { useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { deleteComment, updateComment } from "@/api/comment";

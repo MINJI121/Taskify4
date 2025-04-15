@@ -1,6 +1,7 @@
+// Column.tsx
 import { useEffect, useState, useRef } from "react";
 import Image from "next/image";
-import { CardType, ColumnType } from "@/types/task";
+import { CardType } from "@/types/task";
 import TaskModal from "@/components/modalInput/TaskModal";
 import { TodoButton, ShortTodoButton } from "@/components/button/TodoButton";
 import ColumnDeleteModal from "@/components/columnCard/ColumnDeleteModal";
@@ -23,7 +24,6 @@ type ColumnProps = {
   createdByMe: boolean;
   columnDelete: (columnId: number) => void;
   fetchColumnsAndCards: () => void;
-  columns: ColumnType[];
 };
 
 export default function Column({
@@ -34,7 +34,6 @@ export default function Column({
   createdByMe,
   columnDelete,
   fetchColumnsAndCards,
-  columns,
 }: ColumnProps) {
   const { canEditColumns } = useDashboardPermission(dashboardId, createdByMe);
 
@@ -57,8 +56,10 @@ export default function Column({
 
   const maxColumnTitleLength = 15;
 
+  // 카드리스트의 스크롤을 칼럼 영역으로 이동
   const scrollRef = useRef<HTMLDivElement | null>(null);
 
+  // ✅ 멤버 불러오기
   useEffect(() => {
     const fetchMembers = async () => {
       try {
@@ -85,6 +86,7 @@ export default function Column({
       toast.error("칼럼 제목을 입력해 주세요.");
       return;
     }
+    setIsColumnModalOpen(false);
 
     try {
       const updated = await updateColumn({ columnId, title: newTitle });
@@ -131,17 +133,23 @@ export default function Column({
       {/* 칼럼 헤더 */}
       <div className="shrink-0 mb-2">
         <div className="flex items-center justify-between">
-          {/* 타이틀 + 개수 */}
+          {/* 왼쪽: 타이틀 + 카드 개수 */}
           <div className="flex items-center gap-2">
             <Image src="/svgs/ellipse.svg" alt="circle" width={8} height={8} />
-            <h2 className="text-black3 text-[16px] md:text-[18px] font-bold break-words sm:max-w-none max-w-[90px]">
+            <h2
+              className="text-black3 text-[16px] md:text-[18px] font-bold
+            break-words sm:max-w-none max-w-[90px]"
+            >
               {columnTitle}
             </h2>
-            <span className="flex items-center justify-center leading-none w-[20px] h-[20px] bg-white text-[var(--primary)] font-14m rounded-[4px]">
+            <span
+              className="flex items-center justify-center leading-none
+            w-[20px] h-[20px] bg-white text-[var(--primary)] font-14m rounded-[4px]"
+            >
               {tasks.length}
             </span>
           </div>
-          {/* 버튼 */}
+          {/* 오른쪽: 생성 버튼 + 설정 버튼 */}
           <div className="flex items-center gap-2">
             <div
               onClick={() => {
@@ -191,8 +199,9 @@ export default function Column({
         </div>
       </div>
 
-      {/* 카드 리스트 */}
+      {/* 스크롤바 컨테이너 */}
       <div className="flex flex-col lg:pl-[21px] overflow-y-auto w-full lg:w-[357px] rounded-md bg-[#F5F2FC]">
+        {/* 카드 리스트 */}
         <div
           className="flex-1 overflow-y-auto overflow-x-hidden"
           style={{ scrollbarGutter: "stable" }}
@@ -208,7 +217,7 @@ export default function Column({
         </div>
       </div>
 
-      {/* 카드 생성 */}
+      {/* 카드 생성 모달 */}
       {isTaskModalOpen && (
         <TaskModal
           mode="create"
@@ -217,18 +226,14 @@ export default function Column({
           dashboardId={dashboardId}
           columnId={columnId}
           members={members}
-          columns={columns}
           initialData={{
             status: columnTitle,
           }}
-          onSubmit={() => {
-            fetchColumnsAndCards();
-            setIsTaskModalOpen(false);
-          }}
+          onSubmit={fetchColumnsAndCards}
         />
       )}
 
-      {/* 칼럼 수정 */}
+      {/* 칼럼 관리 모달 */}
       {isColumnModalOpen && (
         <FormModal
           title="칼럼 이름 수정"
@@ -260,25 +265,25 @@ export default function Column({
         />
       )}
 
+      {/* 칼럼 삭제 확인 모달 */}
       <ColumnDeleteModal
         isOpen={isDeleteModalOpen}
         onClose={() => setIsDeleteModalOpen(false)}
         onDelete={handleDeleteColumn}
       />
 
-      {/* 카드 상세 */}
+      {/* 카드 상세 모달 */}
       {isCardDetailModalOpen && selectedCard && (
         <CardDetailModal
           card={selectedCard}
           currentUserId={selectedCard.assignee.id}
           dashboardId={dashboardId}
-          createdByMe={createdByMe}
           onClose={() => {
             setIsCardDetailModalOpen(false);
             setSelectedCard(null);
           }}
           onChangeCard={fetchColumnsAndCards}
-          columns={columns}
+          createdByMe={createdByMe}
         />
       )}
     </div>

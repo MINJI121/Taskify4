@@ -25,7 +25,7 @@ const TextButton = ({
   fullWidth,
 }: ButtonProps) => {
   const buttonSizeClasses = clsx({
-    "w-[84px] h-[28px]": buttonSize === "xxs",
+    "w-[84px] h-[28px]": buttonSize === "xxs", // 🔥 작은 댓글 버튼 크기 수정
     "px-[31px] py-[9px] sm:px-[31.5px] sm:py-[7px]": buttonSize === "xs",
     "px-[29.5px] py-[7.5px] md:px-[23.5px] md:py-[6.5px] sm:px-[44px] sm:py-[7px]":
       buttonSize === "sm",

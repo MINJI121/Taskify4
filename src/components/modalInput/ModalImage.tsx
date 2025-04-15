@@ -8,7 +8,7 @@ interface ModalImageProps {
   label: string;
   columnId: number;
   defaultImageUrl?: string;
-  onImageSelect: (imageUrl: string) => void;
+  onImageSelect: (imageUrl: string) => void; // ✅ string만 넘김
 }
 
 export default function ModalImage({
@@ -43,7 +43,7 @@ export default function ModalImage({
     };
     reader.readAsDataURL(file);
 
-    // 업로드 후 URL 전달
+    // ✅ 업로드 후 URL 전달
     try {
       const imageUrl = await uploadCardImage({
         columnId,

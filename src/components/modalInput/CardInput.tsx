@@ -41,10 +41,10 @@ export default function CardInput({
           className
         )}
         style={{
-          overflowY: "auto",
+          overflowY: "auto", // 내용이 넘치면 스크롤 생성
           wordWrap: "break-word",
           whiteSpace: "pre-wrap",
-          boxSizing: "border-box",
+          boxSizing: "border-box", // padding과 border를 높이에 포함
         }}
       />
       {hasButton && (
