@@ -95,11 +95,6 @@ export default function ChangePassword() {
           invalidMessage="비밀번호가 일치하지 않습니다."
           className="max-w-[624px]"
         />
-        {isPasswordMismatch && (
-          <p className="font-14r block text-[var(--color-red)]">
-            비밀번호가 일치하지 않습니다.
-          </p>
-        )}
 
         <button
           className={`w-full h-[54px] 
