@@ -80,7 +80,8 @@
 2. **공통 컴포넌트**
 
 - Gnb (`HeaderDefalt`, `HeaderDashboard`) 구현
-- 모달, 태그 등 재사용 컴포넌트 공통화
+- `FormModal`, `ColumnNameTag` 등 재사용 컴포넌트 공통화
+- `TaskModal` 컴포넌트 병합 및 디자인, 기능 통일
 - `MemberListMenu` 드롭다운 메뉴 추가(타인의 대시보드 멤버 목록 확인 가능)
 
 3. **페이지**
@@ -100,7 +101,7 @@
 - `SideMenu`, `Header`, `Card` 등에서 제목 생략 처리 및 리스트 overflow 대응
 - 이미지 팝업 모달 구현(클릭 시 원본 확인 가능)
 - 모바일 대응: `window.innerHeight` 기반 높이 계산 적용 → 스크롤 버그 해결
-- 모바일 대응: input text size 16px 이상으로 조정 -> IOS 확대 방지
+- 모바일 대응: input text size 16px 이상으로 조정 → IOS 확대 방지
 
 6. **에러 핸들링 및 사용자 경험 개선**
 
