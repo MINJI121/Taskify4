@@ -62,7 +62,7 @@
 
 4. **리팩토링**
 
-- `sideMunu`, `landingPage` 등 CSS 리펙토링
+- `SideMenu`, `landingPage` 등 CSS 리펙토링
 - `TaskModal` 담당자 선택에 프로필 이미지 적용
 - `Modalinput` DatePicker 리팩토링 및 한국어화 커스터마이징. 및 모바일 뷰 최적화
 
@@ -79,7 +79,8 @@
 
 2. **공통 컴포넌트**
 
-- Gnb (`HeaderDefalt`, `HeaderDashboard`), 모달, 태그 등 재사용 컴포넌트 공통화
+- Gnb (`HeaderDefalt`, `HeaderDashboard`) 구현
+- 모달, 태그 등 재사용 컴포넌트 공통화
 - `MemberListMenu` 드롭다운 메뉴 추가(타인의 대시보드 멤버 목록 확인 가능)
 
 3. **페이지**
@@ -106,7 +107,8 @@
 - 글자수 제한, 이미지 용량 제한, 중복 이메일 가입 등 에러 toast 처리
 - 대시보드 삭제 재확인 모달 및 댓글/카드 삭제 시 확인 모달 추가
 - 대시보드 수정/삭제 접근성 개선을 위해 `mydashboard`에 대시보드 편집 모드 추가
-- 게스트 모드 초기 진입 시, 초대 내역 로딩 전 `EmptyInvitations` 컴포넌트가 깜빡이는 렌더링 버그 해결 (`setTimeout`을 활용한 상태 업데이트 defer 처리로 해결)
+- 게스트 모드 초기 진입 시, 초대 내역 로딩 전 `EmptyInvitations` 컴포넌트가 깜빡이는 렌더링 버그 해결<br>
+  → `setTimeout`을 활용한 상태 업데이트 defer 처리
 
 7. **기타 기여 사항**
 
@@ -119,7 +121,7 @@
 
 1. **공통 컴포넌트**
 
-- invited (`MemberList`, `inviteRecords`, `invitedDashBoard`), `card`, `Modal`
+- invited (`MemberList`, `inviteRecords`, `invitedDashBoard`), `card`, `Modal`, `RandomProfile`
 - `invitedDashBoard` 검색, 무한스크롤, 데이터 별 컴포넌트 분리
 - `MemberList` 프로필 이미지 출력, `Modal` 대시보드 이름 변경 기능
 - 카드 프로필 및 비밀번호 변경
