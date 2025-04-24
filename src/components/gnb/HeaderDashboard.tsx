@@ -1,17 +1,18 @@
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/router";
+import useUserStore from "@/store/useUserStore";
 import clsx from "clsx";
 import Image from "next/image";
 import SkeletonUser from "@/shared/skeletonUser";
-import { MemberType, UserType } from "@/types/users";
+import { MemberType } from "@/types/users";
 import { getMembers } from "@/api/members";
-import { getUserInfo } from "@/api/users";
 import { getDashboardById } from "@/api/dashboards";
 import { UserProfileIcon } from "@/components/gnb/ProfileIcon";
 import MembersProfileIconList from "@/components/gnb/MembersProfileIconList";
 import UserMenu from "@/components/gnb/UserMenu";
 import MemberListMenu from "@/components/gnb/MemberListMenu";
 import InviteDashboard from "@/components/modal/InviteDashboard";
+import { toast } from "react-toastify";
 
 interface HeaderDashboardProps {
   variant?: "mydashboard" | "dashboard" | "edit" | "mypage";
@@ -28,12 +29,13 @@ const HeaderDashboard: React.FC<HeaderDashboardProps> = ({
   onToggleEditMode,
 }) => {
   const router = useRouter();
+  const user = useUserStore((state) => state.user);
+  const isUserLoading = !user;
+  const nickname = useUserStore((state) => state.user?.nickname);
   const [isLoading, setIsLoading] = useState(true);
-  const [user, setUser] = useState<UserType | null>(null);
   const [members, setMembers] = useState<MemberType[]>([]);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isListOpen, setIsListOpen] = useState(false);
-  const [errorMessage, setErrorMessage] = useState("");
   const [dashboard, setDashboard] = useState<{
     title: string;
     createdByMe: boolean;
@@ -58,37 +60,17 @@ const HeaderDashboard: React.FC<HeaderDashboardProps> = ({
         setMembers(members);
       } catch (error) {
         console.error("멤버 불러오기 실패:", error);
-        setErrorMessage("멤버 정보를 불러오지 못했습니다.");
+        toast.error("멤버 정보를 불러오지 못했습니다.");
       } finally {
         setIsLoading(false);
       }
     };
-    if (
-      (variant === "dashboard" || variant === "mypage" || variant === "edit") &&
-      dashboardId
-    ) {
+    if (variant === "mypage" || variant === "mydashboard") {
+      setIsLoading(false);
+    } else if ((variant === "dashboard" || variant === "edit") && dashboardId) {
       fetchMembers();
     }
-  }, [dashboardId, variant]);
-
-  /*유저 정보 api 호출*/
-  useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        const user = await getUserInfo();
-        setUser(user);
-      } catch (error) {
-        console.error("유저 정보 불러오기 실패", error);
-        setErrorMessage("유저 정보를 불러오지 못했습니다.");
-      } finally {
-        setIsLoading(false);
-      }
-    };
-    const token = localStorage.getItem("accessToken");
-    if (token) {
-      fetchUser();
-    }
-  }, []);
+  }, [variant, dashboardId]);
 
   /*대시보드 api 호출*/
   useEffect(() => {
@@ -101,7 +83,7 @@ const HeaderDashboard: React.FC<HeaderDashboardProps> = ({
           setDashboard(dashboardData);
         } catch (error) {
           console.error("대시보드 정보 불러오기 실패", error);
-          setErrorMessage("대시보드를 불러오지 못했습니다.");
+          toast.error("대시보드를 불러오지 못했습니다.");
         } finally {
           setIsLoading(false);
         }
@@ -124,22 +106,23 @@ const HeaderDashboard: React.FC<HeaderDashboardProps> = ({
         "flex items-center justify-center",
         "w-full h-[60px] md:h-[70px]",
         "bg-white",
-        "border-b-[1px] border-b-[var(--color-gray3)]"
+        "border-b-[1px] border-b-gray3"
       )}
     >
-      <div className="w-full flex items-center justify-between pl-[4vw]">
-        {errorMessage && (
-          <p className="text-sm text-[var(--color-red)] px-4 py-2">
-            {errorMessage}
-          </p>
+      <div
+        className={clsx(
+          "w-full flex items-center justify-between",
+          variant === "mydashboard" || variant === "mypage"
+            ? "pl-[4vw]"
+            : "sm:pl-[4vw] pl-[2vw]"
         )}
-
+      >
         {/*헤더 제목*/}
-        <div className="flex font-bold items-center gap-[8px]">
+        <div className="flex items-center gap-[8px] flex-1 min-w-0 overflow-hidden pr-2">
           <p
             className={clsx(
-              "text-[16px] sm:text-[20px] text-black3",
-              "whitespace-nowrap truncate max-w-[100px] md:max-w-[400px]",
+              "font-bold text-[16px] sm:text-[20px] text-black3",
+              "truncate whitespace-nowrap",
               variant !== "mydashboard" && variant !== "mypage"
                 ? "hidden lg:block"
                 : ""
@@ -186,7 +169,7 @@ const HeaderDashboard: React.FC<HeaderDashboardProps> = ({
                 className={clsx(
                   "flex items-center justify-center",
                   "w-[49px] h-[30px] md:w-[85px] md:h-[36px] lg:w-[88px] lg:h-[40px]",
-                  "border border-[var(--color-gray3)] rounded-[8px] gap-[10px] cursor-pointer",
+                  "border border-gray3 rounded-[8px] gap-[10px] cursor-pointer",
                   isEditMode ? "hover:border-2" : ""
                 )}
               >
@@ -212,7 +195,7 @@ const HeaderDashboard: React.FC<HeaderDashboardProps> = ({
                   className={clsx(
                     "flex items-center justify-center",
                     "w-[73px] h-[30px] md:w-[109px] md:h-[36px] lg:w-[116px] lg:h-[40px]",
-                    "border border-[var(--color-gray3)] rounded-[8px] gap-[10px] cursor-pointer"
+                    "border border-gray3 rounded-[8px] gap-[10px] cursor-pointer"
                   )}
                 >
                   <Image
@@ -232,14 +215,18 @@ const HeaderDashboard: React.FC<HeaderDashboardProps> = ({
 
           {/*멤버 목록*/}
           {variant !== "mydashboard" && (
-            <div className="relative flex items-center justify-center w-full h-[60px] md:h-[70px] whitespace-nowrap">
+            <div
+              className="relative flex items-center justify-center
+              w-full h-[60px] md:h-[70px] whitespace-nowrap"
+            >
               {isLoading ? (
                 <SkeletonUser />
               ) : (
                 members && (
                   <div
+                    onMouseDown={(e) => e.stopPropagation()}
                     onClick={() => setIsListOpen((prev) => !prev)}
-                    className="flex items-center pl-[15px] md:pl-[25px] lg:pl-[30px] pr-[15px] md:pr-[25px] lg:pr-[30px] cursor-pointer"
+                    className="flex items-center pl-[15px] md:pl-[25px] lg:pl-[30px] pr-[10px] md:pr-[25px] lg:pr-[30px] cursor-pointer"
                   >
                     <MembersProfileIconList
                       members={members}
@@ -257,13 +244,15 @@ const HeaderDashboard: React.FC<HeaderDashboardProps> = ({
           )}
 
           {/*드롭다운 메뉴 너비 지정 목적의 유저 섹션 div*/}
-          <div className="relative flex items-center h-[60px] md:h-[70px] pr-[10px] md:pr-[30px] lg:pr-[80px]">
+          <div className="relative flex items-center h-[60px] md:h-[70px] sm:pr-[4vw] pr-[2vw]">
             {/*구분선*/}
-            <div className="h-[34px] md:h-[38px] w-[1px] bg-[var(--color-gray3)]" />
+            <div className="h-[34px] md:h-[38px] w-[1px] bg-gray3" />
             {/*유저 드롭다운 메뉴*/}
             <div
+              onMouseDown={(e) => e.stopPropagation()}
               onClick={() => setIsMenuOpen((prev) => !prev)}
-              className="flex items-center gap-[12px] pl-[20px] md:pl-[30px] lg:pl-[35px] cursor-pointer overflow-hidden"
+              className="flex items-center gap-[12px]
+              pl-[15px] sm:pl-[30px] lg:pl-[35px] cursor-pointer overflow-hidden"
             >
               <UserMenu
                 user={user}
@@ -271,14 +260,14 @@ const HeaderDashboard: React.FC<HeaderDashboardProps> = ({
                 setIsMenuOpen={setIsMenuOpen}
               />
               {/*유저 프로필*/}
-              {isLoading ? (
+              {isUserLoading ? (
                 <SkeletonUser />
               ) : (
                 user && (
                   <>
                     <UserProfileIcon user={user} />
                     <span className="hidden md:block text-black3 md:text-base md:font-medium max-w-[90px] truncate whitespace-nowrap">
-                      {user.nickname}
+                      {nickname}
                     </span>
                   </>
                 )

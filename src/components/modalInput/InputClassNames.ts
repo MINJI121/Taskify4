@@ -6,7 +6,7 @@ export const inputClassNames = {
     "flex flex-col items-start gap-[10px] p-4 text-sm sm:text-xs font-normal",
   dropdownOptions:
     "absolute z-10 mt-0.5 flex w-[217px] flex-col rounded-md border border-solid border-gray3 bg-white shadow-[0_4px_20px_0_rgba(0,0,0,0.08)]",
-  label: "text-lg font-medium",
+  label: "text-black3 font-medium text-[16px] sm:text-[18px]",
   // 사이즈를 결정하는 키워드
   type: {
     dropdown: "h-12 w-[217px]",

@@ -5,13 +5,15 @@ import { ToastContainer, Slide } from "react-toastify";
 const CustomToastContainer = () => {
   return (
     <ToastContainer
-      position="top-center"
+      limit={2}
+      position="bottom-center"
       autoClose={3000}
-      newestOnTop
+      newestOnTop={true}
       closeButton={false}
       pauseOnHover={false}
       hideProgressBar={true}
       transition={Slide}
+      draggable
     />
   );
 };

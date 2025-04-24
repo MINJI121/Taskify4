@@ -1,0 +1,96 @@
+.custom-datepicker-popper {
+  transform: translateX(-10px) !important;
+  transform: translateY(50px) !important;
+}
+
+/* 달력 상단 헤더 & 시간 헤더 배경색 변경 */
+.custom-datepicker-popper .react-datepicker-time__header {
+  color: transparent !important;
+  position: relative;
+  font-size: 0 !important;
+  line-height: 20px;
+}
+
+.custom-datepicker-popper .react-datepicker__header {
+  background: #f1effd;
+}
+
+.custom-datepicker-popper .react-datepicker-time__header::after {
+  content: "시간";
+  font-size: 12px; /* 원하는 크기로 조절 */
+  color: #333236;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+/* 모바일 대응 */
+@media (max-width: 640px) {
+  .custom-datepicker-popper {
+    font-size: 10px !important;
+  }
+  /* 시간 선택 컨테이너 폭 줄이기 */
+  .custom-datepicker-popper .react-datepicker__time-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: stretch;
+    height: 100% !important;
+    width: 45px !important;
+  }
+
+  .custom-datepicker-popper .react-datepicker__month-container {
+    height: 100% !important;
+  }
+
+  .custom-datepicker-popper .react-datepicker {
+    display: flex;
+    align-items: stretch;
+    height: auto !important;
+    min-height: 200px; /* 원하는 높이로 조정 가능 */
+  }
+
+  /* 내부 time wrapper 폭 줄이기 */
+  .custom-datepicker-popper .react-datepicker__time {
+    width: 45px !important;
+  }
+
+  .custom-datepicker-popper .react-datepicker__time-box {
+    width: 100% !important;
+    height: 100% !important;
+  }
+
+  /* 리스트 padding/폭 조절 */
+  .custom-datepicker-popper .react-datepicker__time-list {
+    line-height: 2 !important;
+    width: 100% !important;
+    text-align: center !important;
+  }
+
+  .custom-datepicker-popper .react-datepicker__time-list-item {
+    font-size: 12px !important;
+    padding: 2px 2px !important;
+    height: auto !important;
+    word-break: keep-all !important;
+    box-sizing: border-box !important;
+  }
+
+  /* 선택된 항목 스타일 */
+  .custom-datepicker-popper .react-datepicker__time-list-item--selected {
+    font-size: 12px !important;
+    border-radius: 4px !important;
+    background-color: #216ba5 !important;
+    color: white !important;
+    box-sizing: border-box !important;
+    overflow: hidden !important;
+  }
+}
+
+.custom-datepicker-popper .react-datepicker,
+.custom-datepicker-popper .react-datepicker__day,
+.custom-datepicker-popper .react-datepicker__day-name,
+.custom-datepicker-popper .react-datepicker__current-month,
+.custom-datepicker-popper .react-datepicker-time__header,
+.custom-datepicker-popper .react-datepicker__time-list-item {
+  color: #333236 !important;
+}

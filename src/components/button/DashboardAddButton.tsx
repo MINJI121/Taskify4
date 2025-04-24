@@ -26,7 +26,7 @@ const DashboardAddButton: React.FC<
         alt="Plus Icon"
         width={24}
         height={24}
-        className="w-[18px] h-[18px] md:w-[20px] md:h-[20px] lg:w-[22px] lg:h-[22px] p-1 rounded-[4px] bg-[var(--color-violet8)]"
+        className="w-[18px] h-[18px] md:w-[20px] md:h-[20px] lg:w-[22px] lg:h-[22px] p-1 rounded-[4px] bg-violet8"
       />
     </button>
   );

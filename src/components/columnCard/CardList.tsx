@@ -1,100 +1,74 @@
-import { useEffect, useRef, useState, useCallback } from "react";
+import { useEffect, useState, useRef } from "react";
 import { CardType } from "@/types/task";
-import Card from "./Card";
 import { getCardsByColumn } from "@/api/card";
+import SortableCard from "@/components/columnCard/SortableCard";
+import { toast } from "react-toastify";
 
-type CardListProps = {
+interface CardListProps {
   columnId: number;
   teamId: string;
   initialTasks: CardType[];
   onCardClick: (card: CardType) => void;
-};
+  scrollRoot?: React.RefObject<HTMLDivElement | null>;
+}
 
-const ITEMS_PER_PAGE = 6;
-
-export default function CardList({
-  columnId,
+export const CardList = ({
   initialTasks,
+  columnId,
   onCardClick,
-}: CardListProps) {
-  const [cards, setCards] = useState<CardType[]>(initialTasks);
-  const [cursorId, setCursorId] = useState<number | null>(
-    initialTasks.length > 0 ? initialTasks[initialTasks.length - 1].id : null
-  );
-  const [hasMore, setHasMore] = useState(true);
+  scrollRoot,
+}: CardListProps) => {
+  const [cards, setCards] = useState<CardType[]>([]);
   const observerRef = useRef<HTMLDivElement | null>(null);
-  const isFetchingRef = useRef(false);
 
-  /* cursorId 업데이트 방식 변경 */
-  const fetchMoreCards = useCallback(async () => {
-    if (isFetchingRef.current || !hasMore) return;
-
-    isFetchingRef.current = true;
-
-    try {
-      const res = await getCardsByColumn({
-        columnId,
-        size: ITEMS_PER_PAGE,
-        cursorId: cursorId ?? undefined, // 최신 cursorId 사용
-      });
-
-      const newCards = res.cards as CardType[];
-
-      if (newCards.length > 0) {
-        setCards((prev) => {
-          const existingIds = new Set(prev.map((card) => card.id));
-          const uniqueCards = newCards.filter(
-            (card) => !existingIds.has(card.id)
-          );
-          return [...prev, ...uniqueCards];
-        });
-
-        // cursorId 안전하게 업데이트
-        setCursorId((prevCursorId) => {
-          const newCursor = newCards[newCards.length - 1]?.id ?? prevCursorId;
-          return newCursor;
-        });
-      }
-
-      if (newCards.length < ITEMS_PER_PAGE) {
-        setHasMore(false);
-      }
-    } catch (error) {
-      console.error("카드 로딩 실패:", error);
-    } finally {
-      isFetchingRef.current = false;
-    }
-  }, [columnId, cursorId, hasMore]);
-
-  /* 무한 스크롤 */
+  // 카드 목록 api 호출 (마감일 빠른 순 정렬)
   useEffect(() => {
-    if (!observerRef.current) return;
+    const fetchCards = async () => {
+      try {
+        const res = await getCardsByColumn({ columnId });
+        const sorted = [...res.cards].sort((a, b) => {
+          const dateA = a.dueDate ? new Date(a.dueDate).getTime() : Infinity;
+          const dateB = b.dueDate ? new Date(b.dueDate).getTime() : Infinity;
+          return dateA - dateB;
+        });
+        setCards(sorted);
+      } catch (error) {
+        console.error("카드 불러오기 실패:", error);
+        toast.error("카드를 불러오는 데 실패했습니다.");
+      }
+    };
+
+    fetchCards();
+  }, [columnId, initialTasks]);
+
+  // 스크롤
+  useEffect(() => {
+    if (!scrollRoot?.current || !observerRef.current) return;
 
     const observer = new IntersectionObserver(
       (entries) => {
-        if (entries[0].isIntersecting && hasMore) {
-          fetchMoreCards();
+        if (entries[0].isIntersecting) {
         }
       },
-      { threshold: 0.5 }
+      {
+        root: scrollRoot.current,
+        threshold: 1.0,
+      }
     );
 
     observer.observe(observerRef.current);
 
-    return () => observer.disconnect();
-  }, [fetchMoreCards, hasMore]);
+    return () => {
+      observer.disconnect();
+    };
+  }, [scrollRoot]);
 
   return (
-    <div className="grid gap-3 w-full grid-cols-1">
-      {cards.map((task) => (
-        <Card
-          key={task.id}
-          {...task}
-          assignee={task.assignee}
-          onClick={() => onCardClick(task)}
-        />
+    <div className="w-full grid grid-cols-1 gap-3">
+      {cards.map((card) => (
+        <SortableCard key={card.id} card={card} onClick={onCardClick} />
       ))}
-      {hasMore && <div ref={observerRef} className="h-20 " />}
+      <div ref={observerRef} className="h-[1px] bg-transparent" />
     </div>
   );
-}
+};

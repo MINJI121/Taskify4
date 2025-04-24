@@ -1,16 +1,19 @@
 import { useState, useEffect } from "react";
-import { useRouter } from "next/router";
+import useUserStore from "@/store/useUserStore";
 import Image from "next/image";
 import { getUserInfo, updateProfile, uploadProfileImage } from "@/api/users";
 import Input from "@/components/input/Input";
+import { useUserPermission } from "@/hooks/useUserPermission";
 import { toast } from "react-toastify";
 
-export default function ProfileCard() {
-  const router = useRouter();
-  const [image, setImage] = useState<string | null>(null);
-  const [nickname, setNickname] = useState("");
+export const ProfileCard = () => {
+  const { user, updateNickname, updateProfileImage } = useUserStore();
+  const [image, setImage] = useState(user?.profileImageUrl);
+  const [nickname, setNickname] = useState(user?.nickname);
   const [email, setEmail] = useState("");
   const [preview, setPreview] = useState<string | null>(null);
+
+  const isGuest = useUserPermission();
 
   const fetchUserData = async () => {
     try {
@@ -20,6 +23,7 @@ export default function ProfileCard() {
       setEmail(data.email);
     } catch (err) {
       console.error("유저 정보 불러오기 실패:", err);
+      toast.error("유저 정보를 불러올 수 없습니다.");
     }
   };
 
@@ -27,6 +31,11 @@ export default function ProfileCard() {
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
     const MAX_IMAGE_SIZE = 3.5 * 1024 * 1024;
+
+    if (isGuest) {
+      toast.error("게스트 계정은 정보를 변경할 수 없습니다.");
+      return;
+    }
 
     if (event.target.files && event.target.files[0]) {
       const file = event.target.files[0];
@@ -46,28 +55,42 @@ export default function ProfileCard() {
         setImage(response.profileImageUrl); // 서버에서 받은 URL 저장
       } catch (error) {
         console.error("이미지 업로드 실패:", error);
-        toast.error("이미지 업로드에 실패하였습니다.");
+        toast.error("이미지 업로드에 실패했습니다.");
       }
     }
   };
 
   const handleSave = async () => {
-    if (!nickname || !image) return;
+    if (!nickname) return;
 
-    const userProfile = {
-      nickname,
-      profileImageUrl: image,
-    };
+    if (isGuest) {
+      toast.error("게스트 계정은 정보를 변경할 수 없습니다.");
+      return;
+    }
+
+    if (nickname.length > 10) {
+      toast.error("닉네임은 10자 이하로 입력해 주세요.");
+      return;
+    }
 
     try {
-      await updateProfile(userProfile);
+      const payload: { nickname: string; profileImageUrl?: string } = {
+        nickname,
+      };
+      if (image) {
+        payload.profileImageUrl = image;
+      }
+
+      await updateProfile(payload);
+      updateNickname(nickname);
+
+      if (image) {
+        updateProfileImage(image);
+      }
       toast.success("프로필 변경이 완료되었습니다.");
-      setTimeout(() => {
-        router.reload();
-      }, 1500);
     } catch (error) {
       console.error("프로필 변경 실패:", error);
-      toast.error("프로필 변경에 실패하였습니다.");
+      toast.error("프로필 변경에 실패했습니다.");
     }
   };
 
@@ -76,7 +99,7 @@ export default function ProfileCard() {
   }, []);
 
   return (
-    <div className="flex flex-col w-[284px] sm:w-[548px] md:w-[672px] h-[496px] sm:h-[366px] bg-white rounded-[16px] p-[24px]">
+    <div className="flex flex-col w-[284px] sm:w-[544px] lg:w-[620px] h-[496px] sm:h-[366px] bg-white rounded-[12px] p-[24px]">
       {/* 프로필 제목 */}
       <h2 className="text-black3 text-[18px] sm:text-[24px] font-bold mb-4">
         프로필
@@ -109,7 +132,7 @@ export default function ProfileCard() {
         </div>
 
         {/* 입력 폼 */}
-        <div className="flex flex-col sm:ml-[-15px] sm:mt-0 mt-5 w-[252px] sm:w-[276px] md:w-[400px] gap-4">
+        <div className="flex flex-col sm:ml-[-15px] sm:mt-0 mt-5 w-[252px] sm:w-[272px] lg:w-[348px] gap-4">
           <Input
             type="email"
             name="email"
@@ -129,7 +152,7 @@ export default function ProfileCard() {
             className="text-black4"
           />
           <button
-            className="cursor-pointer w-[252px] sm:w-[276px] md:w-[400px] h-[54px] bg-[var(--primary)] text-white rounded-[8px] text-lg font-medium mt-3"
+            className="cursor-pointer w-[252px] sm:w-[272px] lg:w-[348px] h-[54px] bg-primary text-white rounded-[8px] text-lg font-medium mt-3"
             onClick={handleSave}
           >
             저장
@@ -138,4 +161,4 @@ export default function ProfileCard() {
       </div>
     </div>
   );
-}
+};

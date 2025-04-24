@@ -4,6 +4,7 @@ import Image from "next/image";
 import { useRouter } from "next/router";
 import axiosInstance from "@/api/axiosInstance";
 import { TEAM_ID } from "@/constants/team";
+import { ColumnNameTag } from "./chips/ColumnNameTag";
 
 export interface StatusOption {
   label: string;
@@ -37,9 +38,6 @@ export default function StatusSelect({
   const selectedStatus = statusOptions.find((opt) => opt.label === value);
 
   useEffect(() => {
-    console.log("📌 TEAM_ID:", TEAM_ID);
-    console.log("📌 dashboardId:", dashboardId);
-
     if (!TEAM_ID || isNaN(dashboardId)) {
       console.warn("❌ TEAM_ID 또는 dashboardId가 유효하지 않습니다.");
       return;
@@ -50,8 +48,6 @@ export default function StatusSelect({
         const res = await axiosInstance.get(`/${TEAM_ID}/columns`, {
           params: { dashboardId },
         });
-
-        console.log("✅ 상태 목록 응답:", res.data);
 
         const options = (res.data.data as Column[]).map((col) => ({
           label: col.title,
@@ -70,28 +66,21 @@ export default function StatusSelect({
   return (
     <div className="inline-flex flex-col items-start gap-2.5 w-full max-w-[520px]">
       {label && (
-        <p className="font-18m text-[var(--color-black)]">
+        <p className="text-black3 font-medium text-[16px] sm:text-[18px]">
           {label}
-          {required && <span className="text-[var(--color-purple)]">*</span>}
+          {required && <span className="text-primary"> *</span>}
         </p>
       )}
 
       <div className="relative w-full">
         <div
-          className="flex items-center justify-between h-[48px] px-4 border border-[var(--color-gray3)] rounded-md cursor-pointer focus-within:border-[var(--primary)]"
+          className="flex items-center justify-between h-[48px] px-4 border border-gray3 rounded-md cursor-pointer focus-within:border-primary"
           onClick={() => setIsOpen(!isOpen)}
         >
           {selectedStatus ? (
-            <div className="flex items-center gap-2 bg-[#F3EDFF] rounded-full px-3 py-1">
-              <span className="w-2 h-2 rounded-full bg-[#5D2EFF]" />
-              <span className="text-sm text-[#5D2EFF]">
-                {selectedStatus.label}
-              </span>
-            </div>
+            <ColumnNameTag label={selectedStatus.label} />
           ) : (
-            <span className="text-sm text-[var(--color-gray2)]">
-              상태를 선택해주세요
-            </span>
+            <span className="text-sm text-gray2">상태를 선택해 주세요</span>
           )}
           <Image
             src="/svgs/arrow-down.svg"
@@ -111,7 +100,7 @@ export default function StatusSelect({
                   setIsOpen(false);
                 }}
                 className={clsx(
-                  "flex items-center justify-between cursor-pointer mb-1 last:mb-0 rounded-full px-3 py-1 hover:bg-[#F3EDFF]",
+                  "flex items-center justify-between cursor-pointer mb-1 last:mb-0 rounded-full px-3 py-2 hover:bg-[#F3EDFF]",
                   value === status.label && "bg-[#F3EDFF]"
                 )}
               >

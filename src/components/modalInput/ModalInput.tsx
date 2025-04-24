@@ -6,6 +6,7 @@ import ColorTagChip, { getTagColor } from "./chips/ColorTagChip";
 import { inputClassNames } from "./InputClassNames";
 import clsx from "clsx";
 import { format } from "date-fns";
+import { toast } from "react-toastify";
 
 type ModalInputType = "제목" | "마감일" | "태그";
 
@@ -35,6 +36,15 @@ export default function ModalInput({
   const [selectedDate, setSelectedDate] = useState<Date | null>(
     defaultValue ? new Date(defaultValue) : null
   );
+  const [titleLength, setTitleLength] = useState<number>(0);
+  const maxTitleLength = 50;
+
+  // 기존 제목이 있다면 글자수 업데이트
+  useEffect(() => {
+    if (label === "제목" && defaultValue) {
+      setTitleLength(defaultValue.length);
+    }
+  }, [label, defaultValue]);
 
   useEffect(() => {
     if (label === "태그" && defaultValueArray.length > 0) {
@@ -47,7 +57,12 @@ export default function ModalInput({
   }, [label, defaultValueArray]);
 
   const handleTitleValue = (event: ChangeEvent<HTMLInputElement>) => {
-    onValueChange([event.target.value]);
+    const newValue = event.target.value;
+
+    if (newValue.length <= maxTitleLength) {
+      onValueChange([newValue]);
+      setTitleLength(newValue.length);
+    }
   };
 
   const handleTagInputChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -56,6 +71,18 @@ export default function ModalInput({
 
   const handleAddTag = (event: KeyboardEvent<HTMLInputElement>) => {
     if (event.key === "Enter" && tagInput.trim() !== "") {
+      if (tagInput.trim().length > 10) {
+        toast.error("10자 이하로 입력해 주세요.");
+        return;
+      }
+
+      // 태그 개수 제한
+      if (tags.length >= 4) {
+        setTagInput("");
+        toast.error("태그는 4개까지 입력할 수 있습니다.");
+        return;
+      }
+
       if (tags.some((tag) => tag.text === tagInput.trim())) {
         setTagInput("");
         return;
@@ -79,6 +106,17 @@ export default function ModalInput({
     onValueChange(updatedTags.map((tag) => tag.text));
   };
 
+  const handleKeydown = (e: KeyboardEvent<HTMLInputElement>) => {
+    handleAddTag(e);
+
+    if (e.key === "Backspace" && tagInput === "") {
+      const lastTag = tags[tags.length - 1];
+      if (lastTag) {
+        handleDeleteTag(lastTag.text);
+      }
+    }
+  };
+
   const handleDateChange = (date: Date | null) => {
     setSelectedDate(date);
     if (date) {
@@ -92,22 +130,30 @@ export default function ModalInput({
   switch (label) {
     case "제목":
       inputElement = (
-        <input
-          type="text"
-          name="title"
-          id="title"
-          placeholder="제목을 입력해주세요"
-          defaultValue={defaultValue}
-          className="w-full max-w-[520px] h-[48px] rounded-md font-18r outline-none px-2 sm:px-4 border border-[var(--color-gray3)] focus:border-[var(--primary)]"
-          onChange={handleTitleValue}
-        />
+        <div className="relative w-full max-w-[520px]">
+          <input
+            type="text"
+            name="title"
+            id="title"
+            placeholder="제목을 입력해 주세요"
+            defaultValue={defaultValue}
+            className="w-full max-w-[520px] h-[48px] rounded-md pl-4 pr-16
+            text-black3 text-[16px] sm:text-[18px] font:normal
+            outline-none border border-gray3 focus:border-primary"
+            onChange={handleTitleValue}
+            maxLength={maxTitleLength}
+          />
+          <span className="absolute top-1/2 right-3 -translate-y-1/2 font-light text-[12px] sm:text-[14px] text-gray1 pr-1.5">
+            {titleLength} / {maxTitleLength}
+          </span>
+        </div>
       );
       break;
 
     case "마감일":
       inputElement = (
         <div className="relative w-full max-w-[520px]">
-          <div className="flex items-center gap-2 w-full h-[48px] border border-[var(--color-gray3)] rounded-md px-2 sm:px-4 focus-within:border-[var(--primary)]">
+          <div className="flex items-center gap-2 w-full h-[48px] border border-gray3 rounded-md pl-4 sm:px-4 focus-within:border-primary">
             <Image
               src="/svgs/calendar.svg"
               width={20}
@@ -122,8 +168,9 @@ export default function ModalInput({
               timeFormat="HH:mm"
               timeIntervals={15}
               dateFormat="yyyy-MM-dd HH:mm"
-              placeholderText="날짜를 입력해주세요"
-              className="w-full h-full font-18r outline-none bg-transparent"
+              placeholderText="날짜를 입력해 주세요"
+              className="w-full h-full text-black3 text-[16px] sm:text-[18px] font:normal outline-none bg-transparent"
+              calendarClassName="text-[14px]"
               popperPlacement="bottom-start"
               popperContainer={({ children }) => <div>{children}</div>}
               popperClassName="custom-datepicker-popper"
@@ -135,7 +182,10 @@ export default function ModalInput({
 
     case "태그":
       inputElement = (
-        <div className="flex flex-wrap items-center gap-2 w-full max-w-[520px] min-h-[48px] border border-[var(--color-gray3)] rounded-md px-2 sm:px-4 overflow-x-auto scrollbar-hide focus-within:border-[var(--primary)]">
+        <div
+          className="flex flex-wrap items-center gap-2 py-2 pl-4
+        w-full max-w-[520px] min-h-[48px] border border-gray3 rounded-md px-2 sm:px-4 overflow-x-auto scrollbar-hide focus-within:border-primary"
+        >
           {tags.map((tag, index) => (
             <ColorTagChip
               key={index}
@@ -143,7 +193,7 @@ export default function ModalInput({
               className={clsx(
                 tag.textColor,
                 tag.bgColor,
-                "px-3 py-1 rounded-lg font-14r"
+                "px-2 py-1 rounded-lg text-14-r"
               )}
             >
               {tag.text}
@@ -156,8 +206,11 @@ export default function ModalInput({
             value={tagInput}
             placeholder="입력 후 Enter"
             onChange={handleTagInputChange}
-            onKeyDown={handleAddTag}
-            className="flex-grow min-w-[100px] h-full border-none font-18r outline-none"
+            onKeyDown={handleKeydown}
+            className="flex-grow min-w-[100px] h-full
+            border-none outline-none
+            font-normal text-[16px] sm:text-[18px]
+            placeholder:sm:text-[16px] placeholder:text-[14px]"
           />
         </div>
       );
@@ -167,8 +220,7 @@ export default function ModalInput({
   return (
     <div className="inline-flex flex-col items-start gap-2.5 w-full">
       <p className={inputClassNames.label}>
-        {label}{" "}
-        {required && <span className="text-[var(--color-purple)]">*</span>}
+        {label} {required && <span className="text-primary"> *</span>}
       </p>
       <div className="w-full">{inputElement}</div>
     </div>

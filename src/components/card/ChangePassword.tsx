@@ -1,15 +1,16 @@
 import { useState } from "react";
-import { useRouter } from "next/router";
 import { changePassword } from "@/api/changepassword";
 import Input from "@/components/input/Input";
 import { toast } from "react-toastify";
+import { useUserPermission } from "@/hooks/useUserPermission";
 
 export default function ChangePassword() {
-  const router = useRouter();
   const [password, setPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [checkNewpassword, setCheckNewPassword] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const isGuest = useUserPermission();
 
   const isPasswordMismatch =
     !!checkNewpassword && checkNewpassword !== newPassword;
@@ -22,6 +23,11 @@ export default function ChangePassword() {
 
   const handleChangePassword = async () => {
     if (isDisabled) return;
+
+    if (isGuest) {
+      toast.error("게스트 계정은 정보를 변경할 수 없습니다.");
+      return;
+    }
 
     setIsSubmitting(true);
 
@@ -42,15 +48,12 @@ export default function ChangePassword() {
     setNewPassword("");
     setCheckNewPassword("");
     setIsSubmitting(false);
-    setTimeout(() => {
-      router.reload();
-    }, 1500);
   };
 
   return (
     <div
-      className="flex flex-col w-[284px] sm:w-[548px] md:w-[672px] min:h-[454px] sm:min-h-[466px]
-     bg-white rounded-[16px] p-[24px]"
+      className="flex flex-col w-[284px] sm:w-[544px] lg:w-[620px] min:h-[454px] sm:min-h-[466px]
+     bg-white rounded-[12px] p-[24px]"
     >
       <h2 className="text-black3 text-[18px] sm:text-[24px] font-bold mb-4">
         비밀번호 변경
@@ -77,7 +80,7 @@ export default function ChangePassword() {
           value={newPassword}
           onChange={setNewPassword}
           pattern=".{8,}"
-          invalidMessage="8자 이상 입력해주세요."
+          invalidMessage="8자 이상 입력해 주세요."
           className="max-w-[624px]"
         />
         <Input
@@ -92,11 +95,6 @@ export default function ChangePassword() {
           invalidMessage="비밀번호가 일치하지 않습니다."
           className="max-w-[624px]"
         />
-        {isPasswordMismatch && (
-          <p className="font-14r block text-[var(--color-red)]">
-            비밀번호가 일치하지 않습니다.
-          </p>
-        )}
 
         <button
           className={`w-full h-[54px] 
@@ -104,7 +102,7 @@ export default function ChangePassword() {
           ${
             isDisabled
               ? "bg-gray-300 cursor-not-allowed"
-              : "bg-[var(--primary)] text-white cursor-pointer"
+              : "bg-primary text-white cursor-pointer"
           }`}
           onClick={() => handleChangePassword()}
           disabled={isDisabled || isSubmitting}

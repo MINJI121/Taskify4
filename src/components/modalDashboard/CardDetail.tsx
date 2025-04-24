@@ -1,10 +1,11 @@
-// CardDetail.tsx
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import { CardDetailType } from "@/types/cards";
-import { ProfileIcon } from "./profelicon";
+import { ColumnNameTag } from "../modalInput/chips/ColumnNameTag";
 import ColorTagChip, {
   getTagColor,
 } from "@/components/modalInput/chips/ColorTagChip";
+import { PopupImageModal } from "./PopupImageModal";
 
 interface CardDetailProps {
   card: CardDetailType;
@@ -12,82 +13,65 @@ interface CardDetailProps {
 }
 
 export default function CardDetail({ card, columnName }: CardDetailProps) {
+  const [isImageModalOpen, setIsImageModalOpen] = useState(false);
+  const [currentCard, setCurrentCard] = useState<CardDetailType>(card);
+
+  useEffect(() => {
+    setCurrentCard(card);
+  }, [card]);
+
   return (
-    <div className="p-4 ">
-      <h2 className="text-3xl font-semibold mb-5">{card.title}</h2>
-      {/* 작성자 정보 추가 */}
-      <div className="absolute w-[181px] h-[155px] lg:[200px] top-20 right-10 rounded-lg p-3.5 bg-white border border-[#D9D9D9]">
-        <div className="mb-3">
-          <p className="text-sm font-semibold text-gray-800 mb-1">담당자</p>
-          <div className="flex items-center  gap-2">
-            <ProfileIcon
-              userId={card.assignee.id}
-              nickname={card.assignee.nickname}
-              profileImageUrl={card.assignee.profileImageUrl ?? ""}
-              id={card.assignee.id}
-              imgClassName="w-6 h-6"
-              fontClassName="text-sm"
-            />
-
-            <span className="text-sm text-gray-700">
-              {card.assignee.nickname}
-            </span>
-          </div>
-
-          <div>
-            <p className="text-sm font-semibold text-gray-800 mb-1 mt-3">
-              마감일
-            </p>
-            <p className="text-sm text-gray-700">
-              {new Date(card.dueDate).toLocaleString("ko-KR", {
-                year: "numeric",
-                month: "2-digit",
-                day: "2-digit",
-                hour: "2-digit",
-                minute: "2-digit",
-              })}
-            </p>
-          </div>
-        </div>
-      </div>
-      <div className="flex items-center gap-2 mb-2">
-        <span
-          className="rounded-full bg-violet-200 px-3 py-1 text-sm text-violet-800"
-          title={`상태: ${columnName}`}
-        >
-          {columnName}
-        </span>
-        <span className="text-2xl font-extralight text-[#D9D9D9]">|</span>
-        {card.tags.map((tag, idx) => {
-          const { textColor, bgColor } = getTagColor(idx);
-          return (
-            <ColorTagChip key={idx} className={`${textColor} ${bgColor}`}>
-              {tag}
-            </ColorTagChip>
-          );
-        })}
-      </div>
+    <div className="flex flex-col gap-5 w-full">
+      {/* 내용 */}
       <p
-        className="text-gray-700 p-2 break-words overflow-auto"
-        style={{
-          width: "470px",
-          height: "70px",
-          whiteSpace: "pre-wrap", // 줄바꿈 유지 + 자동 줄바꿈
-          wordBreak: "break-word", // 긴 단어도 줄바꿈
-        }}
+        className="text-black font-normal sm:text-[16px] text-[14px] overflow-auto pr-1
+      w-full lg:max-w-[445px] sm:max-w-[420px] max-w-[295px]
+      min-h-0 sm:max-h-[140px] max-h-[80px]
+      whitespace-pre-wrap word-break break-words"
       >
-        {card.description}
+        {currentCard.description}
       </p>
-      {card.imageUrl && (
-        <div className="md:w-420px lg:w-445px">
+
+      {/* 이미지 */}
+      {currentCard.imageUrl && (
+        <div
+          className="md:w-[420px] lg:w-[445px] cursor-pointer"
+          onClick={() => setIsImageModalOpen(true)}
+        >
           <Image
-            src={card.imageUrl}
+            src={currentCard.imageUrl}
             alt="카드 이미지"
-            width={420}
-            height={226}
-            className="rounded-lg object-cover lg:w-[445px] lg:h-[260px] w-[420px] h-[246px] "
+            width={290}
+            height={168}
+            className="rounded-lg object-cover
+              lg:w-[445px] md:w-[420px]
+              lg:h-[280px] md:h-[240px]
+              sm:max-h-none max-h-[180px]"
           />
         </div>
+      )}
+
+      {/* 상태 + 태그 */}
+      <div className="flex flex-wrap items-center gap-5">
+        <ColumnNameTag label={columnName} />
+        <div className="w-[1px] h-[20px] bg-gray3" />
+        <div className="flex flex-wrap gap-[6px]">
+          {currentCard.tags.map((tag, idx) => {
+            const { textColor, bgColor } = getTagColor(idx);
+            return (
+              <ColorTagChip key={idx} className={`${textColor} ${bgColor}`}>
+                {tag}
+              </ColorTagChip>
+            );
+          })}
+        </div>
+      </div>
+
+      {isImageModalOpen && currentCard.imageUrl && (
+        <PopupImageModal
+          imageUrl={currentCard.imageUrl}
+          onClose={() => setIsImageModalOpen(false)}
+        />
       )}
     </div>
   );

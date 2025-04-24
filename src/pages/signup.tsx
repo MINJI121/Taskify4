@@ -1,11 +1,14 @@
 import { useState } from "react";
 import { useRouter } from "next/router";
 import { signUp } from "@/api/users";
-import Input from "@/components/input/Input";
+import { usePostGuard } from "@/hooks/usePostGuard";
+import Image from "next/image";
 import Link from "next/link";
+import Input from "@/components/input/Input";
 import { Modal } from "@/components/modal/Modal";
 import { CustomBtn } from "@/components/button/CustomButton";
 import { toast } from "react-toastify";
+import { AxiosError } from "axios";
 
 export default function SignUpPage() {
   const [email, setEmail] = useState("");
@@ -16,6 +19,7 @@ export default function SignUpPage() {
   const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
 
   const router = useRouter();
+  const { guard: postGuard, isLoading } = usePostGuard();
 
   const isFormValid =
     email.trim() !== "" &&
@@ -37,37 +41,53 @@ export default function SignUpPage() {
       toast.error("비밀번호가 일치하지 않습니다.");
       return;
     }
-
     if (!isFormValid) return;
+
     try {
-      await signUp({
-        payload: {
-          email,
-          nickname: nickName,
-          password,
-        },
+      await postGuard(async () => {
+        await signUp({
+          payload: {
+            email,
+            nickname: nickName,
+            password,
+          },
+        });
+        setIsSuccessModalOpen(true);
       });
-      setIsSuccessModalOpen(true);
     } catch (error) {
-      console.error("회원가입 실패", error);
-      toast.error("회원가입에 실패했습니다.");
+      const AxiosError = error as AxiosError<{ message: string }>;
+      if (AxiosError.response?.status === 409) {
+        toast.error("중복된 이메일입니다.");
+      } else {
+        console.error("회원가입 실패", error);
+        toast.error("회원가입에 실패했습니다.");
+      }
     }
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-[var(--color-gray5)] py-10">
-      <div className="text-center mb-[40px]">
-        <img
+    <div
+      className="flex flex-col min-h-[calc(var(--vh)_*_100)]
+    items-center justify-center
+    bg-white py-10"
+    >
+      <div className="flex flex-col items-center justify-center mb-[30px]">
+        <Image
           src="/svgs/main-logo.svg"
           alt="태스키파이 로고 이미지"
-          className="w-[200px] h-[280px] relative"
+          width={120}
+          height={120}
+          className="object-contain sm:w-[180px]"
         />
-        <p className="font-20m text-black3">첫 방문을 환영합니다!</p>
+        <p className="text-black3 font-midium text-[18px] sm:text-[20px]">
+          첫 방문을 환영합니다!
+        </p>
       </div>
 
       <form
         onSubmit={handleSubmit}
-        className="flex flex-col w-[350px] md:w-[520px] gap-[20px] font-16r text-black3"
+        className="flex flex-col w-[350px] md:w-[520px] gap-[12px] sm:gap-[18px]
+        text-16-r text-black3"
       >
         <Input
           type="email"
@@ -77,6 +97,7 @@ export default function SignUpPage() {
           onChange={setEmail}
           pattern="^[\w.-]+@[\w.-]+\.\w{2,}$"
           invalidMessage="올바른 이메일 주소를 입력해 주세요"
+          className="bg-white"
         />
 
         <Input
@@ -85,6 +106,9 @@ export default function SignUpPage() {
           label="닉네임"
           placeholder="닉네임을 입력해 주세요"
           onChange={setNickname}
+          className="bg-white"
+          forceInvalid={nickName.length > 10}
+          invalidMessage="닉네임은 10자 이하로 입력해 주세요"
         />
 
         <Input
@@ -95,6 +119,7 @@ export default function SignUpPage() {
           onChange={setPassword}
           pattern=".{8,}"
           invalidMessage="영문, 숫자를 포함한 8자 이상 입력해 주세요"
+          className="bg-white"
         />
 
         <Input
@@ -105,14 +130,15 @@ export default function SignUpPage() {
           onChange={setPasswordCheck}
           pattern="{passwordCheckPattern}"
           invalidMessage="비밀번호가 일치하지 않습니다."
+          className="bg-white"
         />
 
-        <label className="flex items-center gap-[8px] font-16r text-black3">
+        <label className="flex items-center gap-[8px] text-16-r text-black3">
           <input
             type="checkbox"
             checked={agree}
             onChange={() => setAgree(!agree)}
-            className="appearance-none w-[20px] h-[20px] border border-[var(--color-gray3)] rounded-[4px] checked:bg-[var(--primary)] checked:border-[var(--primary)] transition"
+            className="appearance-none w-[20px] h-[20px] border border-gray3 rounded-[4px] checked:bg-primary checked:border-primary transition"
             style={{
               backgroundImage: "url('/svgs/check.svg')",
               backgroundRepeat: "no-repeat",
@@ -125,21 +151,21 @@ export default function SignUpPage() {
 
         <button
           type="submit"
-          disabled={!isFormValid}
-          className={`w-full h-[50px] rounded-[8px] text-white font-18m transition ${
+          disabled={!isFormValid || isLoading}
+          className={`w-full h-[50px] rounded-[8px] text-white text-18-m transition mt-1 ${
             isFormValid
-              ? "bg-[var(--primary)] cursor-pointer hover:opacity-90}"
-              : "bg-[var(--color-gray2)] cursor-not-allowed"
+              ? "bg-primary cursor-pointer hover:opacity-90}"
+              : "bg-gray2 cursor-not-allowed"
           }`}
         >
-          가입하기
+          {isLoading ? "가입 중..." : "가입하기"}
         </button>
 
-        <span className="font-16r text-center text-black3">
+        <span className="text-16-r text-center text-black3">
           이미 회원이신가요?{" "}
           <Link
             href="/login"
-            className="text-[var(--primary)] underline hover:opacity-90"
+            className="text-primary underline hover:opacity-90"
           >
             로그인하기
           </Link>
@@ -153,14 +179,14 @@ export default function SignUpPage() {
           onClose={handleSuccessConfirm}
           className="flex flex-col items-center justify-center text-center"
         >
-          <p className="text-black3 font-16m">
+          <p className="text-black3 text-16-m">
             회원가입에 성공했습니다.
             <br />
             로그인 화면으로 이동합니다.
           </p>
           <CustomBtn
             onClick={handleSuccessConfirm}
-            className="w-[180px] h-[40px] bg-[var(--primary)] font-16m text-white rounded-[8px] cursor-pointer"
+            className="w-[180px] h-[40px] bg-primary text-16-m text-white rounded-[8px] cursor-pointer"
           >
             확인
           </CustomBtn>

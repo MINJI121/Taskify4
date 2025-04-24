@@ -7,7 +7,6 @@ export interface CardInputProps {
   placeholder?: string;
   hasButton?: boolean;
   className?: string;
-  small?: boolean;
   onTextChange: (value: string) => void;
   onButtonClick: () => void;
 }
@@ -19,7 +18,6 @@ export default function CardInput({
   hasButton = false,
   onButtonClick = () => {},
   className = "",
-  small = false,
 }: CardInputProps) {
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
 
@@ -35,29 +33,38 @@ export default function CardInput({
         onChange={handleChange}
         placeholder={placeholder}
         className={clsx(
-          "p-4 w-full resize-none rounded-md border border-[var(--color-gray3)] focus:border-[var(--primary)] p-1 outline-none bg-white",
-          small ? "text-sm" : "text-base",
+          "sm:p-4 p-2 w-full resize-none",
+          "sm:h-[80px] h-[55px]",
+          "bg-white rounded-md border border-gray3",
+          "text-black3 font-normal sm:text-[14px] text-[12px]",
+          "focus:border-primary outline-none",
           className
         )}
         style={{
-          height: small ? "110px" : "100px", // 고정된 높이 설정
           overflowY: "auto", // 내용이 넘치면 스크롤 생성
           wordWrap: "break-word",
           whiteSpace: "pre-wrap",
-          paddingBottom: hasButton ? "40px" : "8px", // 버튼과 겹치지 않도록 여백 추가
           boxSizing: "border-box", // padding과 border를 높이에 포함
         }}
       />
       {hasButton && (
-        <TextButton
-          disabled={value.trim().length === 0}
-          color="secondary"
-          buttonSize="xs"
-          onClick={onButtonClick}
-          className="absolute bottom-3 right-3 z-10 flex items-center justify-center w-[83px] h-[32px] border-gray-300 text-[#5534DA] cursor-pointer whitespace-nowrap rounded-sm"
-        >
-          입력
-        </TextButton>
+        <div className="flex justify-end mt-[2px]">
+          <TextButton
+            disabled={value.trim().length === 0}
+            color="secondary"
+            buttonSize="xs"
+            onClick={onButtonClick}
+            className="bottom-4 right-2.5 z-10 flex items-center justify-center
+          lg:w-[83px]
+          md:w-[77px] md:h-[32px]
+          w-[84px] h-[28px] rounded-sm
+          border-gray3 hover:bg-gray-100
+          text-primary text-12-m
+          cursor-pointer whitespace-nowrap"
+          >
+            등록
+          </TextButton>
+        </div>
       )}
     </div>
   );

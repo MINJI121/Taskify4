@@ -1,0 +1,18 @@
+/* InvitedDashBoard.tsx에서 스크롤바 숨기는 css */
+.scroll-area::-webkit-scrollbar {
+  display: none;
+}
+
+.scroll-area {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* 스크롤바 숨기기용 유틸리티 */
+.scrollbar-hidden {
+  -ms-overflow-style: none; /* IE & Edge */
+  scrollbar-width: none; /* Firefox */
+}
+.scrollbar-hidden::-webkit-scrollbar {
+  display: none; /* Chrome, Safari */
+}
