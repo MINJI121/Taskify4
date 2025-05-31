@@ -107,7 +107,7 @@ const ChangeBebridge = ({ onUpdate }: ChangeBebridgeProps) => {
               placeholder="변경할 이름을 입력해 주세요"
               className="max-w-none mb-1 pr-[52px] placeholder:text-[14px] placeholder:sm:text-[16px]"
             />
-            <span className="absolute right-3 bottom-1 top-4/6 -translate-y-2/6 font-light text-[12px] sm:text-[14px] text-[var(--color-gray1)] sm:pr-1.5">
+            <span className="absolute right-3 bottom-1 top-4/6 -translate-y-2/6 font-light text-[12px] sm:text-[14px] text-gray1 sm:pr-1.5">
               {titleLength} / {maxTitleLength}
             </span>
           </div>
@@ -141,9 +141,9 @@ const ChangeBebridge = ({ onUpdate }: ChangeBebridgeProps) => {
               onClick={handleSubmit}
               disabled={selected === null} // color가 없으면 버튼 비활성화
               className={`cursor-pointer w-full sm:h-[54px] h-[54px]
-            rounded-[8px] border border-[var(--color-gray3)] bg-[var(--primary)]
-            text-[var(--color-white)] font-semibold text-[14px] sm:text-[16px]
-            ${selected === null ? "bg-gray-300 cursor-not-allowed" : "bg-[var(--primary)]"}`}
+            rounded-[8px] border border-gray3 bg-primary
+            text-white font-semibold text-[14px] sm:text-[16px]
+            ${selected === null ? "bg-gray-300 cursor-not-allowed" : "bg-primary"}`}
             >
               변경
             </button>

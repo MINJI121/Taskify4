@@ -135,7 +135,7 @@ const InviteRecords = ({
                 onClick={() => setIsModalOpen(true)}
                 className="cursor-pointer sm:w-[105px] w-[86px] sm:h-[32px] h-[26px]
                 flex items-center justify-center gap-2
-                bg-[var(--primary)] rounded-[4px]
+                bg-primary rounded-[4px]
                 text-white font-normal sm:text-[14px] text-[12px]"
               >
                 <img
@@ -155,7 +155,7 @@ const InviteRecords = ({
           </div>
 
           {/* 구성원 리스트 */}
-          <p className="mt-6 text-[var(--color-gray2)] font-normal text-[14px] sm:text-[16px]">
+          <p className="mt-6 text-gray2 font-normal text-[14px] sm:text-[16px]">
             이메일
           </p>
 
@@ -178,7 +178,7 @@ const InviteRecords = ({
                 <button
                   onClick={() => handleCancel(invite.id)}
                   className="cursor-pointer px-2 py-1 h-[32px] sm:h-[32px] w-[52px] sm:w-[84px] md:w-[84px]
-                  border border-[var(--color-gray3)] text-[var(--primary)] rounded-md hover:bg-gray-100
+                  border border-gray3 text-primary rounded-md hover:bg-gray-100
                   font-normal sm:text-[14px] text-[12px]"
                 >
                   취소

@@ -68,6 +68,11 @@ export const ProfileCard = () => {
       return;
     }
 
+    if (nickname.length > 10) {
+      toast.error("닉네임은 10자 이하로 입력해 주세요.");
+      return;
+    }
+
     try {
       const payload: { nickname: string; profileImageUrl?: string } = {
         nickname,
@@ -147,7 +152,7 @@ export const ProfileCard = () => {
             className="text-black4"
           />
           <button
-            className="cursor-pointer w-[252px] sm:w-[272px] lg:w-[348px] h-[54px] bg-[var(--primary)] text-white rounded-[8px] text-lg font-medium mt-3"
+            className="cursor-pointer w-[252px] sm:w-[272px] lg:w-[348px] h-[54px] bg-primary text-white rounded-[8px] text-lg font-medium mt-3"
             onClick={handleSave}
           >
             저장

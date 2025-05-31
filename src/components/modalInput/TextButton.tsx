@@ -1,6 +1,6 @@
 import clsx from "clsx";
 import React, { ReactNode } from "react";
-// xxs 삭제, xs 입력,  sm 수락거절, md 취소 확인, lg 대시보드삭제하기,  xl로그인
+// xxs 삭제, xs 입력,  sm 수락거절, md 취소 확인, lg 대시보드삭제하기,  xl 로그인
 interface ButtonProps {
   type?: "submit" | "reset" | "button";
   buttonSize?: "xxs" | "xs" | "sm" | "md" | "lg" | "xl";
@@ -43,7 +43,7 @@ const TextButton = ({
 
   const colorClasses = clsx({
     [disabled
-      ? "bg-gray4 text-white cursor-not-allowed border-[1px] border-gray4 rounded-lg"
+      ? "bg-gray4 text-white cursor-default border-[1px] border-gray4 rounded-lg"
       : "bg-violet2 border-[1px] border-violet2 text-white rounded-lg"]:
       color === "primary",
     "text-violet2 border-gray3 border-[1px] rounded-lg": color === "secondary",

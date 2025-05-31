@@ -142,11 +142,11 @@ export default function ModalInput({
             defaultValue={defaultValue}
             className="w-full max-w-[520px] h-[48px] rounded-md pl-4 pr-16
             text-black3 text-[16px] sm:text-[18px] font:normal
-            outline-none border border-[var(--color-gray3)] focus:border-[var(--primary)]"
+            outline-none border border-gray3 focus:border-primary"
             onChange={handleTitleValue}
             maxLength={maxTitleLength}
           />
-          <span className="absolute top-1/2 right-3 -translate-y-1/2 font-light text-[12px] sm:text-[14px] text-[var(--color-gray1)] pr-1.5">
+          <span className="absolute top-1/2 right-3 -translate-y-1/2 font-light text-[12px] sm:text-[14px] text-gray1 pr-1.5">
             {titleLength} / {maxTitleLength}
           </span>
         </div>
@@ -156,7 +156,7 @@ export default function ModalInput({
     case "마감일":
       inputElement = (
         <div className="relative w-full max-w-[520px]">
-          <div className="flex items-center gap-2 w-full h-[48px] border border-[var(--color-gray3)] rounded-md pl-4 sm:px-4 focus-within:border-[var(--primary)]">
+          <div className="flex items-center gap-2 w-full h-[48px] border border-gray3 rounded-md pl-4 sm:px-4 focus-within:border-primary">
             <Image
               src="/svgs/calendar.svg"
               width={20}
@@ -188,7 +188,7 @@ export default function ModalInput({
       inputElement = (
         <div
           className="flex flex-wrap items-center gap-2 py-2 pl-4
-        w-full max-w-[520px] min-h-[48px] border border-[var(--color-gray3)] rounded-md px-2 sm:px-4 overflow-x-auto scrollbar-hide focus-within:border-[var(--primary)]"
+        w-full max-w-[520px] min-h-[48px] border border-gray3 rounded-md px-2 sm:px-4 overflow-x-auto scrollbar-hide focus-within:border-primary"
         >
           {tags.map((tag, index) => (
             <ColorTagChip
@@ -197,7 +197,7 @@ export default function ModalInput({
               className={clsx(
                 tag.textColor,
                 tag.bgColor,
-                "px-2 py-1 rounded-lg font-14r"
+                "px-2 py-1 rounded-lg text-14-r"
               )}
             >
               {tag.text}
@@ -224,7 +224,7 @@ export default function ModalInput({
   return (
     <div className="inline-flex flex-col items-start gap-2.5 w-full">
       <p className={inputClassNames.label}>
-        {label} {required && <span className="text-[var(--primary)]"> *</span>}
+        {label} {required && <span className="text-primary"> *</span>}
       </p>
       <div className="w-full">{inputElement}</div>
     </div>

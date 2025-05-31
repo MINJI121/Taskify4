@@ -66,7 +66,7 @@ export default function LoginPage() {
       <form
         onSubmit={handleSubmit}
         className="flex flex-col w-[350px] md:w-[520px] gap-[12px] sm:gap-[18px]
-        font-16r text-black3"
+        text-16-r text-black3"
       >
         <Input
           type="email"
@@ -92,20 +92,20 @@ export default function LoginPage() {
         <button
           type="submit"
           disabled={!isFormValid || isLoading}
-          className={`w-full h-[50px] rounded-[8px] text-white font-18m transition mt-1 ${
+          className={`w-full h-[50px] rounded-[8px] text-white text-18-m transition mt-1 ${
             isFormValid
-              ? "bg-[var(--primary)] cursor-pointer hover:opacity-90}"
-              : "bg-[var(--color-gray2)] cursor-not-allowed"
+              ? "bg-primary cursor-pointer hover:opacity-90}"
+              : "bg-gray2 cursor-not-allowed"
           }`}
         >
           {isLoading ? "로그인 중..." : "로그인"}
         </button>
 
-        <span className="font-16r text-center text-black3">
+        <span className="text-16-r text-center text-black3">
           회원이 아니신가요?{" "}
           <Link
             href="/signup"
-            className="text-[var(--primary)] underline hover:opacity-90"
+            className="text-primary underline hover:opacity-90"
           >
             회원가입하기
           </Link>

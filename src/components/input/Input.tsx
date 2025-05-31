@@ -88,8 +88,8 @@ export default function Input(props: InputProps) {
         <label
           htmlFor={id}
           className={clsx(
-            "text-[var(--color-black3)]",
-            labelClassName ? labelClassName : "font-16r"
+            "text-black3",
+            labelClassName ? labelClassName : "text-16-r"
           )}
         >
           {label}
@@ -116,13 +116,9 @@ export default function Input(props: InputProps) {
           onKeyDown={rest.onKeyDown}
           className={clsx(
             "peer flex h-[50px] w-full max-w-[520px] px-2 sm:px-4 py-2 rounded-lg transition-colors duration-200",
-            "border border-[var(--color-gray3)] focus:border-[var(--primary)] focus:ring-0 focus:outline-none",
-            isInvalid || forceInvalid
-              ? "border-[var(--color-red)] focus:border-[var(--color-red)]"
-              : "",
-            type === "password"
-              ? "text-[var(--color-black4)]"
-              : "text-[var(--color-black)]",
+            "border border-gray3 focus:border-primary focus:ring-0 focus:outline-none",
+            isInvalid || forceInvalid ? "border-red focus:border-red" : "",
+            type === "password" ? "text-black4" : "text-black",
             className
           )}
           {...rest}
@@ -147,9 +143,7 @@ export default function Input(props: InputProps) {
       </div>
 
       {(isInvalid || forceInvalid) && invalidMessage && (
-        <span className="font-14r block text-[var(--color-red)] mt-1">
-          {invalidMessage}
-        </span>
+        <span className="text-14-r block text-red mt-1">{invalidMessage}</span>
       )}
     </div>
   );

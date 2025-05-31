@@ -68,21 +68,19 @@ export default function StatusSelect({
       {label && (
         <p className="text-black3 font-medium text-[16px] sm:text-[18px]">
           {label}
-          {required && <span className="text-[var(--primary)]"> *</span>}
+          {required && <span className="text-primary"> *</span>}
         </p>
       )}
 
       <div className="relative w-full">
         <div
-          className="flex items-center justify-between h-[48px] px-4 border border-[var(--color-gray3)] rounded-md cursor-pointer focus-within:border-[var(--primary)]"
+          className="flex items-center justify-between h-[48px] px-4 border border-gray3 rounded-md cursor-pointer focus-within:border-primary"
           onClick={() => setIsOpen(!isOpen)}
         >
           {selectedStatus ? (
             <ColumnNameTag label={selectedStatus.label} />
           ) : (
-            <span className="text-sm text-[var(--color-gray2)]">
-              상태를 선택해 주세요
-            </span>
+            <span className="text-sm text-gray2">상태를 선택해 주세요</span>
           )}
           <Image
             src="/svgs/arrow-down.svg"

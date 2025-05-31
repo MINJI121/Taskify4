@@ -110,7 +110,7 @@ export default function MyDashboardPage() {
   if (!isInitialized || !user) return <LoadingSpinner />;
 
   return (
-    <div className="flex h-[calc(var(--vh)_*_100)] overflow-hidden bg-[var(--color-violet5)]">
+    <div className="flex h-[calc(var(--vh)_*_100)] overflow-hidden bg-violet5">
       <SideMenu
         teamId={TEAM_ID}
         dashboardList={dashboardList}
@@ -136,7 +136,7 @@ export default function MyDashboardPage() {
                     setCurrentPage(1);
                   }}
                   placeholder="대시보드 이름을 입력하세요"
-                  className="w-full px-4 py-2 border border-[var(--color-gray3)] rounded-md outline-none bg-[var(--color-white)]"
+                  className="w-full px-4 py-2 border border-gray3 rounded-md outline-none bg-white"
                 />
                 <Search
                   size={18}

@@ -45,8 +45,8 @@ export const ShortTodoButton = () => {
       <span
         className={clsx(
           "flex items-center justify-center leading-none",
-          "w-[20px] h-[20px] bg-white hover:bg-[var(--color-gray3)]",
-          "rounded-md text-[var(--primary)] font-medium text-[18px]"
+          "w-[20px] h-[20px] bg-white hover:bg-gray3",
+          "rounded-md text-primary text-18-m"
         )}
       >
         +

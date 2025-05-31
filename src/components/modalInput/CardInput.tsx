@@ -35,9 +35,9 @@ export default function CardInput({
         className={clsx(
           "sm:p-4 p-2 w-full resize-none",
           "sm:h-[80px] h-[55px]",
-          "bg-white rounded-md border border-[var(--color-gray3)]",
+          "bg-white rounded-md border border-gray3",
           "text-black3 font-normal sm:text-[14px] text-[12px]",
-          "focus:border-[var(--primary)] outline-none",
+          "focus:border-primary outline-none",
           className
         )}
         style={{
@@ -58,8 +58,8 @@ export default function CardInput({
           lg:w-[83px]
           md:w-[77px] md:h-[32px]
           w-[84px] h-[28px] rounded-sm
-          border-[var(--color-gray3)] hover:bg-gray-100
-          text-[var(--primary)] font-12m
+          border-gray3 hover:bg-gray-100
+          text-primary text-12-m
           cursor-pointer whitespace-nowrap"
           >
             등록

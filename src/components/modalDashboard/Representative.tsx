@@ -15,13 +15,14 @@ export const Representative = ({ card }: RepresentativeProps) => {
     >
       {/* 내부 아이템 컨테이너 */}
       <div
-        className="flex items-center justify-center
-      sm:items-start sm:justify-between
-      sm:flex-col sm:gap-4 gap-18"
+        className="flex sm:items-start sm:flex-col sm:gap-4 sm:px-1
+        justify-between items-center px-3.5"
       >
         {/* 담당자 컨테이너 */}
         <div>
-          <p className="font-12sb text-black3 mb-[4px]">담당자</p>
+          <p className="sm:text-[14px] text-12-sb text-black3 mb-[4px]">
+            담당자
+          </p>
           <div className="flex items-center gap-2">
             <ProfileIcon
               key={card.assignee.profileImageUrl}
@@ -30,17 +31,26 @@ export const Representative = ({ card }: RepresentativeProps) => {
               profileImageUrl={card.assignee.profileImageUrl ?? ""}
               id={card.assignee.id}
               imgClassName="w-6 h-6"
-              fontClassName="font-14r"
+              fontClassName="text-14-r"
             />
-            <span className="font-normal text-black3 sm:text-[14px] text-[12px]">
+            <span
+              title={card.assignee.nickname}
+              className="font-normal text-black3 sm:text-[14px] text-[12px]
+            truncate sm:max-w-none max-w-20 whitespace-nowrap"
+            >
               {card.assignee.nickname}
             </span>
           </div>
         </div>
 
+        {/* 모바일 gap 조절용 */}
+        <div className="min-w-4 sm:hidden flex-shrink-0" />
+
         {/* 마감일 컨테이너 */}
         <div>
-          <p className="font-12sb text-black3 mb-[4px]">마감일</p>
+          <p className="sm:text-[14px] text-12-sb text-black3 mb-[4px]">
+            마감일
+          </p>
           <div className="flex items-center w-full h-6">
             <p className="font-normal text-black3 sm:text-[14px] text-[12px]">
               {card.dueDate

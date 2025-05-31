@@ -91,7 +91,7 @@ export default function Card({
           {/* 마감일 */}
           <div
             className="flex items-center justify-between gap-8
-          w-full text-[var(--color-gray1)]"
+          w-full text-gray1"
           >
             <div className="flex flex-1 items-center gap-1">
               <Image

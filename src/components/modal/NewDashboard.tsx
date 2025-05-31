@@ -78,7 +78,7 @@ export default function NewDashboard({ onClose, onCreate }: NewDashboardProps) {
           />
           <span
             className="absolute right-3 top-2/5 translate-y-6.5 font-light
-            text-[12px] sm:text-[14px] text-[var(--color-gray1)] sm:pr-1.5"
+            text-[12px] sm:text-[14px] text-gray1 sm:pr-1.5"
           >
             {titleLength} / {maxTitleLength}
           </span>
@@ -111,16 +111,16 @@ export default function NewDashboard({ onClose, onCreate }: NewDashboardProps) {
             onClick={onClose}
             className="cursor-pointer
             sm:w-[256px] sm:h-[54px] w-[144px] h-[54px] rounded-[8px]
-            border border-[var(--color-gray3)] text-[var(--color-gray1)]"
+            border border-gray3 text-gray1"
           >
             취소
           </button>
           <button
             onClick={handleSubmit}
             disabled={!title || selected === null || isLoading}
-            className={`cursor-pointer sm:w-[256px] sm:h-[54px] w-[144px] h-[54px] rounded-[8px] 
-            border border-[var(--color-gray3)] text-[var(--color-white)] 
-            ${!title || selected === null ? "bg-gray-300 cursor-not-allowed" : "bg-[var(--primary)]"}`}
+            className={`sm:w-[256px] sm:h-[54px] w-[144px] h-[54px] rounded-[8px] 
+            border border-gray3 text-white 
+            ${!title || selected === null ? "bg-gray-300" : "bg-primary cursor-pointer"}`}
           >
             {isLoading ? "생성 중..." : "생성"}
           </button>

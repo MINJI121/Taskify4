@@ -97,12 +97,10 @@ function InvitedList({
     /* 초대 목록 헤더 */
     <div className="relative bg-white w-full max-w-[260px] sm:max-w-[504px] lg:max-w-[966px] mx-auto mt-1">
       {filteredData.length > 0 && (
-        <div className="font-16r hidden sm:grid grid-cols-[3fr_2fr_3fr] px-4 w-full h-[26px] items-center mb-5">
-          <p className="text-[var(--color-gray2)] whitespace-nowrap">이름</p>
-          <p className="text-[var(--color-gray2)] whitespace-nowrap">초대자</p>
-          <p className="text-center text-[var(--color-gray2)] whitespace-nowrap">
-            수락 여부
-          </p>
+        <div className="text-16-r hidden sm:grid grid-cols-[3fr_2fr_3fr] px-4 w-full h-[26px] items-center mb-5">
+          <p className="text-gray2 whitespace-nowrap">이름</p>
+          <p className="text-gray2 whitespace-nowrap">초대자</p>
+          <p className="text-center text-gray2 whitespace-nowrap">수락 여부</p>
         </div>
       )}
 
@@ -113,7 +111,7 @@ function InvitedList({
             <div
               key={index}
               className="pb-5 mb-[20px] w-full max-w-[260px] sm:max-w-[504px] lg:max-w-[966px]
-                 h-auto sm:h-[50px] border-b border-[var(--color-gray4)]
+                 h-auto sm:h-[50px] border-b border-gray4
                  sm:grid sm:grid-cols-[3fr_2fr_3fr] sm:items-center
                  text-black3 text-[14px] sm:text-[16px] font-normal
                  flex flex-col gap-10"
@@ -121,26 +119,26 @@ function InvitedList({
               {/* 모바일 레이아웃 */}
               <div className="flex flex-col mt-1 sm:hidden px-4 w-full gap-2">
                 <div className="flex justify-between">
-                  <span className="text-[var(--color-gray2)]">이름</span>
+                  <span className="text-gray2">이름</span>
                   <span className="text-[#333236] font-medium">
                     {invite.title}
                   </span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-[var(--color-gray2)]">초대자</span>
+                  <span className="text-gray2">초대자</span>
                   <span className="text-[#333236] font-medium">
                     {invite.nickname}
                   </span>
                 </div>
                 <div className="flex gap-2 mt-1 justify-end">
                   <button
-                    className="cursor-pointer border px-3 py-1 rounded-md w-[84px] h-[32px] text-[var(--primary)] border-[var(--color-gray3)]"
+                    className="cursor-pointer border px-3 py-1 rounded-md w-[84px] h-[32px] text-primary border-gray3"
                     onClick={() => rejectInvite(invite.id)}
                   >
                     거절
                   </button>
                   <button
-                    className="cursor-pointer bg-[var(--primary)] text-white px-3 py-1 rounded-md w-[84px] h-[32px]"
+                    className="cursor-pointer bg-primary text-white px-3 py-1 rounded-md w-[84px] h-[32px]"
                     onClick={() => acceptInvite(invite.id)}
                   >
                     수락
@@ -157,13 +155,13 @@ function InvitedList({
               </div>
               <div className="hidden sm:flex items-center justify-center gap-2 mr-1 lg:mr-12">
                 <button
-                  className="cursor-pointer border px-3 py-1 rounded-md w-[84px] h-[32px] text-[var(--primary)] border-[var(--color-gray3)]"
+                  className="cursor-pointer border px-3 py-1 rounded-md w-[84px] h-[32px] text-primary border-gray3"
                   onClick={() => rejectInvite(invite.id)}
                 >
                   거절
                 </button>
                 <button
-                  className="cursor-pointer bg-[var(--primary)] text-white px-3 py-1 rounded-md w-[84px] h-[32px]"
+                  className="cursor-pointer bg-primary text-white px-3 py-1 rounded-md w-[84px] h-[32px]"
                   onClick={() => acceptInvite(invite.id)}
                 >
                   수락
@@ -314,7 +312,7 @@ export default function InvitedDashBoard({
               <div className="relative w-full sm:w-[448px] lg:w-[966px] mx-auto">
                 <input
                   id="title"
-                  placeholder="검색"
+                  placeholder="대시보드 이름을 입력하세요"
                   type="text"
                   value={searchTitle}
                   onChange={handleSearchInputChange}

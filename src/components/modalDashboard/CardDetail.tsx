@@ -54,7 +54,7 @@ export default function CardDetail({ card, columnName }: CardDetailProps) {
       {/* 상태 + 태그 */}
       <div className="flex flex-wrap items-center gap-5">
         <ColumnNameTag label={columnName} />
-        <div className="w-[1px] h-[20px] bg-[var(--color-gray3)]" />
+        <div className="w-[1px] h-[20px] bg-gray3" />
         <div className="flex flex-wrap gap-[6px]">
           {currentCard.tags.map((tag, idx) => {
             const { textColor, bgColor } = getTagColor(idx);

@@ -106,7 +106,7 @@ const HeaderDashboard: React.FC<HeaderDashboardProps> = ({
         "flex items-center justify-center",
         "w-full h-[60px] md:h-[70px]",
         "bg-white",
-        "border-b-[1px] border-b-[var(--color-gray3)]"
+        "border-b-[1px] border-b-gray3"
       )}
     >
       <div
@@ -169,7 +169,7 @@ const HeaderDashboard: React.FC<HeaderDashboardProps> = ({
                 className={clsx(
                   "flex items-center justify-center",
                   "w-[49px] h-[30px] md:w-[85px] md:h-[36px] lg:w-[88px] lg:h-[40px]",
-                  "border border-[var(--color-gray3)] rounded-[8px] gap-[10px] cursor-pointer",
+                  "border border-gray3 rounded-[8px] gap-[10px] cursor-pointer",
                   isEditMode ? "hover:border-2" : ""
                 )}
               >
@@ -195,7 +195,7 @@ const HeaderDashboard: React.FC<HeaderDashboardProps> = ({
                   className={clsx(
                     "flex items-center justify-center",
                     "w-[73px] h-[30px] md:w-[109px] md:h-[36px] lg:w-[116px] lg:h-[40px]",
-                    "border border-[var(--color-gray3)] rounded-[8px] gap-[10px] cursor-pointer"
+                    "border border-gray3 rounded-[8px] gap-[10px] cursor-pointer"
                   )}
                 >
                   <Image
@@ -246,7 +246,7 @@ const HeaderDashboard: React.FC<HeaderDashboardProps> = ({
           {/*드롭다운 메뉴 너비 지정 목적의 유저 섹션 div*/}
           <div className="relative flex items-center h-[60px] md:h-[70px] sm:pr-[4vw] pr-[2vw]">
             {/*구분선*/}
-            <div className="h-[34px] md:h-[38px] w-[1px] bg-[var(--color-gray3)]" />
+            <div className="h-[34px] md:h-[38px] w-[1px] bg-gray3" />
             {/*유저 드롭다운 메뉴*/}
             <div
               onMouseDown={(e) => e.stopPropagation()}

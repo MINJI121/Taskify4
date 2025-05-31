@@ -80,7 +80,7 @@ export default function EditDashboard() {
             <div className="flex">
               <button
                 onClick={openModal}
-                className="bg-white text-base sm:text-lg cursor-pointer w-[284px] h-[52px] sm:w-[320px] sm:h-[62px] text-black3 rounded-[8px] border border-[var(--color-gray4)] hover:scale-105 transition-transform duration-200"
+                className="bg-white text-base sm:text-lg cursor-pointer w-[284px] h-[52px] sm:w-[320px] sm:h-[62px] text-black3 rounded-[8px] border border-gray4 hover:scale-105 transition-transform duration-200"
               >
                 대시보드 삭제하기
               </button>

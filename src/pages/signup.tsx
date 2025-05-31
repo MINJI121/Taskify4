@@ -87,7 +87,7 @@ export default function SignUpPage() {
       <form
         onSubmit={handleSubmit}
         className="flex flex-col w-[350px] md:w-[520px] gap-[12px] sm:gap-[18px]
-        font-16r text-black3"
+        text-16-r text-black3"
       >
         <Input
           type="email"
@@ -133,12 +133,12 @@ export default function SignUpPage() {
           className="bg-white"
         />
 
-        <label className="flex items-center gap-[8px] font-16r text-black3">
+        <label className="flex items-center gap-[8px] text-16-r text-black3">
           <input
             type="checkbox"
             checked={agree}
             onChange={() => setAgree(!agree)}
-            className="appearance-none w-[20px] h-[20px] border border-[var(--color-gray3)] rounded-[4px] checked:bg-[var(--primary)] checked:border-[var(--primary)] transition"
+            className="appearance-none w-[20px] h-[20px] border border-gray3 rounded-[4px] checked:bg-primary checked:border-primary transition"
             style={{
               backgroundImage: "url('/svgs/check.svg')",
               backgroundRepeat: "no-repeat",
@@ -152,20 +152,20 @@ export default function SignUpPage() {
         <button
           type="submit"
           disabled={!isFormValid || isLoading}
-          className={`w-full h-[50px] rounded-[8px] text-white font-18m transition mt-1 ${
+          className={`w-full h-[50px] rounded-[8px] text-white text-18-m transition mt-1 ${
             isFormValid
-              ? "bg-[var(--primary)] cursor-pointer hover:opacity-90}"
-              : "bg-[var(--color-gray2)] cursor-not-allowed"
+              ? "bg-primary cursor-pointer hover:opacity-90}"
+              : "bg-gray2 cursor-not-allowed"
           }`}
         >
           {isLoading ? "가입 중..." : "가입하기"}
         </button>
 
-        <span className="font-16r text-center text-black3">
+        <span className="text-16-r text-center text-black3">
           이미 회원이신가요?{" "}
           <Link
             href="/login"
-            className="text-[var(--primary)] underline hover:opacity-90"
+            className="text-primary underline hover:opacity-90"
           >
             로그인하기
           </Link>
@@ -179,14 +179,14 @@ export default function SignUpPage() {
           onClose={handleSuccessConfirm}
           className="flex flex-col items-center justify-center text-center"
         >
-          <p className="text-black3 font-16m">
+          <p className="text-black3 text-16-m">
             회원가입에 성공했습니다.
             <br />
             로그인 화면으로 이동합니다.
           </p>
           <CustomBtn
             onClick={handleSuccessConfirm}
-            className="w-[180px] h-[40px] bg-[var(--primary)] font-16m text-white rounded-[8px] cursor-pointer"
+            className="w-[180px] h-[40px] bg-primary text-16-m text-white rounded-[8px] cursor-pointer"
           >
             확인
           </CustomBtn>

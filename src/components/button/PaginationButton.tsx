@@ -12,12 +12,10 @@ export const PaginationButton: React.FC<PaginationButtonProps> = ({
   ...props
 }) => {
   const baseStyle =
-    "w-[40px] h-[40px] flex justify-center items-center bg-white border border-[var(--color-gray3)] rounded-md text-[16px] font-medium transition";
+    "w-[40px] h-[40px] flex justify-center items-center bg-white border border-gray3 rounded-md text-[16px] font-medium transition";
 
-  const enabledTextColor =
-    "text-[var(--color-gray1)] bg-white hover:bg-[var(--color-gray5)] cursor-pointer";
-  const disabledTextColor =
-    "bg-[var(--color-gray4)] text-[var(--color-gray3)] cursor-default";
+  const enabledTextColor = "text-gray1 bg-white hover:bg-gray5 cursor-pointer";
+  const disabledTextColor = "bg-gray4 text-gray3 cursor-default";
   const finalStyle = `${baseStyle} ${disabled ? disabledTextColor : enabledTextColor}`;
 
   return (

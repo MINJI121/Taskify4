@@ -35,7 +35,7 @@ export default function GuestModeButton() {
       className="flex items-center justify-center
       w-full h-[54px]
       rounded-lg bg-white cursor-pointer
-      text-[var(--primary)] font-medium sm:text-[18px] text-[16px]"
+      text-primary font-medium sm:text-[18px] text-[16px]"
     >
       게스트 모드
     </button>

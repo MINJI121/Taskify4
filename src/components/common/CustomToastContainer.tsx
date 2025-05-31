@@ -6,13 +6,14 @@ const CustomToastContainer = () => {
   return (
     <ToastContainer
       limit={2}
-      position="top-center"
+      position="bottom-center"
       autoClose={3000}
-      newestOnTop={false}
+      newestOnTop={true}
       closeButton={false}
       pauseOnHover={false}
       hideProgressBar={true}
       transition={Slide}
+      draggable
     />
   );
 };

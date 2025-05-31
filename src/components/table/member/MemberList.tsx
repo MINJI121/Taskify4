@@ -76,7 +76,7 @@ const MemberList: React.FC<HeaderBebridgeProps> = ({ dashboardId }) => {
 
           {/* 구성원 리스트 */}
           <div className="w-full mt-6">
-            <p className="mt-6 mb-4 text-[var(--color-gray2)] font-normal text-[14px] sm:text-[16px]">
+            <p className="mt-6 mb-4 text-gray2 font-normal text-[14px] sm:text-[16px]">
               이름
             </p>
 
@@ -125,7 +125,7 @@ const MemberList: React.FC<HeaderBebridgeProps> = ({ dashboardId }) => {
                           setIsModalOpen(true);
                         }}
                         className="cursor-pointer px-2 py-1 h-[32px] sm:h-[32px] w-[52px] sm:w-[84px] md:w-[84px]
-                        border border-[var(--color-gray3)] text-[var(--primary)] rounded-md hover:bg-gray-100
+                        border border-gray3 text-primary rounded-md hover:bg-gray-100
                         font-normal sm:text-[14px] text-[12px]"
                       >
                         삭제

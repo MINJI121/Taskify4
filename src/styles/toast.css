@@ -1,0 +1,47 @@
+@import "react-toastify/dist/ReactToastify.css";
+
+.Toastify__toast {
+  font-size: 14px;
+  font-weight: 500;
+  word-break: keep-all; /* 단어 단위로 줄바꿈 */
+  width: fit-content !important;
+  max-width: 380px !important;
+  min-width: 200px;
+  white-space: normal !important;
+  text-align: center !important;
+  margin: 0 auto !important;
+  border-radius: 16px;
+  background-color: rgba(255, 255, 255, 0.85) !important;
+  padding: 16px !important;
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.08);
+}
+
+.Toastify__close-button {
+  display: none !important;
+}
+
+.Toastify__toast--success {
+  color: #5534da !important;
+}
+
+.Toastify__toast--error {
+  color: #d549b6 !important;
+}
+
+/* default icon */
+.Toastify__toast-icon svg {
+  fill: #5534da !important;
+}
+
+/* type icon */
+.Toastify__toast--error .Toastify__toast-icon svg {
+  fill: #d549b6 !important;
+}
+
+.Toastify__progress-bar--success {
+  background: #5534da !important;
+}
+
+.Toastify__progress-bar--error {
+  background: #d549b6 !important;
+}

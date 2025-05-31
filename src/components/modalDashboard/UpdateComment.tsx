@@ -63,7 +63,7 @@ export default function UpdateComment({
         {/* 작성자 + 시간 */}
         <div
           className="flex items-center gap-2
-        text-[var(--color-gray2)] font-normal sm:text-[12px] text-[10px]"
+        text-gray2 font-normal sm:text-[12px] text-[10px]"
         >
           <span className="text-black3 font-semibold sm:text-[14px] text-[12px]">
             {comment.author.nickname}
@@ -92,7 +92,7 @@ export default function UpdateComment({
               </button>
               <button
                 onClick={handleEditToggle}
-                className="font-normal text-[var(--color-gray2)] sm:text-[12px] text-[10px]
+                className="font-normal text-gray2 sm:text-[12px] text-[10px]
               cursor-pointer"
               >
                 취소
@@ -112,7 +112,7 @@ export default function UpdateComment({
             {currentUserId === comment.author.id && (
               <div
                 className="flex gap-2 mt-1
-              text-[var(--color-gray2)] font-normal sm:text-[12px] text-[10px]"
+              text-gray2 font-normal sm:text-[12px] text-[10px]"
               >
                 <button onClick={handleEditToggle} className="cursor-pointer">
                   수정

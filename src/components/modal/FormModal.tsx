@@ -67,16 +67,14 @@ export default function FormModal({
           {charCount && (
             <span
               className="absolute right-3 top-2/5 translate-y-6.5 font-light
-            text-[12px] sm:text-[14px] text-[var(--color-gray1)] sm:pr-1.5"
+            text-[12px] sm:text-[14px] text-gray1 sm:pr-1.5"
             >
               {charCount.current} / {charCount.max}
             </span>
           )}
         </div>
         {errorMessage && (
-          <p className="font-14r block text-[var(--color-red)] mt-1">
-            {errorMessage}
-          </p>
+          <p className="text-14-r block text-red mt-1">{errorMessage}</p>
         )}
 
         <div className="mt-8 gap-2 flex justify-between">
@@ -84,16 +82,16 @@ export default function FormModal({
             onClick={onLeftButtonClick || onClose}
             className="cursor-pointer
             sm:w-[256px] sm:h-[54px] w-[144px] h-[54px] rounded-[8px]
-            border border-[var(--color-gray3)] text-[var(--color-gray1)]"
+            border border-gray3 text-gray1"
           >
             {leftButtonText}
           </button>
           <button
             onClick={onSubmit}
             disabled={!inputValue || !isInputValid}
-            className={`cursor-pointer sm:w-[256px] sm:h-[54px] w-[144px] h-[54px] rounded-[8px] 
-                border border-[var(--color-gray3)] text-[var(--color-white)] 
-                ${!inputValue || !isInputValid ? "bg-gray-300 cursor-not-allowed" : "bg-[var(--primary)]"}`}
+            className={`sm:w-[256px] sm:h-[54px] w-[144px] h-[54px] rounded-[8px] 
+                border border-gray3 text-white 
+                ${!inputValue || !isInputValid ? "bg-gray-300" : "bg-primary cursor-pointer"}`}
           >
             {submitText}
           </button>

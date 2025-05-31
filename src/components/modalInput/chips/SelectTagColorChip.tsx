@@ -38,7 +38,7 @@ export function SelectTagColorChip({
           className={clsx(
             "w-5 h-5 rounded-full cursor-pointer transition",
             color.bgColor,
-            selectedColorIndex === idx && "ring-[1.5px] ring-[var(--primary)]"
+            selectedColorIndex === idx && "ring-[1.5px] ring-primary"
           )}
         />
       ))}

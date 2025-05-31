@@ -4,7 +4,7 @@ import Section3 from "./Section3";
 
 export default function LandingMain() {
   return (
-    <main className="w-full bg-[var(--color-black)] text-[var(--color-white)] flex flex-col items-center px-4">
+    <main className="w-full bg-black text-white flex flex-col items-center px-4">
       {/* 히어로 섹션 */}
       <Section1 />
 
@@ -15,7 +15,7 @@ export default function LandingMain() {
 
         {/* Section3 영역 */}
         <div className="mt-[120px] w-full max-w-[1200px] px-4 lg:px-0 flex flex-col gap-[36px]">
-          <p className="text-[24px] sm:text-[28px] font-bold leading-[36px] sm:leading-[42px] text-[var(--color-white)] text-center sm:text-left">
+          <p className="text-[24px] sm:text-[28px] font-bold leading-[36px] sm:leading-[42px] text-white text-center sm:text-left">
             생산성을 높이는 다양한 설정 ⚡
           </p>
 

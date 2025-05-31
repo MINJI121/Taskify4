@@ -1,0 +1,188 @@
+@layer utilities {
+  .font-16m {
+    font-size: 16px;
+    line-height: 26px;
+    font-weight: 500;
+  }
+}
+
+@theme {
+  /* 32-b */
+  --text-32-b: 32px;
+  --text-32-b--line-height: 42px;
+  --text-32-b--font-weight: 700;
+
+  /* 32-sb */
+  --text-32-sb: 32px;
+  --text-32-sb--line-height: 42px;
+  --text-32-sb--font-weight: 600;
+
+  /* 24-b */
+  --text-24-b--font-size: 24px;
+  --text-24-b--line-height: 32px;
+  --text-24-b--font-weight: 700;
+
+  /* 24-sb */
+  --text-24-sb: 24px;
+  --text-24-sb--line-height: 32px;
+  --text-24-sb--font-weight: 600;
+
+  /* 24-m */
+  --text-24-m: 24px;
+  --text-24-m--line-height: 32px;
+  --text-24-m--font-weight: 500;
+
+  /* 24-r */
+  --text-24-r: 24px;
+  --text-24-r--line-height: 32px;
+  --text-24-r--font-weight: 400;
+
+  /* 20-b */
+  --text-20-b: 20px;
+  --text-20-b--line-height: 32px;
+  --text-20-b--font-weight: 700;
+
+  /* 20-sb */
+  --text-20-sb: 20px;
+  --text-20-sb--line-height: 32px;
+  --text-20-sb--font-weight: 600;
+
+  /* 20-m */
+  --text-20-m: 20px;
+  --text-20-m--line-height: 32px;
+  --text-20-m--font-weight: 500;
+
+  /* 20-r */
+  --text-20-r: 20px;
+  --text-20-r--line-height: 32px;
+  --text-20-r--font-weight: 400;
+
+  /* 18-b */
+  --text-18-b: 18px;
+  --text-18-b--line-height: 26px;
+  --text-18-b--font-weight: 700;
+
+  /* 18-sb */
+  --text-18-sb: 18px;
+  --text-18-sb--line-height: 26px;
+  --text-18-sb--font-weight: 600;
+
+  /* 18-m */
+  --text-18-m: 18px;
+  --text-18-m--line-height: 26px;
+  --text-18-m--font-weight: 500;
+
+  /* 18-r */
+  --text-18-r: 18px;
+  --text-18-r--line-height: 26px;
+  --text-18-r--font-weight: 400;
+
+  /* 16-b */
+  --text-16-b: 16px;
+  --text-16-b--line-height: 26px;
+  --text-16-b--font-weight: 700;
+
+  /* 16-sb */
+  --text-16-sb: 16px;
+  --text-16-sb--line-height: 26px;
+  --text-16-sb--font-weight: 600;
+
+  /* 16-m */
+  --text-16-m: 16px;
+  --text-16-m--line-height: 26px;
+  --text-16-m--font-weight: 500;
+
+  /* 16-r */
+  --text-16-r: 16px;
+  --text-16-r--line-height: 26px;
+  --text-16-r--font-weight: 400;
+
+  /* 14-b */
+  --text-14-b: 14px;
+  --text-14-b--line-height: 24px;
+  --text-14-b--font-weight: 700;
+
+  /* 14-sb */
+  --text-14-sb: 14px;
+  --text-14-sb--line-height: 24px;
+  --text-14-sb--font-weight: 600;
+
+  /* 14-m */
+  --text-14-m: 14px;
+  --text-14-m--line-height: 24px;
+  --text-14-m--font-weight: 500;
+
+  /* 14-r */
+  --text-14-r: 14px;
+  --text-14-r--line-height: 24px;
+  --text-14-r--font-weight: 400;
+
+  /* 13-sb */
+  --text-13-sb: 13px;
+  --text-13-sb--line-height: 22px;
+  --text-13-sb--font-weight: 600;
+
+  /* 13-m */
+  --text-13-m: 13px;
+  --text-13-m--line-height: 22px;
+  --text-13-m--font-weight: 500;
+
+  /* 12-sb */
+  --text-12-sb: 12px;
+  --text-12-sb--line-height: 20px;
+  --text-12-sb--font-weight: 600;
+
+  /* 12-m */
+  --text-12-m: 12px;
+  --text-12-m--line-height: 18px;
+  --text-12-m--font-weight: 500;
+
+  /* 12-r */
+  --text-12-r: 12px;
+  --text-12-r--line-height: 18px;
+  --text-12-r--font-weight: 400;
+}
+
+@font-face {
+  font-family: "Pretendard";
+  src: url("https://fastly.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff2")
+    format("woff2");
+  src: url("https://fastly.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff")
+    format("woff");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Pretendard";
+  src: url("https://fastly.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Medium.woff2")
+    format("woff2");
+  src: url("https://fastly.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Medium.woff")
+    format("woff");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Pretendard";
+  src: url("https://fastly.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-SemiBold.woff2")
+    format("woff2");
+  src: url("https://fastly.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-SemiBold.woff")
+    format("woff");
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Pretendard";
+  src: url("https://fastly.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Bold.woff2")
+    format("woff2");
+  src: url("https://fastly.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Bold.woff")
+    format("woff");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}

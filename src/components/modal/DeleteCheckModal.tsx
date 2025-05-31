@@ -34,7 +34,7 @@ export const DeleteCheckModal: React.FC<DeleteModalProps> = ({
         className="flex items-center justify-center text-center"
       >
         <div className="flex flex-col items-center gap-1 text-center min-h-[60px]">
-          <div className="text-[var(--primary)] font-medium sm:text-[18px] text-[16px]">
+          <div className="text-primary font-medium sm:text-[18px] text-[16px]">
             {selectedTitle}
           </div>
           <div className="text-black3 font-medium sm:text-[18px] text-[16px]">
@@ -49,7 +49,7 @@ export const DeleteCheckModal: React.FC<DeleteModalProps> = ({
             onClick={() => setIsDeleteModalOpen(false)}
             className="cursor-pointer border px-3 py-1 rounded-md
             sm:w-[100px] sm:h-[40px] w-[84px] h-[32px]
-            text-[var(--primary)] border-[var(--color-gray3)]"
+            text-primary border-gray3"
           >
             취소
           </CustomBtn>
@@ -63,7 +63,7 @@ export const DeleteCheckModal: React.FC<DeleteModalProps> = ({
                 toast.error("현재 탈퇴 기능이 준비 중입니다.");
               }
             }}
-            className="cursor-pointer bg-[var(--primary)] px-3 py-1 rounded-md
+            className="cursor-pointer bg-primary px-3 py-1 rounded-md
             sm:w-[100px] sm:h-[40px] w-[84px] h-[32px]
             text-white"
           >
@@ -93,7 +93,7 @@ export const DeleteCheckModal: React.FC<DeleteModalProps> = ({
             onClick={() => setIsConfirmDeleteModalOpen(false)}
             className="cursor-pointer border px-3 py-1 rounded-md
             sm:w-[100px] sm:h-[40px] w-[84px] h-[32px]
-            text-[var(--primary)] border-[var(--color-gray3)]"
+            text-primary border-gray3"
           >
             취소
           </CustomBtn>
@@ -103,7 +103,7 @@ export const DeleteCheckModal: React.FC<DeleteModalProps> = ({
               handleDelete(); // 진짜 삭제 실행
               toast.success("대시보드가 삭제되었습니다.");
             }}
-            className="cursor-pointer bg-[var(--primary)] px-3 py-1 rounded-md
+            className="cursor-pointer bg-primary px-3 py-1 rounded-md
             sm:w-[100px] sm:h-[40px] w-[84px] h-[32px]
             text-white"
           >

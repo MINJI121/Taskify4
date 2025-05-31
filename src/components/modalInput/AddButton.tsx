@@ -13,7 +13,7 @@ export default function AddButton({ bgColor, size }: AddButtonProps) {
       height={14}
       alt="더하기 아이콘"
       className={`
-        rounded-sm ${bgColor ? bgColor : "bg-[var(--primary)]"} 
+        rounded-sm ${bgColor ? bgColor : "bg-primary"} 
         ${size === "todoSize" ? "size-[28px]" : "size-[16px] sm:size-[14.5px]"}
       `}
     />

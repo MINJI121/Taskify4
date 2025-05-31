@@ -29,7 +29,7 @@ export default function Section3({
       {/* 상단 이미지 영역 */}
       <div
         className={clsx(
-          "bg-[var(--color-black4)] flex justify-center items-center min-h-[180px]",
+          "bg-black4 flex justify-center items-center min-h-[180px]",
           paddingClasses
         )}
       >
@@ -37,9 +37,9 @@ export default function Section3({
       </div>
 
       {/* 하단 텍스트 영역 */}
-      <div className="flex flex-col gap-[18px] bg-[var(--color-black2)] px-8 py-[33px] text-[var(--color-white)]">
-        <p className="font-18b">{title}</p>
-        <p className="font-16m text-[var(--color-gray3)]">{description}</p>
+      <div className="flex flex-col gap-[18px] bg-black2 px-8 py-[33px] text-white">
+        <p className="text-18-b">{title}</p>
+        <p className="text-16-m text-gray3">{description}</p>
       </div>
     </div>
   );

@@ -41,13 +41,13 @@ export const DeleteModal: React.FC<DeleteModalProps> = ({
             onClick={onCancel}
             className="cursor-pointer border px-3 py-1 rounded-md
             sm:w-[100px] sm:h-[40px] w-[84px] h-[32px]
-            text-[var(--primary)] border-[var(--color-gray3)]"
+            text-primary border-gray3"
           >
             취소
           </CustomBtn>
           <CustomBtn
             onClick={onConfirm}
-            className="cursor-pointer bg-[var(--primary)] px-3 py-1 rounded-md
+            className="cursor-pointer bg-primary px-3 py-1 rounded-md
             sm:w-[100px] sm:h-[40px] w-[84px] h-[32px]
             text-white"
           >

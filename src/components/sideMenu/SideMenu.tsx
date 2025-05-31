@@ -137,7 +137,7 @@ export default function SideMenu({
       )}
     >
       {!isCollapsed && (
-        <span className="hidden md:block font-12sb text-[var(--color-gray1)]">
+        <span className="hidden md:block text-12-sb text-gray1">
           Dash Boards
         </span>
       )}
@@ -157,7 +157,7 @@ export default function SideMenu({
     <aside
       className={clsx(
         "z-20 flex flex-col h-[calc(var(--vh)_*_100)] overflow-y-auto lg:overflow-y-hidden overflow-x-hidden transition-all duration-200",
-        "bg-white border-r border-[var(--color-gray3)] py-5",
+        "bg-white border-r border-gray3 py-5",
         isCollapsed
           ? "w-[67px] items-center px-0"
           : "w-[67px] sm:w-[67px] md:w-[160px] lg:w-[300px] px-3"

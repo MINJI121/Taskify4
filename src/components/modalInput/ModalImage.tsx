@@ -79,7 +79,7 @@ export default function ModalImage({
               className="rounded-md object-cover"
               unoptimized
             />
-            <div className="z-10 flex w-[76px] h-[76px] items-center justify-center rounded-md bg-[var(--color-black4)] opacity-0 transition-opacity duration-200 ease-in-out group-hover:opacity-60">
+            <div className="z-10 flex w-[76px] h-[76px] items-center justify-center rounded-md bg-black4 opacity-0 transition-opacity duration-200 ease-in-out group-hover:opacity-60">
               <Image
                 src="/svgs/modal-edit-logo.svg"
                 width={30}

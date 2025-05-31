@@ -50,12 +50,12 @@ export default function ModalTextarea({
         htmlFor="comment"
         className="font-medium text-black3 text-[16px] sm:text-[18px]"
       >
-        {label} {required && <span className="text-[var(--primary)]"> *</span>}
+        {label} {required && <span className="text-primary"> *</span>}
       </label>
 
       <div
         className={`
-          relative rounded-md border border-[var(--color-gray3)] bg-white focus-within:border-[var(--primary)] transition-all duration-200
+          relative rounded-md border border-gray3 bg-white focus-within:border-primary transition-all duration-200
           ${small ? "w-full max-w-[287px] h-[70px]" : "w-full max-w-[520px] min-h-[110px]"}
         `}
       >
@@ -76,7 +76,7 @@ export default function ModalTextarea({
             ${small ? "h-[50px]" : "min-h-[110px]"}
           `}
         />
-        <div className="font-light text-[12px] sm:text-[14px] text-[var(--color-gray1)] text-left px-4 py-2">
+        <div className="font-light text-[12px] sm:text-[14px] text-gray1 text-left px-4 py-2">
           {text.length} / {maxLength}
         </div>
         {isButton && text.length > 0 && (
@@ -84,7 +84,7 @@ export default function ModalTextarea({
             color="secondary"
             buttonSize={small ? "xxs" : "xs"}
             onClick={onButtonClick}
-            className="absolute bottom-3 right-3 flex h-8 shrink-0 items-center justify-center font-14r text-[var(--primary)]"
+            className="absolute bottom-3 right-3 flex h-8 shrink-0 items-center justify-center text-14-r text-primary"
           >
             입력
           </TextButton>

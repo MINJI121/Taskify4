@@ -28,7 +28,7 @@ const HeaderDefault: React.FC<HeaderDefaultProps> = ({ variant = "white" }) => {
   return (
     <header
       className={`w-full h-[60px] md:h-[70px] flex items-center justify-center
-        ${isWhite ? "bg-white border-b-[1px] border-b-[var(--color-gray3)]" : "bg-black"} `}
+        ${isWhite ? "bg-white border-b-[1px] border-b-gray3" : "bg-black"} `}
     >
       <div className="w-full flex items-center justify-between px-[24px] md:px-[40px] lg:px-[70px]">
         <div className="flex items-center cursor-pointer">

@@ -36,14 +36,14 @@ export default function AssigneeSelect({
       {label && (
         <p className="text-black3 font-medium text-[16px] sm:text-[18px]">
           {label}
-          {required && <span className="text-[var(--primary)]"> *</span>}
+          {required && <span className="text-primary"> *</span>}
         </p>
       )}
 
       <div className="relative w-full">
         {/* 선택된 담당자 표시 */}
         <div
-          className="flex items-center justify-between h-[48px] px-4 border border-[var(--color-gray3)] rounded-md cursor-pointer focus-within:border-[var(--primary)]"
+          className="flex items-center justify-between h-[48px] px-4 border border-gray3 rounded-md cursor-pointer focus-within:border-primary"
           onClick={() => setIsOpen(!isOpen)}
         >
           <div className="flex items-center gap-2">
@@ -67,7 +67,7 @@ export default function AssigneeSelect({
                 </span>
               </>
             ) : (
-              <span className="font-normal text-[16px] sm:text-[18px] text-[var(--color-gray2)]">
+              <span className="font-normal text-[16px] sm:text-[18px] text-gray2">
                 담당자를 선택해 주세요
               </span>
             )}
@@ -76,7 +76,7 @@ export default function AssigneeSelect({
 
         {/* 드롭다운 목록 */}
         {isOpen && (
-          <ul className="absolute z-10 top-full left-0 mt-1 w-full max-h-[200px] overflow-y-auto bg-white border border-[var(--color-gray3)] rounded-md shadow-lg">
+          <ul className="absolute z-10 top-full left-0 mt-1 w-full max-h-[200px] overflow-y-auto bg-white border border-gray3 rounded-md shadow-lg">
             {filtered.map((user) => (
               <li
                 key={user.userId}
@@ -106,7 +106,7 @@ export default function AssigneeSelect({
                   </span>
                 </div>
                 {value === user.nickname && (
-                  <span className="text-[var(--primary)]">✔</span>
+                  <span className="text-primary">✔</span>
                 )}
               </li>
             ))}

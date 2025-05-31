@@ -23,9 +23,8 @@ export default function DashboardItem({
   return (
     <li
       className={clsx(
-        "flex w-full justify-center md:justify-start p-3 font-18m text-[var(--color-gray1)] transition-colors duration-200",
-        isActive &&
-          "bg-[var(--color-violet8)] text-[var(--color-black)] font-semibold rounded-xl"
+        "flex w-full justify-center md:justify-start p-3 text-18-m text-gray1 transition-colors duration-200",
+        isActive && "bg-violet8 text-black font-semibold rounded-xl"
       )}
     >
       <Link

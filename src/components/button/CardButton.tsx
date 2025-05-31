@@ -62,8 +62,8 @@ const CardButton: React.FC<CardButtonProps> = ({
       onClick={handleCardClick}
       className={clsx(
         "flex justify-between items-center bg-white transition-all",
-        "rounded-lg px-4 py-3 font-16sb",
-        "border border-[var(--color-gray3)]",
+        "rounded-lg px-4 py-3 text-16-sb",
+        "border border-gray3",
         "min-w-0 w-full max-w-[260px] md:max-w-[247px] lg:max-w-[332px]",
         "h-[58px] md:h-[68px] lg:h-[70px]",
         "mt-[2px]",
@@ -103,14 +103,14 @@ const CardButton: React.FC<CardButtonProps> = ({
           {createdByMe && (
             <button
               onClick={handleEdit}
-              className="font-12m text-gray1 border border-[var(--color-gray3)] px-2 rounded hover:bg-gray-100 cursor-pointer"
+              className="text-12-m text-gray1 border border-gray3 px-2 rounded hover:bg-gray-100 cursor-pointer"
             >
               수정
             </button>
           )}
           <button
             onClick={handleDelete}
-            className="font-12m text-red-400 border border-red-400 px-2 rounded hover:bg-red-100 cursor-pointer"
+            className="text-12-m text-red-400 border border-red-400 px-2 rounded hover:bg-red-100 cursor-pointer"
           >
             삭제
           </button>

@@ -102,7 +102,7 @@ export default function ChangePassword() {
           ${
             isDisabled
               ? "bg-gray-300 cursor-not-allowed"
-              : "bg-[var(--primary)] text-white cursor-pointer"
+              : "bg-primary text-white cursor-pointer"
           }`}
           onClick={() => handleChangePassword()}
           disabled={isDisabled || isSubmitting}

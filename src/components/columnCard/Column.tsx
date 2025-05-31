@@ -126,7 +126,7 @@ export default function Column({
     <div
       className={`
       flex flex-col shrink-0 lg:items-center overflow-hidden p-4 mr-4 lg:my-0 mb-4
-      border border-[var(--color-gray4)] bg-[#F5F2FC] rounded-[12px]
+      border border-gray4 bg-[#F5F2FC] rounded-[12px]
       w-full lg:w-[370px] max-h-[325px] lg:max-h-[827px]
       `}
     >
@@ -144,7 +144,7 @@ export default function Column({
             </h2>
             <span
               className="flex items-center justify-center leading-none
-            w-[20px] h-[20px] bg-white text-[var(--primary)] font-14m rounded-[4px]"
+            w-[20px] h-[20px] bg-white text-primary text-14-m rounded-[4px]"
             >
               {tasks.length}
             </span>

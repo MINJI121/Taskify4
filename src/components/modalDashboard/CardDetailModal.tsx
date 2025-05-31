@@ -87,7 +87,7 @@ export default function CardDetailPage({
                   {showMenu && (
                     <div className="absolute right-0 top-9.5 p-2 z-40 flex flex-col items-center justify-center sm:gap-[6px] gap-[11px] sm:w-28 w-20 sm:h-24 bg-white border border-[#D9D9D9] rounded-lg">
                       <button
-                        className="w-full h-full rounded-sm font-normal sm:text-[14px] text-[12px] text-black3 hover:bg-[var(--color-violet8)] hover:text-[var(--primary)] cursor-pointer"
+                        className="w-full h-full rounded-sm font-normal sm:text-[14px] text-[12px] text-black3 hover:bg-violet8 hover:text-primary cursor-pointer"
                         type="button"
                         onClick={() => {
                           if (!canEditCards) {
@@ -101,7 +101,7 @@ export default function CardDetailPage({
                         수정하기
                       </button>
                       <button
-                        className="w-full h-full rounded-sm font-normal sm:text-[14px] text-[12px] text-black3 hover:bg-[var(--color-violet8)] hover:text-[var(--primary)] cursor-pointer"
+                        className="w-full h-full rounded-sm font-normal sm:text-[14px] text-[12px] text-black3 hover:bg-violet8 hover:text-primary cursor-pointer"
                         type="button"
                         onClick={() => {
                           if (!canEditCards) {

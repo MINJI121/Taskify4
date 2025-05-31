@@ -3,20 +3,20 @@ import clsx from "clsx";
 
 const tagColors = [
   {
-    textColor: "text-[var(--sortTextBlue)]",
-    bgColor: "bg-[var(--sortTextBgBlue)]",
+    textColor: "text-sortTextBlue",
+    bgColor: "bg-sortTextBgBlue",
   },
   {
-    textColor: "text-[var(--sortTextPink)]",
-    bgColor: "bg-[var(--sortTextBgPink)]",
+    textColor: "text-sortTextPink",
+    bgColor: "bg-sortTextBgPink",
   },
   {
-    textColor: "text-[var(--sortTextGreen)]",
-    bgColor: "bg-[var(--sortTextBgGreen)]",
+    textColor: "text-sortTextGreen",
+    bgColor: "bg-sortTextBgGreen",
   },
   {
-    textColor: "text-[var(--sortTextOrange)]",
-    bgColor: "bg-[var(--sortTextBgOrange)]",
+    textColor: "text-sortTextOrange",
+    bgColor: "bg-sortTextBgOrange",
   },
 ];
 
@@ -61,7 +61,7 @@ export function TagColorChip({
                 color.bgColor,
                 selectedTagIndex !== null &&
                   tags[selectedTagIndex]?.bgColor === color.bgColor &&
-                  "ring-[1.5px] ring-[var(--primary)]"
+                  "ring-[1.5px] ring-primary"
               )}
             />
           ))}

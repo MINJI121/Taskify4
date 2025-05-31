@@ -17,7 +17,7 @@ export default function Section1() {
   };
 
   return (
-    <section className="w-full bg-[var(--color-black)] text-[var(--color-white)] px-4 pt-[94px] sm:pt-[42px] flex flex-col items-center">
+    <section className="w-full bg-black text-white px-4 pt-[94px] sm:pt-[42px] flex flex-col items-center">
       {/* 히어로 이미지 */}
       <div className="w-full px-4 sm:px-6 md:px-8 flex justify-center">
         <div className="w-full max-w-[722px]">
@@ -37,13 +37,13 @@ export default function Section1() {
         <span className="text-[40px] sm:text-[56px] md:text-[76px] font-bold leading-[48px] sm:leading-[72px] tracking-[-2px]">
           새로운 일정 관리{" "}
         </span>
-        <span className="text-[42px] sm:text-[70px] md:text-[90px] font-bold leading-[51px] sm:leading-[70px] tracking-[-1px] text-[var(--primary)]">
+        <span className="text-[42px] sm:text-[70px] md:text-[90px] font-bold leading-[51px] sm:leading-[70px] tracking-[-1px] text-primary">
           Taskify
         </span>
       </div>
 
       {/* 설명 문구 (비어있으면 지워도 됨) */}
-      <span className="mt-6 font-14m text-[var(--color-gray3)] sm:mt-[18px] text-center">
+      <span className="mt-6 text-14-m text-gray3 sm:mt-[18px] text-center">
         {/* 설명 문구 필요시 여기에 추가 */}
       </span>
 
@@ -57,8 +57,8 @@ export default function Section1() {
           onClick={handleMainClick}
           className="flex items-center justify-center
           w-full h-[54px]
-          rounded-lg bg-[var(--primary)] cursor-pointer
-          text-[var(--color-white)] font-medium sm:text-[18px] text-[16px]"
+          rounded-lg bg-primary cursor-pointer
+          text-white font-medium sm:text-[18px] text-[16px]"
         >
           {isLoggedIn ? "대시보드 이동하기" : "로그인하기"}
         </button>
