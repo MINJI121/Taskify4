@@ -3,7 +3,7 @@ import useUserStore from "@/store/useUserStore";
 import Image from "next/image";
 import { getUserInfo, updateProfile, uploadProfileImage } from "@/api/users";
 import Input from "@/components/input/Input";
-import { useUserPermission } from "@/hooks/useUserPermission";
+import { useUserPermission } from "@/permissions/useUserPermission";
 import { toast } from "react-toastify";
 
 export const ProfileCard = () => {

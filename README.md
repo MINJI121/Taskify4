@@ -109,7 +109,7 @@
 - 대시보드 수정/삭제 접근성 개선을 위해 `mydashboard`에 대시보드 편집 모드 추가
 - 사용자 구분을 위해 `RandomProfile` 유저 별 색상 고정
 - 게스트 모드 초기 진입 시, 초대 내역 로딩 전 `EmptyInvitations` 컴포넌트가 깜빡이는 렌더링 버그 해결<br>
-  → `setTimeout`을 활용한 상태 업데이트 defer 처리로 해결
+  → `setTimeout`을 활용한 상태 업데이트 defer 처리
 
 7. **기타 기여 사항**
 

@@ -2,7 +2,7 @@ import { useState } from "react";
 import { changePassword } from "@/api/changepassword";
 import Input from "@/components/input/Input";
 import { toast } from "react-toastify";
-import { useUserPermission } from "@/hooks/useUserPermission";
+import { useUserPermission } from "@/permissions/useUserPermission";
 
 export default function ChangePassword() {
   const [password, setPassword] = useState("");
