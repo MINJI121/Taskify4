@@ -10,7 +10,7 @@ interface UserState {
   updateProfileImage: (url: string) => void;
 }
 
-const useUserStore = create<UserState>((set, get) => ({
+const useUserStore = create<UserState>((set) => ({
   user: null,
   isInitialized: false,
   setUser: (user) => set({ user, isInitialized: true }),
