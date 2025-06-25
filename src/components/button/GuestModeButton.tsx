@@ -3,11 +3,7 @@ import useUserStore from "@/store/useUserStore";
 import { postAuthData } from "@/api/auth";
 import { getUserInfo } from "@/api/users";
 import { toast } from "react-toastify";
-
-const GUEST_CREDENTIALS = {
-  email: "guest@gmail.com",
-  password: "qwer1155",
-};
+import { GUEST_ACCOUNTS } from "@/constants/guest";
 
 export default function GuestModeButton() {
   const router = useRouter();
@@ -15,7 +11,7 @@ export default function GuestModeButton() {
 
   const handleGuestLogin = async () => {
     try {
-      const response = await postAuthData(GUEST_CREDENTIALS);
+      const response = await postAuthData(GUEST_ACCOUNTS);
       const token = response.accessToken;
       localStorage.setItem("accessToken", token);
 

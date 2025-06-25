@@ -21,11 +21,6 @@ const useUserStore = create<UserState>((set, get) => ({
     set((state) => ({
       user: state.user ? { ...state.user, profileImageUrl: url } : null,
     })),
-
-  get isGuest() {
-    const user = get().user;
-    return user?.email === "guest@gmail.com";
-  },
 }));
 
 export default useUserStore;
