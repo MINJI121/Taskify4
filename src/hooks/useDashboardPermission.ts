@@ -1,25 +1,19 @@
-import useUserStore from "@/store/useUserStore";
-import { READ_ONLY_DASHBOARD_IDS } from "@/constants/protectedDashboards";
+import { GUEST_EDIT_RESTRICTED_DASHBOARD_IDS } from "@/constants/protectedDashboards";
 
-export const isReadOnlyDashboard = (dashboardId: number) =>
-  READ_ONLY_DASHBOARD_IDS.includes(dashboardId);
+export const isGuestRestrictedDashboard = (dashboardId: number) =>
+  GUEST_EDIT_RESTRICTED_DASHBOARD_IDS.includes(dashboardId);
 
 export const useDashboardPermission = (
   dashboardId: number,
   createdByMe: boolean
 ) => {
-  const user = useUserStore((state) => state.user);
+  const isGuestRestricted =
+    GUEST_EDIT_RESTRICTED_DASHBOARD_IDS.includes(dashboardId);
 
-  const isGuest = user?.email === "guest@gmail.com";
-  const isReadOnly = READ_ONLY_DASHBOARD_IDS.includes(dashboardId);
-
-  const canEdit = createdByMe || !isReadOnly;
+  const canEdit = createdByMe || !isGuestRestricted;
 
   return {
-    isGuest,
-    isReadOnly,
+    isGuestRestricted,
     canEdit,
-    canEditCards: canEdit,
-    canEditColumns: canEdit,
   };
 };

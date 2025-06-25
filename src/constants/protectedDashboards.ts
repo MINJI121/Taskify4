@@ -1,2 +1,1 @@
-// 편집 제한 대시보드
-export const READ_ONLY_DASHBOARD_IDS = [13746, 14245];
+export const GUEST_EDIT_RESTRICTED_DASHBOARD_IDS = [13746, 14245];

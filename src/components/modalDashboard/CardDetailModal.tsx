@@ -29,7 +29,7 @@ export default function CardDetailPage({
   onClose,
   onChangeCard,
 }: CardDetailModalProps) {
-  const { canEditCards } = useDashboardPermission(dashboardId, createdByMe);
+  const { canEdit } = useDashboardPermission(dashboardId, createdByMe);
   const { cardData, setCardData, columnName, members } = useCardDetailState(
     card,
     dashboardId
@@ -90,7 +90,7 @@ export default function CardDetailPage({
                         className="w-full h-full rounded-sm font-normal sm:text-[14px] text-[12px] text-black3 hover:bg-violet8 hover:text-primary cursor-pointer"
                         type="button"
                         onClick={() => {
-                          if (!canEditCards) {
+                          if (!canEdit) {
                             toast.error("읽기 전용 대시보드입니다.");
                             return;
                           }
@@ -104,7 +104,7 @@ export default function CardDetailPage({
                         className="w-full h-full rounded-sm font-normal sm:text-[14px] text-[12px] text-black3 hover:bg-violet8 hover:text-primary cursor-pointer"
                         type="button"
                         onClick={() => {
-                          if (!canEditCards) {
+                          if (!canEdit) {
                             toast.error("읽기 전용 대시보드입니다.");
                             return;
                           }

@@ -1,4 +1,3 @@
-// Column.tsx
 import { useEffect, useState, useRef } from "react";
 import Image from "next/image";
 import { CardType } from "@/types/task";
@@ -35,7 +34,7 @@ export default function Column({
   columnDelete,
   fetchColumnsAndCards,
 }: ColumnProps) {
-  const { canEditColumns } = useDashboardPermission(dashboardId, createdByMe);
+  const { canEdit } = useDashboardPermission(dashboardId, createdByMe);
 
   const [columnTitle, setColumnTitle] = useState(title);
   const [editTitle, setEditTitle] = useState(columnTitle);
@@ -59,7 +58,7 @@ export default function Column({
   // 카드리스트의 스크롤을 칼럼 영역으로 이동
   const scrollRef = useRef<HTMLDivElement | null>(null);
 
-  // ✅ 멤버 불러오기
+  // 멤버 불러오기
   useEffect(() => {
     const fetchMembers = async () => {
       try {
@@ -153,7 +152,7 @@ export default function Column({
           <div className="flex items-center gap-2">
             <div
               onClick={() => {
-                if (!canEditColumns) {
+                if (!canEdit) {
                   toast.error("읽기 전용 대시보드입니다.");
                   return;
                 }
@@ -171,7 +170,7 @@ export default function Column({
                 priority
                 className="object-contain cursor-pointer"
                 onClick={() => {
-                  if (!canEditColumns) {
+                  if (!canEdit) {
                     toast.error("읽기 전용 대시보드입니다.");
                     return;
                   }
@@ -186,7 +185,7 @@ export default function Column({
         <div className="flex items-center justify-center">
           <div
             onClick={() => {
-              if (!canEditColumns) {
+              if (!canEdit) {
                 toast.error("읽기 전용 대시보드입니다.");
                 return;
               }
