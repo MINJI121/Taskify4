@@ -7,7 +7,7 @@ import { Representative } from "@/components/modalDashboard/Representative";
 import TaskModal from "@/components/modalInput/TaskModal";
 import { DeleteModal } from "@/components/modal/DeleteModal";
 import { toast } from "react-toastify";
-import { useDashboardPermission } from "@/hooks/useDashboardPermission";
+import { useDashboardPermission } from "@/permissions/useDashboardPermission";
 import { useCardDetailState } from "@/hooks/useCardDetailState";
 import { useCardDetail } from "@/hooks/useCardDetail";
 import { getCardDetail } from "@/api/card";

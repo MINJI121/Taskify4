@@ -3,7 +3,7 @@ import useUserStore from "@/store/useUserStore";
 import { postAuthData } from "@/api/auth";
 import { getUserInfo } from "@/api/users";
 import { toast } from "react-toastify";
-import { GUEST_ACCOUNTS } from "@/constants/guest";
+import { GUEST_ACCOUNTS } from "@/permissions/constants/guest";
 
 export default function GuestModeButton() {
   const router = useRouter();

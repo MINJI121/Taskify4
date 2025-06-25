@@ -12,7 +12,7 @@ import { CardList } from "./CardList";
 import CardDetailModal from "@/components/modalDashboard/CardDetailModal";
 import { CardDetailType } from "@/types/cards";
 import { toast } from "react-toastify";
-import { useDashboardPermission } from "@/hooks/useDashboardPermission";
+import { useDashboardPermission } from "@/permissions/useDashboardPermission";
 import FormModal from "@/components/modal/FormModal";
 
 type ColumnProps = {

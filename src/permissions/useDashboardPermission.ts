@@ -1,4 +1,4 @@
-import { GUEST_EDIT_RESTRICTED_DASHBOARD_IDS } from "@/constants/protectedDashboards";
+import { GUEST_EDIT_RESTRICTED_DASHBOARD_IDS } from "@/permissions/constants/restrictedDashboards";
 
 export const isGuestRestrictedDashboard = (dashboardId: number) =>
   GUEST_EDIT_RESTRICTED_DASHBOARD_IDS.includes(dashboardId);
